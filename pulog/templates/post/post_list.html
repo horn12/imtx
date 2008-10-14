@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %} I'm TualatriX {% endblock %}
+
+{% block content %}
+	{% for post in posts %}
+	<div class="post" id="post-{{ post.id }}">
+		{% include "post/title.html" %}
+	
+	<div class="clear"></div>
+	<div class="entry">
+		{% autoescape off %}
+        {{ post.get_excerpt }} {% if post.get_pagebreak %}<a href="{{ post.get_absolute_url }}#more-{{ post.id }}">Read More...</a>{% endif %}
+		{% endautoescape %}
+	</div>
+	</div>
+	{% endfor %}
+{% endblock %}

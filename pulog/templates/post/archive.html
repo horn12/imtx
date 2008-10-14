@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %} TualatriX's Blog {% endblock %}
+
+{% block content %}
+	{% if category %}
+	<h2 class="pagetitle">Archive for {{ category.name }}</h2>
+	{% endif %}
+	{% if year %}
+	<h2 class="pagetitle">Archive for {{ year }} {{ month }}</h2>
+	{% endif %}
+	{% if results %}
+	<h2 class="pagetitle">Archive for {{ query }}</h2>
+	{% endif %}
+	{% if posts %}
+		{% for post in posts %}
+		<div class="post" id="post-{{ post.id }}">
+		{% include "post/title.html" %}
+		
+		<div class="clear"></div>
+		<div class="entry">
+			{% autoescape off %}
+			{{ post.get_excerpt }} {% if post.get_pagebreak %}<a href="{{ post.get_absolute_url }}#more">Read More...</a>{% endif %}
+			{% endautoescape %}
+		</div>
+		</div>
+		{% endfor %}
+	{% else %}
+		<div class="entry">
+			没有任何文档
+		</div>
+	{% endif %}
+
+{% endblock %}

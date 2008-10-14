@@ -1,0 +1,9 @@
+{% load filter i18n count %}
+<ul class="date">
+	<li class="day">{{ post.date.day }}</li>
+	<li class="month">{{ post.date.month }}月</li>
+</ul>
+
+<ul class="title">	
+	<li class="topic"><a href="{{ post.get_absolute_url }}" rel="bookmark" title="Permanent Link to {{ post.title }}">{{ post.title }}</a></li>
+    <li class="postmeta">Post by {{ post.get_author }} at {{ post.date.year }} . {% trans "Category" %}: <a href="{{ post.category.get_absolute_url }}">{{ post.category.title }}</a>. {% get_views_count %}. <a href="{{ post.get_absolute_url}}#comments">{# get_comments_count #}</a> {% if user.is_staff %} <a href="/admin/blog/post/{{ post.id }}/">{% trans "Edit" %}</a>{% endif %}</li> </ul>

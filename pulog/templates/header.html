@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+	<title>{% block title %}{% endblock %}</title>
+	<link rel="stylesheet" href="/site_media/css/style.css" type="text/css" media="screen" />
+	<link rel="alternate" type="application/rss+xml" title="订阅 TualatriX Feed" href="/feed/latest/">
+</head>
+		
+<body>
+	<div id="bgcontain"> 
+		<div id="header">
+			<h1><a href="/">I'm TualatriX!</a></h1>
+			<form action="/search" method="GET">
+				<input type="text" value="Search..." onfocus="if (value =='Search...'){value =''}" onblur="if (value ==''){value='Search...'}" name="q" id="s" />
+				<input type="image" id="searchsubmit" value="Search" src="/site_media/css/images/search.gif" />
+			</form>
+		</div> 
+
+		<div id="menu">
+		       	<ul>
+			{% if current %}
+				<li class="page_item"><a href="/" title="Home">首页</a></li>
+			{% else %}
+				<li class="current_page_item"><a href="/" title="Home">首页</a></li>
+			{% endif %}
+
+			{% for menu_item in menu %}
+				{% ifequal  current menu_item.name %}
+					<li class="current_page_item"><a href="/{{ menu_item.name }}" title="Home">{{ menu_item.title }}</a></li>
+				{% else %}
+					<li class="page_item"><a href="/{{ menu_item.name }}" title="Home">{{ menu_item.title }}</a></li>
+				{% endifequal %}
+			{% endfor %}
+			</ul>
+		</div>
+
+		

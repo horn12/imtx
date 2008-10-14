@@ -1,0 +1,42 @@
+{% load i18n filter count %}
+
+{% if post.get_comments %}
+<h3 id="comments">{% get_comments_count %}</h3>
+{% endif %}
+<ol class="commentlist">
+    {% for comment in post.get_comments %}
+
+    <li class="{{ forloop.counter|alt }}" id="comment-{{ comment.id }}">
+    <cite>{% if comment.url %}<a href="{{ comment.url }}">{{ comment.author }}</a>{% else %}{{ comment.author }}{% endif %}</cite>{% trans " Says:" %}
+        <br />
+        <small class="commentmetadata"><a href="#comment-{{ comment.id }}" title="">{{ comment.date }}</a></small>
+        {% autoescape off %}
+        {{ comment.content|urlize|linebreaks }}
+        {% endautoescape %}
+    </li>
+    {% endfor %}
+</ol>
+
+{% ifequal post.comment_status "open" %}
+<h3>{% trans "Leave a Comment" %}</h3>
+<form action="/commentspost/" method="POST" id="commentform">
+    {% if not user.is_authenticated %}
+        <p>{{ form.author }}
+        <label for="author"><small>{% trans "Name (required)" %}</small></label></p>
+        <div id="result"></div>
+
+        <p>{{ form.email }}
+        <label for="email"><small>{% trans "Mail (will not be published) (required)" %}</small></label>
+
+        <p>{{ form.url }}
+        <label for="url"><small>{% trans "Website" %}</small></label>
+    {% else %}
+    <p>Logged in as {{ user.get_profile.nickname }}. <a href="/admin/logout/" title="Log out of this account">{% trans "Logout" %} &raquo;</a></p>
+
+    {% endif %}
+
+    <p>{{ form.content }}
+    <p><input name="submit" type="image" src="/static/css/images/submit.png" id="submit" tabindex="5" value="Submit Comment" />
+    <input type="hidden" name="post_id" value="{{ post.id }}" />
+</form>
+{% endifequal %}

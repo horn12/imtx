@@ -1,0 +1,7 @@
+{% if months %}
+<ul>
+	{% for month in months %}
+	<li><a href="{{ month.link }}">{{ month.title }}</a> ({{ month.get_post_count }})</li>
+	{% endfor %}
+</ul>
+{% endif %}
