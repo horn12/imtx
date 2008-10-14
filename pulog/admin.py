@@ -2,6 +2,7 @@ from django.contrib import admin
 from pulog.models import Category
 from pulog.models import Post
 from pulog.models import Link
+from pulog.models import Profile
 
 class PostAdmin(admin.ModelAdmin):
     list_display = ('title', 'date', 'author')
@@ -17,4 +18,5 @@ class PostAdmin(admin.ModelAdmin):
 
 admin.site.register(Post, PostAdmin)
 admin.site.register(Category)
+admin.site.register(Profile)
 admin.site.register(Link)
