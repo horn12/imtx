@@ -74,7 +74,7 @@ class Post(models.Model):
     content = models.TextField()
     date = models.DateTimeField(auto_now_add = True)
     author = models.ForeignKey(User)
-    category = models.ForeignKey(Category)
+    category = models.ManyToManyField(Category)
     view = models.IntegerField(default = 0, editable = False)
     type = models.CharField(max_length = 20, default = 'post', choices = TYPE_CHOICES)
     post_status = models.CharField(max_length = 20, default = 'publish', choices = POST_STATUS_CHOICES)
@@ -125,6 +125,9 @@ class Post(models.Model):
             return ''
         else:
             return 'true'
+
+    def get_categories(self):
+        return self.category.all()
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, related_name = 'comments')

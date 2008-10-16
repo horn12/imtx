@@ -1,5 +1,13 @@
 2008-10-16 TualatriX <tualatrix@gmail.com>
 
+	* pulog/models.py: Modified the relation between Post and Category
+	ManyToMany.
+	* pulog/templates/imtx/post/title.html: Modified the Post's categoy
+	display behavior. 
+	* pulog/templates/imtx/post/archive.html: Fixed an typo.
+
+2008-10-16 TualatriX <tualatrix@gmail.com>
+
 	* demo/Settings.py: Variable TEMPLATE_DIRS use to store the current template
 	name.
 	* pulog/urls.py: Serve the templates dir for templates.
