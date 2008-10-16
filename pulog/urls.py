@@ -25,7 +25,7 @@ urlpatterns = patterns('',
         (r'^static/(?P<path>.*)$', 'django.views.static.serve',
             {'document_root': os.path.join(os.path.dirname(__file__), 'static')}),
         (r'^templates/(?P<path>.*)$', 'django.views.static.serve',
-            {'document_root': os.path.join(os.path.dirname(__file__), 'templates/Imtx')}),
+            {'document_root': os.path.join(os.path.dirname(__file__), 'templates')}),
 )
 
 urlpatterns += patterns('pulog.views',

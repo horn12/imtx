@@ -1,3 +1,17 @@
+2008-10-16 TualatriX <tualatrix@gmail.com>
+
+	* demo/Settings.py: Variable TEMPLATE_DIRS use to store the current template
+	name.
+	* pulog/urls.py: Serve the templates dir for templates.
+	* pulog/templates/imtx
+	* pulog/static/css: Default template renamed to imtx, move default ccs to
+	imtx. Modified the template to use /templates/**** url.
+
+2008-10-15 Shawn <xuancn@hotmail.com>
+
+	* Modified the templates dir structure so the app will be able to support
+	multiple templates in the future.
+
 2008-10-14 TualatriX <tualatrix@gmail.com>
 
 	* Initial pulog project.
