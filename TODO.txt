@@ -1,0 +1,3 @@
+* Create more common filters for blog templates.
+* Implement the upload file feature.
+* Implement the tag feature.
