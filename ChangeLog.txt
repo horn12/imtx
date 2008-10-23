@@ -1,3 +1,11 @@
+2008-10-23 TualatriX <tualatrix@gmail.com>
+	
+	* pulog/urls.py: Cleaned up the urls and use the variable import from
+	settings.py.
+	* demo/settings.py: Added an new variable TEMPLATE_ROOT to hold
+	template root folder.
+	* demo/urls.py: Cleaned up the urls.
+
 2008-10-16 TualatriX <tualatrix@gmail.com>
 
 	* pulog/models.py: Modified the relation between Post and Category

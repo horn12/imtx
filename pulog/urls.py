@@ -1,10 +1,10 @@
 import os
+from django.contrib import admin
 from django.conf.urls.defaults import *
 from django.views.generic import list_detail
+from settings import MEDIA_ROOT, TEMPLATE_ROOT
 from pulog.models import Post, Category
 from pulog.feed import LatestPosts
-
-from django.contrib import admin
 admin.autodiscover()
 
 post_info = {
@@ -19,13 +19,10 @@ urlpatterns = patterns('',
         (r'^admin/(.*)', admin.site.root),
         (r'^feed/(?P<url>.*)/$', 'django.contrib.syndication.views.feed', 
             {'feed_dict': feed}),
-        (r'^(?P<object_id>\d+)/comment/$', 
-            'django.views.generic.list_detail.object_detail', 
-            dict(post_info, template_name = 'ImTX/post/comment_ajax.html')),
-        (r'^static/(?P<path>.*)$', 'django.views.static.serve',
-            {'document_root': os.path.join(os.path.dirname(__file__), 'static')}),
         (r'^templates/(?P<path>.*)$', 'django.views.static.serve',
-            {'document_root': os.path.join(os.path.dirname(__file__), 'templates')}),
+            {'document_root': TEMPLATE_ROOT}),
+        (r'^static/(?P<path>.*)$', 'django.views.static.serve',
+            {'document_root': MEDIA_ROOT}),
 )
 
 urlpatterns += patterns('pulog.views',
