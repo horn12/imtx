@@ -4,6 +4,7 @@ from settings import MEDIA_ROOT
 from django.utils.translation import ugettext as _
 from django.db.models.fields.files import ImageFieldFile
 from utils import make_thumb
+from pulog.models import Post
 
 UPLOAD_ROOT = 'upload'
 THUMB_ROOT = 'upload/thumb'
@@ -13,6 +14,7 @@ class Media(models.Model):
     image = models.ImageField(upload_to = UPLOAD_ROOT)
     thumb = models.ImageField(upload_to = THUMB_ROOT, blank = True)
     date = models.DateTimeField(auto_now_add = True)
+    post = models.ForeignKey(Post)
 
     class Meta:
         verbose_name_plural = _('Media')

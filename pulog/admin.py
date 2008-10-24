@@ -3,12 +3,15 @@ from pulog.models import Category
 from pulog.models import Post
 from pulog.models import Link
 from pulog.models import Profile
+from media.admin import MediaAdmin
 
 class PostAdmin(admin.ModelAdmin):
     list_display = ('title', 'date', 'author')
     radio_fields = {'post_status': admin.VERTICAL,
                     'type': admin.VERTICAL,
                     'comment_status': admin.VERTICAL}
+    inlines = [MediaAdmin,]
+
 
     class Media:
         js = (
