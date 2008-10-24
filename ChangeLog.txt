@@ -1,3 +1,11 @@
+2008-10-24 TualatriX <tualatrix@gmail.com>
+	
+	* media/admin.py, views.py, __init__.py, utils.py, models.py: Added
+	the Media model to store upload media.
+	* pulog/static/upload
+	pulog/static/upload/thumb: Added two folders to store the upload
+	media.
+
 2008-10-23 TualatriX <tualatrix@gmail.com>
 	
 	* pulog/urls.py: Cleaned up the urls and use the variable import from

@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 from django.utils import encoding, html
 from django.utils.html import urlquote
+from media.models import Media
 
 class Category(models.Model):
     title = models.CharField(max_length = 250, help_text = 'Maximum 250 \
@@ -128,6 +129,9 @@ class Post(models.Model):
 
     def get_categories(self):
         return self.category.all()
+
+    def get_media(self):
+        return self.media.all()
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, related_name = 'comments')
