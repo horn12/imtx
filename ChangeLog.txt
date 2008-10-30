@@ -1,3 +1,10 @@
+2008-10-30 TualatriX <tualatrix@gmail.com>
+
+	* dynamic_media_serve: Add for new media serve.
+	* media/utils.py: Removed.
+	* media/models.py: Upload path to use %Y/%m.
+	* pulog/urls.py: Modified it to satisfield to dynamic_media_serve.
+
 2008-10-24 TualatriX <tualatrix@gmail.com>
 	
 	* media/views.py, __init__.py, utils.py, models.py: Added

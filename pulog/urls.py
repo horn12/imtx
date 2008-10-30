@@ -21,7 +21,9 @@ urlpatterns = patterns('',
             {'feed_dict': feed}),
         (r'^templates/(?P<path>.*)$', 'django.views.static.serve',
             {'document_root': TEMPLATE_ROOT}),
-        (r'^static/(?P<path>.*)$', 'django.views.static.serve',
+#        (r'^static/(?P<path>.*)$', 'django.views.static.serve',
+#            {'document_root': MEDIA_ROOT}),
+        (r'^static/(?P<path>.*)$', 'dynamic_media_serve.serve', 
             {'document_root': MEDIA_ROOT}),
 )
 
