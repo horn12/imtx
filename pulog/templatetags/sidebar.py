@@ -9,7 +9,7 @@ register = Library()
 
 @register.inclusion_tag('post/recent_posts.html', takes_context = True)
 def get_recent_posts(context):
-    return {'posts': Post.objects.filter(type = 'post').order_by('-date')[:10]}
+    return {'posts': Post.manager.get_post()[:10]}
 
 @register.inclusion_tag('post/recent_comments.html', takes_context = True)
 def get_recent_comments(context):
@@ -26,7 +26,7 @@ def get_links(context):
 @register.inclusion_tag('post/category_list.html', takes_context = True)
 def get_categories(context):
     return {'categories': Category.objects.all(),
-        'posts': Post.objects.filter(type = 'post')}
+        'posts': Post.manager.get_post()}
 
 class MonthArchive:
     title = ""
@@ -39,11 +39,11 @@ class MonthArchive:
         self.year = int(date[0])
         self.month = int(date[1])
         
-        self.title = datetime.date(self.year, self.month, 1).strftime(_("%B %Y"))
-        self.link = "/archives/%s/%s" % (date[0], date[1])
+        self.title = datetime.date(self.year, self.month, 1).strftime(_('%B %Y'))
+        self.link = '/archives/%s/%s/' % (date[0], date[1])
 
     def get_post_count(self):
-        return len(Post.objects.filter(date__year = self.year, date__month = self.month, type = 'post'))
+        return len(Post.manager.get_post_by_date(self.year, self.month))
 
 @register.inclusion_tag('post/archive_list.html', takes_context = True)
 def get_archive(context):
@@ -51,7 +51,7 @@ def get_archive(context):
     archive_months = []
 
     for post in Post.objects.all():
-        month = post.date.date().strftime("%Y-%m")
+        month = post.date.date().strftime('%Y-%m')
         if month not in months:
             months.append(month)
 

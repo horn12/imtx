@@ -8,7 +8,7 @@ from pulog.feed import LatestPosts
 admin.autodiscover()
 
 post_info = {
-    'queryset': Post.objects.filter(type = 'post').order_by('-date'),
+    'queryset': Post.manager.get_post(),
 }
 
 feed = {
@@ -31,12 +31,14 @@ urlpatterns += patterns('pulog.views',
         (r'^$', 'index'),
         (r'^archives/$', 'index'),
         (r'^archives/(?P<post_id>\d+).html$', 'single_post'),
-        (r'^archives/category/(?P<slugname>[^/]+)$', 'category_view'),
-        (r'^archives/category/(?P<slugname>[^/]+)/page/(?P<page_num>\d+)$', 'category_view'),
-        (r'^archives/(?P<year>\d{4})/(?P<month>\d{1,2})$', 'archive_view'),
-        (r'^archives/(?P<year>\d{4})/(?P<month>[^/]+)/page/(?P<page_num>\d+)$', 'archive_view'),
+        (r'^archives/category/(?P<slugname>[^/]+)/$', 'category_view'),
+        (r'^archives/category/(?P<slugname>[^/]+)/page/(?P<page_num>\d+)/$', 
+            'category_view'),
+        (r'^archives/(?P<year>\d{4})/(?P<month>\d{1,2})/$', 'archive_view'),
+        (r'^archives/(?P<year>\d{4})/(?P<month>[^/]+)/page/(?P<page_num>\d+)/$',
+            'archive_view'),
         (r'^commentspost/$', 'comments_post'),
-        (r'^page/(?P<num>\d+)', 'page'),
+        (r'^page/(?P<num>\d+)/$', 'page'),
         (r'(\w+)$', 'static_pages'),
 #        (r'^(?P<year>\d{4})/(?P<month>\d{1,2})/page/(?P<page_num>\d+)$', 'archive_view'),
 )

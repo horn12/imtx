@@ -87,4 +87,5 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'pulog',
     'media',
+    'tagging',
 )

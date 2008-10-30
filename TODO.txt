@@ -2,3 +2,4 @@
 * Implement the upload file feature.
 * Implement the tag feature.
 * Implement groups for authors/administrators and the corresponding privileges.
+* Solve the problem of the relation between post and comment.

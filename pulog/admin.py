@@ -7,9 +7,11 @@ from media.admin import MediaAdmin
 
 class PostAdmin(admin.ModelAdmin):
     list_display = ('title', 'date', 'author')
-    radio_fields = {'post_status': admin.VERTICAL,
-                    'type': admin.VERTICAL,
-                    'comment_status': admin.VERTICAL}
+    prepopulated_fields = {'slug': ('title',)}
+    radio_fields = {
+        'status': admin.VERTICAL,
+        'type': admin.VERTICAL
+    }
     inlines = [MediaAdmin,]
 
 

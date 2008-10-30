@@ -12,20 +12,20 @@
 	<div class="clear"></div>
 	<div class="entry">
 		{% autoescape off %}
-		{% if post.get_pagebreak %}
-			{{ post.get_excerpt }}
+		{% if post.pagebreak %}
+			{{ post.excerpt }}
             <p><span id="more-{{ post.id }}"></span></p>
-			{{ post.get_remain }}
+			{{ post.remain }}
 		{% else %}
 			{{ post.content }}
 		{% endif %}
 		{% endautoescape %}
         <p class="meta"> 
-        {% ifequal post.comment_status "open" %}
+        {% if post.enable_comment %}
         <small> &raquo; <a href="#comment">{% trans "You can leave a comment." %}</a></small>
         {% else %}
         <small> &raquo; {% trans "Comments are currently closed." %}</a></small>
-        {% endifequal %}
+        {% endif %}
         </p>
 	</div>
 </div>

@@ -4,6 +4,8 @@ from django.utils.translation import ugettext as _
 from django.utils import encoding, html
 from django.utils.html import urlquote
 
+import tagging
+
 class Category(models.Model):
     title = models.CharField(max_length = 250, help_text = 'Maximum 250 \
             characters.')
@@ -19,10 +21,10 @@ class Category(models.Model):
         return self.title
 
     def get_post_count(self):
-        return len(Post.objects.filter(type = 'post', category = self.id))
+        return len(Post.manager.get_post_by_category(self))
 
     def get_absolute_url(self):
-        return '/archives/category/%s' % self.slug
+        return '/archives/category/%s/' % self.slug
 
 class Tag(models.Model):
     '''Tag entity'''
@@ -55,31 +57,58 @@ class Profile(models.Model):
 	class Admin:
 		pass
 
+class PostManager(models.Manager):
+    def get_post(self):
+        return super(PostManager, self).get_query_set().filter(
+                type = self.model.POST_TYPE).order_by('-date')
+
+    def get_page(self):
+        return super(PostManager, self).get_query_set().filter(
+                type = self.model.PAGE_TYPE).order_by('-date')
+
+    def get_post_by_category(self, cat):
+        return super(PostManager, self).get_query_set().filter(
+                type = self.model.POST_TYPE, 
+                category = cat.id).order_by('-date')
+
+    def get_post_by_date(self, year, month):
+        return super(PostManager, self).get_query_set().filter(
+                type = self.model.POST_TYPE, 
+                date__year = int(year),
+                date__month = int(month)).order_by('-date')
+
 class Post(models.Model):
+    (
+        PAGE_TYPE,
+        POST_TYPE,
+    ) = range(2)
+    (
+        PUBLISHED_STATUS,
+        PENDING_STATUS,
+        DRAFT_STATUS,
+    ) = range(3)
+
     TYPE_CHOICES = (
-            ('page', 'Page'),
-            ('post', 'Post'),
-            )
-    POST_STATUS_CHOICES = (
-            ('publish', 'Published'),
-            ('pending', 'Pending Review'),
-            ('draft', 'Unpublished'),
-            )
-    COMMENT_STATUS_CHOICES = (
-            ('open', 'Open'),
-            ('closed', 'Closed'),
-            )
+        (PAGE_TYPE, _('Page')),
+        (POST_TYPE, _('Post')),
+    )
+    STATUS_CHOICES = (
+        (PUBLISHED_STATUS, _('Published')),
+        (PENDING_STATUS, _('Pending Review')),
+        (DRAFT_STATUS, _('Unpublished')),
+    )
     title = models.CharField(max_length = 64)
-    name = models.CharField(max_length = 200, blank = True)
+    slug = models.SlugField(unique = True)
     content = models.TextField()
     date = models.DateTimeField(auto_now_add = True)
     author = models.ForeignKey(User)
     category = models.ManyToManyField(Category)
     view = models.IntegerField(default = 0, editable = False)
-    type = models.CharField(max_length = 20, default = 'post', choices = TYPE_CHOICES)
-    post_status = models.CharField(max_length = 20, default = 'publish', choices = POST_STATUS_CHOICES)
-    comment_status = models.CharField(max_length = 20, default = 'open', choices = COMMENT_STATUS_CHOICES)
-    tags = models.ManyToManyField(Tag, blank = True, related_name = 'post_set')
+    type = models.IntegerField(default = POST_TYPE, choices = TYPE_CHOICES)
+    status = models.IntegerField(default = PUBLISHED_STATUS, choices = STATUS_CHOICES)
+    enable_comment = models.BooleanField(default = True)
+    manager = PostManager()
+    objects = models.Manager()
 
     def save(self):
         self.content = html.clean_html(self.content)
@@ -112,22 +141,29 @@ class Post(models.Model):
         comments = self.comments.order_by('id')
         return len(comments)
 
-    def get_excerpt(self):
+    def __get_excerpt(self):
         return self.content.split('<!--more-->')[0]
 
-    def get_remain(self):
+    excerpt = property(__get_excerpt)
+
+    def __get_remain(self):
         return self.content.split('<!--more-->')[1]
 
-    def get_pagebreak(self):
+    remain = property(__get_remain)
+
+    def __get_pagebreak(self):
         try:
             self.content.index('<!--more-->')
         except ValueError:
-            return ''
+            return False
         else:
-            return 'true'
+            return True
+    pagebreak = property(__get_pagebreak)
 
     def get_categories(self):
         return self.category.all()
+
+tagging.register(Post)
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, related_name = 'comments')

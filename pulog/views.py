@@ -22,7 +22,7 @@ def index(request):
         posts = search(request)
         SEARCH = True
     else:
-        posts = Post.objects.filter(type = 'post').order_by('-date')
+        posts = Post.manager.get_post()
         SEARCH = False
 
     if len(posts) > 5:
@@ -75,7 +75,7 @@ def page(request, num):
         posts = search(request)
         SEARCH = True
     else:
-        posts = Post.objects.filter(type = 'post').order_by('-date')
+        posts = Post.manager.get_post()
         SEARCH = False
 
     if num:
@@ -203,7 +203,7 @@ def single_post(request, post_id):
         return Http404
 
 def static_pages(request, page):
-    for post in Post.objects.filter(type = 'page'):
+    for post in Post.manager.get_page():
         try:
             if post.name == page:
                 return render_to_response('post/page.html', 
@@ -218,7 +218,7 @@ def static_pages(request, page):
 def category_view(request, slugname, page_num = None):
     slugname = encoding.iri_to_uri(slugname)
     cat = Category.objects.filter(slug = slugname)[0]
-    posts = Post.objects.filter(type = 'post', category = cat.id).order_by('-date')
+    posts = Post.manager.get_post_by_category(cat)
 
     if page_num:
         current_page = int(page_num)
@@ -242,9 +242,7 @@ def category_view(request, slugname, page_num = None):
                 )
 
 def archive_view(request, year, month, page_num = None):
-    posts = Post.objects.filter(date__year = int(year),
-            date__month = int(month),
-            type = 'post').order_by('-date')
+    posts = Post.manager.get_post_by_date(year, month)
 
     if page_num:
         current_page = int(page_num)

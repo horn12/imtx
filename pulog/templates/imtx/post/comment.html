@@ -17,7 +17,7 @@
     {% endfor %}
 </ol>
 
-{% ifequal post.comment_status "open" %}
+{% if post.enable_comment %}
 <h3>{% trans "Leave a Comment" %}</h3>
 <form action="/commentspost/" method="POST" id="commentform">
     {% if not user.is_authenticated %}
@@ -39,4 +39,4 @@
     <p><input name="submit" type="image" src="/templates/imtx/css/images/submit.png" id="submit" tabindex="5" value="Submit Comment" />
     <input type="hidden" name="post_id" value="{{ post.id }}" />
 </form>
-{% endifequal %}
+{% endif %}
