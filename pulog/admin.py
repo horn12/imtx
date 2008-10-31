@@ -3,7 +3,10 @@ from pulog.models import Category
 from pulog.models import Post
 from pulog.models import Link
 from pulog.models import Profile
-from media.admin import MediaAdmin
+from pulog.models import Media
+
+class MediaAdmin(admin.StackedInline):
+    model = Media
 
 class PostAdmin(admin.ModelAdmin):
     list_display = ('title', 'date', 'author')
@@ -14,13 +17,13 @@ class PostAdmin(admin.ModelAdmin):
     }
     inlines = [MediaAdmin,]
 
-
     class Media:
         js = (
             '/static/js/tiny_mce/tiny_mce.js',
             '/static/js/textareas.js',
         )
 
+admin.site.register(Media)
 admin.site.register(Post, PostAdmin)
 admin.site.register(Category)
 admin.site.register(Profile)

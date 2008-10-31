@@ -1,4 +1,8 @@
 2008-10-30 TualatriX <tualatrix@gmail.com>
+	
+	* media/: Integrated media to pulog models.
+
+2008-10-30 TualatriX <tualatrix@gmail.com>
 
 	* dynamic_media_serve: Add for new media serve.
 	* media/utils.py: Removed.

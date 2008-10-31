@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 from django.utils import encoding, html
 from django.utils.html import urlquote
+from django.db.models.fields.files import ImageFieldFile
 
 import tagging
 
@@ -59,21 +60,17 @@ class Profile(models.Model):
 
 class PostManager(models.Manager):
     def get_post(self):
-        return super(PostManager, self).get_query_set().filter(
-                type = self.model.POST_TYPE).order_by('-date')
+        return self.get_query_set().filter(type = self.model.POST_TYPE).order_by('-date')
 
     def get_page(self):
-        return super(PostManager, self).get_query_set().filter(
-                type = self.model.PAGE_TYPE).order_by('-date')
+        return self.get_query_set().filter(type = self.model.PAGE_TYPE).order_by('-date')
 
     def get_post_by_category(self, cat):
-        return super(PostManager, self).get_query_set().filter(
-                type = self.model.POST_TYPE, 
+        return self.get_query_set().filter(type = self.model.POST_TYPE, 
                 category = cat.id).order_by('-date')
 
     def get_post_by_date(self, year, month):
-        return super(PostManager, self).get_query_set().filter(
-                type = self.model.POST_TYPE, 
+        return self.get_query_set().filter(type = self.model.POST_TYPE, 
                 date__year = int(year),
                 date__month = int(month)).order_by('-date')
 
@@ -190,3 +187,17 @@ class Link(models.Model):
 
     def __unicode__(self):
         return '%s: %s' % (self.name, self.url)
+
+class Media(models.Model):
+    UPLOAD_ROOT = 'upload/%Y/%m'
+
+    title = models.CharField(max_length = 120)
+    image = models.ImageField(upload_to = UPLOAD_ROOT)
+    date = models.DateTimeField(auto_now_add = True)
+    post = models.ForeignKey(Post)
+
+    class Meta:
+        verbose_name_plural = _('Media')
+
+    def __unicode__(self):
+        return _('%s, uploaded at %s') % (self.title, self.date.strftime('%T %h %d, %Y'))

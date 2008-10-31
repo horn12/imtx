@@ -17,6 +17,7 @@ feed = {
 
 urlpatterns = patterns('',
         (r'^admin/(.*)', admin.site.root),
+        (r'^comments/', include('django.contrib.comments.urls.comments')),
         (r'^feed/(?P<url>.*)/$', 'django.contrib.syndication.views.feed', 
             {'feed_dict': feed}),
         (r'^templates/(?P<path>.*)$', 'django.views.static.serve',
