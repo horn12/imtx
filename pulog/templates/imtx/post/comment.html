@@ -1,4 +1,8 @@
-{% load i18n filter count %}
+{% load i18n filter count comments %}
+
+{% get_comment_form for post as commentform %}
+
+{{ commentform }}
 
 {% if post.get_comments %}
 <h3 id="comments">{% get_comments_count %}</h3>

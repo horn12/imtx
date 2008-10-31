@@ -86,5 +86,6 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.admin',
     'pulog',
+    'pulog.comments',
     'tagging',
 )
