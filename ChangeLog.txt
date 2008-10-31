@@ -1,6 +1,8 @@
 2008-10-30 TualatriX <tualatrix@gmail.com>
 	
 	* media/: Integrated media to pulog models.
+	* dynamic_media_serve: Remove dynamic_media_serve to
+	pulug.media_serve.
 
 2008-10-30 TualatriX <tualatrix@gmail.com>
 

@@ -24,7 +24,7 @@ urlpatterns = patterns('',
             {'document_root': TEMPLATE_ROOT}),
 #        (r'^static/(?P<path>.*)$', 'django.views.static.serve',
 #            {'document_root': MEDIA_ROOT}),
-        (r'^static/(?P<path>.*)$', 'dynamic_media_serve.serve', 
+        (r'^static/(?P<path>.*)$', 'pulog.media_serve.serve', 
             {'document_root': MEDIA_ROOT}),
 )
 
