@@ -21,3 +21,20 @@ class CommentManager(models.Manager):
         if isinstance(model, models.Model):
             qs = qs.filter(object_pk=force_unicode(model._get_pk_val()))
         return qs
+
+class PostManager(models.Manager):
+    def get_post(self):
+        return self.get_query_set().filter(type = self.model.POST_TYPE).order_by('-date')
+    
+    def get_page(self):
+        return self.get_query_set().filter(type = self.model.PAGE_TYPE).order_by('-date')
+        
+    def get_post_by_category(self, cat):
+        return self.get_query_set().filter(type = self.model.POST_TYPE,
+                category = cat.id).order_by('-date')
+        
+    def get_post_by_date(self, year, month):
+        return self.get_query_set().filter(type = self.model.POST_TYPE,
+                date__year = int(year),
+                date__month = int(month)).order_by('-date')
+

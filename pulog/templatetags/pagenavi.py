@@ -1,8 +1,8 @@
 from django import template
-from txblog.blog.models import Post
+from pulog.models import Post
 
 register = template.Library()
 
 @register.tag
 def pagenavi(context):
-	return {'pages': Post.objects.filter(type = 'page')}
+	return {'pages': Post.manager.get_page()}

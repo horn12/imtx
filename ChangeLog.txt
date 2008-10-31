@@ -3,7 +3,8 @@
 	* media/: Integrated media to pulog models.
 	* dynamic_media_serve: Remove dynamic_media_serve to
 	pulug.media_serve.
-	* pulog/comments/: Modified form django.contrib.comments.
+	* pulog/models.py, admin.py, managers.py, views: Modified form
+	django.contri.comments, use GenericRelation to Post.
 
 2008-10-30 TualatriX <tualatrix@gmail.com>
 

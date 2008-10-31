@@ -17,7 +17,6 @@ feed = {
 
 urlpatterns = patterns('',
         (r'^admin/(.*)', admin.site.root),
-        (r'^comments/', include('django.contrib.comments.urls.comments')),
         (r'^feed/(?P<url>.*)/$', 'django.contrib.syndication.views.feed', 
             {'feed_dict': feed}),
         (r'^templates/(?P<path>.*)$', 'django.views.static.serve',
@@ -38,8 +37,23 @@ urlpatterns += patterns('pulog.views',
         (r'^archives/(?P<year>\d{4})/(?P<month>\d{1,2})/$', 'archive_view'),
         (r'^archives/(?P<year>\d{4})/(?P<month>[^/]+)/page/(?P<page_num>\d+)/$',
             'archive_view'),
-        (r'^commentspost/$', 'comments_post'),
         (r'^page/(?P<num>\d+)/$', 'page'),
         (r'(\w+)$', 'static_pages'),
 #        (r'^(?P<year>\d{4})/(?P<month>\d{1,2})/page/(?P<page_num>\d+)$', 'archive_view'),
+)
+
+urlpatterns += patterns('pulog.views',
+    url(r'^comment/post/$',          'comment.post_comment',       name='comment-post-comment'),
+    url(r'^comment/posted/$',        'comment.comment_done',       name='comment-comment-done'),
+    url(r'^comment/flag/(\d+)/$',    'moderation.flag',             name='comment-flag'),
+    url(r'^comment/flagged/$',       'moderation.flag_done',        name='comment-flag-done'),
+    url(r'^comment/delete/(\d+)/$',  'moderation.delete',           name='comment-delete'),
+    url(r'^comment/deleted/$',       'moderation.delete_done',      name='comment-delete-done'),
+    url(r'^comment/moderate/$',      'moderation.moderation_queue', name='comment-moderation-queue'),
+    url(r'^comment/approve/(\d+)/$', 'moderation.approve',          name='comment-approve'),
+    url(r'^comment/approved/$',      'moderation.approve_done',     name='comment-approve-done'),
+)
+
+urlpatterns += patterns('',
+    url(r'^comment/cr/(\d+)/(\w+)/$', 'django.views.defaults.shortcut', name='comment-url-redirect'),
 )

@@ -1,9 +1,11 @@
 from django import template
+from django.core import urlresolvers
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
-from django.contrib import comments
 from django.utils.encoding import smart_unicode
+from pulog.models import Comment
+from pulog.forms import CommentForm
 
 register = template.Library()
 
@@ -59,7 +61,7 @@ class BaseCommentNode(template.Node):
     def __init__(self, ctype=None, object_pk_expr=None, object_expr=None, as_varname=None, comment=None):
         if ctype is None and object_expr is None:
             raise template.TemplateSyntaxError("Comment nodes must be given either a literal object or a ctype and object pk.")
-        self.comment_model = comments.get_model()
+        self.comment_model = Comment
         self.as_varname = as_varname
         self.ctype = ctype
         self.object_pk_expr = object_pk_expr
@@ -117,7 +119,7 @@ class CommentFormNode(BaseCommentNode):
     def get_form(self, context):
         ctype, object_pk = self.get_target_ctype_pk(context)
         if object_pk:
-            return comments.get_form()(ctype.get_object_for_this_type(pk=object_pk))
+            return CommentForm(ctype.get_object_for_this_type(pk=object_pk))
         else:
             return None
 
@@ -151,9 +153,9 @@ class RenderCommentFormNode(CommentFormNode):
         ctype, object_pk = self.get_target_ctype_pk(context)
         if object_pk:
             template_search_list = [
-                "comments/%s/%s/form.html" % (ctype.app_label, ctype.model),
-                "comments/%s/form.html" % ctype.app_label,
-                "comments/form.html"
+                "comment/%s/%s/form.html" % (ctype.app_label, ctype.model),
+                "comment/%s/form.html" % ctype.app_label,
+                "comment/form.html"
             ]
             context.push()
             formstr = render_to_string(template_search_list, {"form" : self.get_form(context)}, context)
@@ -243,10 +245,10 @@ def comment_form_target():
 
         <form action="{% comment_form_target %}" method="POST">
     """
-    return comments.get_form_target()
+    return 'test'
 
 register.tag(get_comment_count)
 register.tag(get_comment_list)
 register.tag(get_comment_form)
 register.tag(render_comment_form)
-register.simple_tag(comment_form_target)
+#register.simple_tag(comment_form_target)

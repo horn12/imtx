@@ -1,11 +1,192 @@
+import datetime
 from django.db import models
+from django.core import urlresolvers
 from django.contrib.auth.models import User
-from django.utils.translation import ugettext as _
+from django.contrib.contenttypes import generic
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.sites.models import Site
 from django.utils import encoding, html
 from django.utils.html import urlquote
+from django.utils.translation import ugettext_lazy as _
 from django.db.models.fields.files import ImageFieldFile
+from pulog.managers import PostManager
+from pulog.managers import CommentManager
+from django.conf import settings
 
 import tagging
+
+COMMENT_MAX_LENGTH = getattr(settings, 'COMMENT_MAX_LENGTH', 3000)
+
+class BaseCommentAbstractModel(models.Model):
+    """
+    An abstract base class that any custom comment models probably should
+    subclass.
+    """
+
+    # Content-object field
+    content_type   = models.ForeignKey(ContentType,
+            related_name="content_type_set_for_%(class)s")
+    object_pk      = models.PositiveIntegerField(_('object id'))
+    content_object = generic.GenericForeignKey(ct_field="content_type", fk_field="object_pk")
+
+    # Metadata about the comment
+    site        = models.ForeignKey(Site)
+
+    class Meta:
+        abstract = True
+
+    def get_content_object_url(self):
+        """
+        Get a URL suitable for redirecting to the content object.
+        """
+        return urlresolvers.reverse(
+            "comments-url-redirect",
+            args=(self.content_type_id, self.object_pk)
+        )
+
+class Comment(BaseCommentAbstractModel):
+    """
+    A user comment about some object.
+    """
+
+    # Who posted this comment? If ``user`` is set then it was an authenticated
+    # user; otherwise at least user_name should have been set and the comment
+    # was posted by a non-authenticated user.
+    user        = models.ForeignKey(User, blank=True, null=True, related_name="%(class)s_comments")
+    user_name   = models.CharField(_("user's name"), max_length=50, blank=True)
+    user_email  = models.EmailField(_("user's email address"), blank=True)
+    user_url    = models.URLField(_("user's URL"), blank=True)
+
+    comment = models.TextField(_('comment'), max_length=COMMENT_MAX_LENGTH)
+
+    # Metadata about the comment
+    date = models.DateTimeField(_('date/time submitted'), default=None)
+    ip_address  = models.IPAddressField(_('IP address'), blank=True, null=True)
+    is_public   = models.BooleanField(_('is public'), default=True,
+                    help_text=_('Uncheck this box to make the comment effectively ' \
+                                'disappear from the site.'))
+    is_removed  = models.BooleanField(_('is removed'), default=False,
+                    help_text=_('Check this box if the comment is inappropriate. ' \
+                                'A "This comment has been removed" message will ' \
+                                'be displayed instead.'))
+
+    # Manager
+    objects = CommentManager()
+
+    class Meta:
+        ordering = ('date',)
+        permissions = [("can_moderate", "Can moderate comments")]
+
+    def __unicode__(self):
+        return "%s: %s..." % (self.name, self.comment[:50])
+
+    def save(self, force_insert=False, force_update=False):
+        if self.date is None:
+            self.date = datetime.datetime.now()
+        super(Comment, self).save(force_insert, force_update)
+
+    def _get_userinfo(self):
+        """
+        Get a dictionary that pulls together information about the poster
+        safely for both authenticated and non-authenticated comments.
+
+        This dict will have ``name``, ``email``, and ``url`` fields.
+        """
+        if not hasattr(self, "_userinfo"):
+            self._userinfo = {
+                "name"  : self.user_name,
+                "email" : self.user_email,
+                "url"   : self.user_url
+            }
+            if self.user_id:
+                u = self.user
+                if u.email:
+                    self._userinfo["email"] = u.email
+
+                # If the user has a full name, use that for the user name.
+                # However, a given user_name overrides the raw user.username,
+                # so only use that if this comment has no associated name.
+                if u.get_full_name():
+                    self._userinfo["name"] = self.user.get_full_name()
+                elif not self.user_name:
+                    self._userinfo["name"] = u.username
+        return self._userinfo
+    userinfo = property(_get_userinfo, doc=_get_userinfo.__doc__)
+
+    def _get_name(self):
+        return self.userinfo["name"]
+    def _set_name(self, val):
+        if self.user_id:
+            raise AttributeError(_("This comment was posted by an authenticated "\
+                                   "user and thus the name is read-only."))
+        self.user_name = val
+    name = property(_get_name, _set_name, doc="The name of the user who posted this comment")
+
+    def _get_email(self):
+        return self.userinfo["email"]
+    def _set_email(self, val):
+        if self.user_id:
+            raise AttributeError(_("This comment was posted by an authenticated "\
+                                   "user and thus the email is read-only."))
+        self.user_email = val
+    email = property(_get_email, _set_email, doc="The email of the user who posted this comment")
+
+    def _get_url(self):
+        return self.userinfo["url"]
+    def _set_url(self, val):
+        self.user_url = val
+    url = property(_get_url, _set_url, doc="The URL given by the user who posted this comment")
+
+    def get_absolute_url(self, anchor_pattern="#c%(id)s"):
+        return self.get_content_object_url() + (anchor_pattern % self.__dict__)
+
+    def get_as_text(self):
+        """
+        Return this comment as plain text.  Useful for emails.
+        """
+        d = {
+            'user': self.user,
+            'date': self.date,
+            'comment': self.comment,
+            'domain': self.site.domain,
+            'url': self.get_absolute_url()
+        }
+        return _('Posted by %(user)s at %(date)s\n\n%(comment)s\n\nhttp://%(domain)s%(url)s') % d
+
+class CommentFlag(models.Model):
+    """
+    Records a flag on a comment. This is intentionally flexible; right now, a
+    flag could be:
+
+        * A "removal suggestion" -- where a user suggests a comment for (potential) removal.
+
+        * A "moderator deletion" -- used when a moderator deletes a comment.
+
+    You can (ab)use this model to add other flags, if needed. However, by
+    design users are only allowed to flag a comment with a given flag once;
+    if you want rating look elsewhere.
+    """
+    user      = models.ForeignKey(User, related_name="comment_flags")
+    comment   = models.ForeignKey(Comment, related_name="flags")
+    flag      = models.CharField(max_length=30, db_index=True)
+    flag_date = models.DateTimeField(default=None)
+
+    # Constants for flag types
+    SUGGEST_REMOVAL = "removal suggestion"
+    MODERATOR_DELETION = "moderator deletion"
+    MODERATOR_APPROVAL = "moderator approval"
+
+    class Meta:
+        unique_together = [('user', 'comment', 'flag')]
+
+    def __unicode__(self):
+        return "%s flag of comment ID %s by %s" % \
+            (self.flag, self.comment_id, self.user.username)
+
+    def save(self, force_insert=False, force_update=False):
+        if self.flag_date is None:
+            self.flag_date = datetime.datetime.now()
+        super(CommentFlag, self).save(force_insert, force_update)
 
 class Category(models.Model):
     title = models.CharField(max_length = 250, help_text = 'Maximum 250 \
@@ -55,25 +236,6 @@ class Profile(models.Model):
 	def __unicode__(self):
 		return self.nickname
 
-	class Admin:
-		pass
-
-class PostManager(models.Manager):
-    def get_post(self):
-        return self.get_query_set().filter(type = self.model.POST_TYPE).order_by('-date')
-
-    def get_page(self):
-        return self.get_query_set().filter(type = self.model.PAGE_TYPE).order_by('-date')
-
-    def get_post_by_category(self, cat):
-        return self.get_query_set().filter(type = self.model.POST_TYPE, 
-                category = cat.id).order_by('-date')
-
-    def get_post_by_date(self, year, month):
-        return self.get_query_set().filter(type = self.model.POST_TYPE, 
-                date__year = int(year),
-                date__month = int(month)).order_by('-date')
-
 class Post(models.Model):
     (
         PAGE_TYPE,
@@ -95,7 +257,7 @@ class Post(models.Model):
         (DRAFT_STATUS, _('Unpublished')),
     )
     title = models.CharField(max_length = 64)
-    slug = models.SlugField(unique = True)
+    slug = models.SlugField(unique = True, blank = True)
     content = models.TextField()
     date = models.DateTimeField(auto_now_add = True)
     author = models.ForeignKey(User)
@@ -104,6 +266,9 @@ class Post(models.Model):
     type = models.IntegerField(default = POST_TYPE, choices = TYPE_CHOICES)
     status = models.IntegerField(default = PUBLISHED_STATUS, choices = STATUS_CHOICES)
     enable_comment = models.BooleanField(default = True)
+    comment =  generic.GenericRelation(Comment, 
+                    object_id_field = 'object_pk',
+                    content_type_field = 'content_type')
     manager = PostManager()
     objects = models.Manager()
 
@@ -162,23 +327,23 @@ class Post(models.Model):
 
 tagging.register(Post)
 
-class Comment(models.Model):
-    post = models.ForeignKey(Post, related_name = 'comments')
-    author = models.CharField(max_length = 32)
-    email = models.EmailField()
-    url = models.URLField(blank = True)
-    IP = models.IPAddressField(editable = False)
-    date = models.DateTimeField(auto_now_add = True, editable = False)
-    content = models.TextField()
-
-    def __unicode__(self):
-        return '%s: %s' % (self.author, self.content)
-
-    def get_display(self):
-        return html.strip_tags(self.content)
-
-    def get_absolute_url(self):
-        return '%s#comment-%d' % (self.post.get_absolute_url(), self.id )
+#class Comment(models.Model):
+#    post = models.ForeignKey(Post, related_name = 'comments')
+#    author = models.CharField(max_length = 32)
+#    email = models.EmailField()
+#    url = models.URLField(blank = True)
+#    IP = models.IPAddressField(editable = False)
+#    date = models.DateTimeField(auto_now_add = True, editable = False)
+#    content = models.TextField()
+#
+#    def __unicode__(self):
+#        return '%s: %s' % (self.author, self.content)
+#
+#    def get_display(self):
+#        return html.strip_tags(self.content)
+#
+#    def get_absolute_url(self):
+#        return '%s#comment-%d' % (self.post.get_absolute_url(), self.id )
 
 class Link(models.Model):
     url = models.URLField()

@@ -7,23 +7,23 @@ from pulog.models import Post, Category, Comment, Link
 
 register = Library()
 
-@register.inclusion_tag('post/recent_posts.html', takes_context = True)
+@register.inclusion_tag('sidebar/recent_posts.html', takes_context = True)
 def get_recent_posts(context):
     return {'posts': Post.manager.get_post()[:10]}
 
-@register.inclusion_tag('post/recent_comments.html', takes_context = True)
+@register.inclusion_tag('sidebar/recent_comments.html', takes_context = True)
 def get_recent_comments(context):
     comments = Comment.objects.all().order_by('-date')[:10]
 
     return {'comments': comments}
 
-@register.inclusion_tag('post/links.html', takes_context = True)
+@register.inclusion_tag('sidebar/links.html', takes_context = True)
 def get_links(context):
     links = Link.objects.all()
 
     return {'links': links}
 
-@register.inclusion_tag('post/category_list.html', takes_context = True)
+@register.inclusion_tag('sidebar/category_list.html', takes_context = True)
 def get_categories(context):
     return {'categories': Category.objects.all(),
         'posts': Post.manager.get_post()}
@@ -45,7 +45,7 @@ class MonthArchive:
     def get_post_count(self):
         return len(Post.manager.get_post_by_date(self.year, self.month))
 
-@register.inclusion_tag('post/archive_list.html', takes_context = True)
+@register.inclusion_tag('sidebar/archive_list.html', takes_context = True)
 def get_archive(context):
     months = []
     archive_months = []
