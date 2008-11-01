@@ -365,4 +365,4 @@ class Media(models.Model):
         verbose_name_plural = _('Media')
 
     def __unicode__(self):
-        return _('%s, uploaded at %s') % (self.title, self.date.strftime('%T %h %d, %Y'))
+        return _('%s, uploaded at %s') % (self.title, self.date.strftime('%I:%M%p, %Y/%m/%d'))
