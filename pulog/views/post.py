@@ -181,22 +181,24 @@ def single_post(request, post_id):
             post.view = post.view + 1
             post.save()
 
-        author = ''
-        email = ''
-        url = ''
-        if 'author' in request.COOKIES:
-            author = request.COOKIES['author']
-        if 'email' in request.COOKIES:
-            email = request.COOKIES['email']
-        if 'url' in request.COOKIES:
-            url = request.COOKIES['url']
+#        author = ''
+#        email = ''
+#        url = ''
+#        if 'author' in request.COOKIES:
+#            author = request.COOKIES['author']
+#        if 'email' in request.COOKIES:
+#            email = request.COOKIES['email']
+#        if 'url' in request.COOKIES:
+#            url = request.COOKIES['url']
 
-        qd = QueryDict('author=%s&email=%s&url=%s' % (author, email, url))
-        form = CommentForm(qd)
+#        qd = QueryDict('author=%s&email=%s&url=%s' % (author, email, url))
+#        form = CommentForm(qd)
 
         return render_to_response('post/post_detail.html', 
-                    {'post': post,
-                    'form': form},
+                    {
+                        'post': post,
+#                        'form': form,
+                    },
                     context_instance = RequestContext(request),
                     )
     else:
