@@ -12,24 +12,24 @@
 		 * @param {string} url Absolute URL to where the plugin is located.
 		 */
 		init : function(ed, url) {
-			// Register the command so that it can be invoked by using tinyMCE.activeEditor.execCommand('mceExample');
+			// Register the command so that it can be invoked by using tinyMCE.activeEditor.execCommand('mceUpload');
 			ed.addCommand('mceUpload', function() {
 				ed.windowManager.open({
-					file : url + '/dialog.htm',
+					file : url + '/upload.htm',
 					width : 320 + parseInt(ed.getLang('pulog_upload.delta_width', 0)),
-					height : 160 + parseInt(ed.getLang('pulog_upload.delta_height', 0)),
+					height : 140 + parseInt(ed.getLang('pulog_upload.delta_height', 0)),
 					inline : 1
 				}, {
 					plugin_url : url, // Plugin absolute URL
-					some_custom_arg : 'custom arg' // Custom argument
+					post_url : window.location.toString().substring(window.location.toString().indexOf("/admin")) // get the current post url
 				});
 			});
 
-			// Register example button
+			// Register upload button
 			ed.addButton('pulog_upload', {
 				title : 'pulog_upload.desc',
 				cmd : 'mceUpload',
-				image : url + '/img/example.gif'
+				image : url + '/img/upload.gif'
 			});
 
 			// Add a node change handler, selects the button in the UI when a image is selected

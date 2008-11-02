@@ -6,7 +6,7 @@ var ExampleDialog = {
 
 		// Get the selected contents as text and place it in the input
 		f.someval.value = tinyMCEPopup.editor.selection.getContent({format : 'text'});
-		f.somearg.value = tinyMCEPopup.getWindowArg('some_custom_arg');
+		f.somearg.value = tinyMCEPopup.getWindowArg('post_url');
 	},
 
 	insert : function() {
