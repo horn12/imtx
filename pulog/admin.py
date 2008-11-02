@@ -12,13 +12,15 @@ class MediaAdmin(admin.StackedInline):
     model = Media
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('title', 'date', 'author')
+    list_display = ('title', 'date', 'author', 'status')
+    list_filter = ('date', 'author', 'category', 'type', 'status')
     prepopulated_fields = {'slug': ('title',)}
     radio_fields = {
         'status': admin.VERTICAL,
         'type': admin.VERTICAL
     }
     inlines = [MediaAdmin,]
+    search_fields = ('title', 'author', 'content')
 
     class Media:
         js = (

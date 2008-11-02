@@ -12,6 +12,11 @@ from django.utils.hashcompat import sha_constructor
 from django.utils.text import get_text_list
 from django.utils.translation import ungettext, ugettext_lazy as _
 from pulog.models import Comment
+from pulog.models import Media
+
+class MediaForm(forms.ModelForm):
+    class Meta:
+        model = Media
 
 COMMENT_MAX_LENGTH = getattr(settings,'COMMENT_MAX_LENGTH', 3000)
 
