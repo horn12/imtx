@@ -39,10 +39,9 @@ class BaseCommentAbstractModel(models.Model):
         """
         Get a URL suitable for redirecting to the content object.
         """
-        return urlresolvers.reverse(
-            "comments-url-redirect",
-            args=(self.content_type_id, self.object_pk)
-        )
+        model = ContentType.objects.get(pk = self.content_type_id).model_class()
+        object = model.objects.get(pk = self.object_pk)
+        return object.get_absolute_url()
 
 class Comment(BaseCommentAbstractModel):
     """
@@ -137,7 +136,7 @@ class Comment(BaseCommentAbstractModel):
         self.user_url = val
     url = property(_get_url, _set_url, doc="The URL given by the user who posted this comment")
 
-    def get_absolute_url(self, anchor_pattern="#c%(id)s"):
+    def get_absolute_url(self, anchor_pattern="#comment-%(id)s"):
         return self.get_content_object_url() + (anchor_pattern % self.__dict__)
 
     def get_as_text(self):
@@ -206,8 +205,9 @@ class Category(models.Model):
         '''Return the post number under the category'''
         return Post.objects.get_post_by_category(self).count()
 
+    @models.permalink
     def get_absolute_url(self):
-        return '/archives/category/%s/' % self.slug
+        return ('post-category', [str(self.slug)])
 
 class Tag(models.Model):
     '''Tag entity'''
@@ -279,8 +279,10 @@ class Post(models.Model):
     def __unicode__(self):
         return self.title
 
+    @models.permalink
     def get_absolute_url(self):
-        return '/archives/%d.html' % self.id
+#        return '/archives/%d.html' % self.id
+        return ('post-single', [str(self.id)])
 
     def get_author(self):
         try:

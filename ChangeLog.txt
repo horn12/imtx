@@ -1,6 +1,8 @@
 2008-11-02 TualatriX <tualatrix@gmail.com>
 
 	* pulog/templatetags/menu.py: Fixed the filter for menu(static page).
+	* pulog/urls.py, pulog/models.py: Apply the permalink(Post, Category
+	and Comment.
 
 2008-10-30 TualatriX <tualatrix@gmail.com>
 	
