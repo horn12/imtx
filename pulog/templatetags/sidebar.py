@@ -9,7 +9,7 @@ register = Library()
 
 @register.inclusion_tag('sidebar/recent_posts.html', takes_context = True)
 def get_recent_posts(context):
-    return {'posts': Post.manager.get_post()[:10]}
+    return {'posts': Post.objects.get_post()[:10]}
 
 @register.inclusion_tag('sidebar/recent_comments.html', takes_context = True)
 def get_recent_comments(context):
@@ -26,7 +26,7 @@ def get_links(context):
 @register.inclusion_tag('sidebar/category_list.html', takes_context = True)
 def get_categories(context):
     return {'categories': Category.objects.all(),
-        'posts': Post.manager.get_post()}
+        'posts': Post.objects.get_post()}
 
 class MonthArchive:
     title = ""
@@ -43,7 +43,7 @@ class MonthArchive:
         self.link = '/archives/%s/%s/' % (date[0], date[1])
 
     def get_post_count(self):
-        return len(Post.manager.get_post_by_date(self.year, self.month))
+        return Post.objects.get_post_by_date(self.year, self.month).count()
 
 @register.inclusion_tag('sidebar/archive_list.html', takes_context = True)
 def get_archive(context):

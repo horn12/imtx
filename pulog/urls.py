@@ -8,7 +8,7 @@ from pulog.feed import LatestPosts
 admin.autodiscover()
 
 post_info = {
-    'queryset': Post.manager.get_post(),
+    'queryset': Post.objects.get_post(),
 }
 
 feed = {
@@ -38,7 +38,7 @@ urlpatterns += patterns('pulog.views',
         (r'^archives/(?P<year>\d{4})/(?P<month>[^/]+)/page/(?P<page_num>\d+)/$',
             'archive_view'),
         (r'^page/(?P<num>\d+)/$', 'page'),
-        (r'(\w+)$', 'static_pages'),
+        (r'^(\w+)/$', 'static_pages'),
 #        (r'^(?P<year>\d{4})/(?P<month>\d{1,2})/page/(?P<page_num>\d+)$', 'archive_view'),
 )
 

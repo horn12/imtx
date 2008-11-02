@@ -22,7 +22,7 @@ def index(request):
         posts = search(request)
         SEARCH = True
     else:
-        posts = Post.manager.get_post()
+        posts = Post.objects.get_post()
         SEARCH = False
 
     if len(posts) > 5:
@@ -75,7 +75,7 @@ def page(request, num):
         posts = search(request)
         SEARCH = True
     else:
-        posts = Post.manager.get_post()
+        posts = Post.objects.get_post()
         SEARCH = False
 
     if num:
@@ -205,12 +205,11 @@ def single_post(request, post_id):
         return Http404
 
 def static_pages(request, page):
-    for post in Post.manager.get_page():
+    for post in Post.objects.get_page():
         try:
-            if post.name == page:
+            if post.slug == page:
                 return render_to_response('post/page.html', 
-                        {'post': post, 'current': post.name},
-                        context_instance = RequestContext(request)
+                        {'post': post, 'current': post.slug},
                         )
         except TypeError:
             raise Http404
@@ -220,7 +219,7 @@ def static_pages(request, page):
 def category_view(request, slugname, page_num = None):
     slugname = encoding.iri_to_uri(slugname)
     cat = Category.objects.filter(slug = slugname)[0]
-    posts = Post.manager.get_post_by_category(cat)
+    posts = Post.objects.get_post_by_category(cat)
 
     if page_num:
         current_page = int(page_num)
@@ -244,7 +243,7 @@ def category_view(request, slugname, page_num = None):
                 )
 
 def archive_view(request, year, month, page_num = None):
-    posts = Post.manager.get_post_by_date(year, month)
+    posts = Post.objects.get_post_by_date(year, month)
 
     if page_num:
         current_page = int(page_num)

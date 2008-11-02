@@ -5,6 +5,4 @@ register = template.Library()
 
 @register.tag
 def list_pages(context):
-	return {'pages': Post.objects.filter(type = 'page')}
-
-
+	return {'pages': Post.objects.get_page()}

@@ -189,10 +189,10 @@ class CommentFlag(models.Model):
         super(CommentFlag, self).save(force_insert, force_update)
 
 class Category(models.Model):
-    title = models.CharField(max_length = 250, help_text = 'Maximum 250 \
-            characters.')
-    slug = models.SlugField(unique = True, help_text = 'Suggested value \
-            automatically generated from title. Must be unique.')
+    title = models.CharField(max_length = 250, help_text = _('Maximum 250 '
+            'characters.'))
+    slug = models.SlugField(unique = True, help_text = _('Suggested value '
+            'automatically generated from title. Must be unique.'))
     description = models.TextField()
 
     class Meta:
@@ -203,7 +203,8 @@ class Category(models.Model):
         return self.title
 
     def get_post_count(self):
-        return len(Post.manager.get_post_by_category(self))
+        '''Return the post number under the category'''
+        return Post.objects.get_post_by_category(self).count()
 
     def get_absolute_url(self):
         return '/archives/category/%s/' % self.slug
@@ -269,8 +270,7 @@ class Post(models.Model):
     comment =  generic.GenericRelation(Comment, 
                     object_id_field = 'object_pk',
                     content_type_field = 'content_type')
-    manager = PostManager()
-    objects = models.Manager()
+    objects = PostManager()
 
     def save(self):
         self.content = html.clean_html(self.content)
