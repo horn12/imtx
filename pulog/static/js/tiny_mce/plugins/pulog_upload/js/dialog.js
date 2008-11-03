@@ -1,19 +1,19 @@
 tinyMCEPopup.requireLangPack();
 
-var ExampleDialog = {
-	init : function() {
+var UploadDialog = {
+	init : function(url) {
 		var f = document.forms[0];
 
 		// Get the selected contents as text and place it in the input
-		f.someval.value = tinyMCEPopup.editor.selection.getContent({format : 'text'});
-		f.somearg.value = tinyMCEPopup.getWindowArg('post_url');
+		
+		//f.somearg.value = tinyMCEPopup.getWindowArg('post_url');
 	},
 
-	insert : function() {
+	insert : function(url,alt) {
 		// Insert the contents from the input into the document
-		tinyMCEPopup.editor.execCommand('mceInsertContent', false, document.forms[0].someval.value);
+		tinyMCEPopup.editor.execCommand('mceInsertContent', false,'<img src=\"' + url + '\" alt=\"' + alt + '\" />');
 		tinyMCEPopup.close();
 	}
 };
 
-tinyMCEPopup.onInit.add(ExampleDialog.init, ExampleDialog);
+tinyMCEPopup.onInit.add(UploadDialog.init, UploadDialog);

@@ -15,10 +15,18 @@
 <form enctype="multipart/form-data" method="POST" action="/upload/">
 	{{ form.as_p }}
 	<input type="submit" value="upload"/>
+	<!--<input type="button" id="insert" name="insert" value="{#insert}" onclick="UploadDialog({{ image.image.url }}).insert();" />-->
 </form> 
 {% for image in images %}
 {{ image.image.get_thumb_url }}
-<a href="{{image.image.url}}"><img src="{{ image.get_thumb_url }}" title="{{ image.title }}" /></a><br />
+<div>
+    <div>
+        <a href="{{image.image.url}}"><img src="{{ image.get_thumb_url }}" title="{{ image.title }}" /></a><br />
+    </div>
+    <div>
+        <input type="button" id="insert" name="insert" value="{#insert}" onclick="UploadDialog.insert('{{image.image.url}}', '{{ image.title}}');" />
+    </div>
+</div>
 {% endfor %}
 
 </body>
