@@ -357,14 +357,21 @@ class Link(models.Model):
 
 class Media(models.Model):
     UPLOAD_ROOT = 'upload/%Y/%m'
+    THUMB_SIZE = '480'
+    LOGO_SIZE = '48'
 
     title = models.CharField(max_length = 120)
     image = models.ImageField(upload_to = UPLOAD_ROOT)
     date = models.DateTimeField(auto_now_add = True)
-    post = models.ForeignKey(Post)
 
     class Meta:
         verbose_name_plural = _('Media')
 
     def __unicode__(self):
-        return _('%s, uploaded at %s') % (self.title, self.date.strftime('%I:%M%p, %Y/%m/%d'))
+        return _('<Media: %s, uploaded at %s>') % (self.title, self.date.strftime('%I:%M%p, %Y/%m/%d'))
+
+    def get_thumb_url(self):
+        return self.image.url + '?width=' + self.THUMB_SIZE
+
+    def get_logo_url(self):
+        return self.image.url + '?width=' + self.LOGO_SIZE + '&height=' + self.LOGO_SIZE

@@ -1,0 +1,14 @@
+{% load media %}
+
+{% get_media as images %}
+
+<h1 id="title">Upload your files</h1>
+<hr>
+<form enctype="multipart/form-data" method="POST" action="/upload/">
+	{{ form.as_p }}
+	<input type="submit" value="upload"/>
+</form> 
+{% for image in images %}
+{{ image.image.get_thumb_url }}
+<a href="{{image.image.url}}"><img src="{{ image.get_thumb_url }}" title="{{ image.title }}" /></a><br />
+{% endfor %}

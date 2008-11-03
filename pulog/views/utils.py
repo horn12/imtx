@@ -11,6 +11,20 @@ from django.template import RequestContext
 from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
 from pulog.models import Comment
+from pulog.models import Media
+from pulog.forms import MediaForm
+
+def upload(request):
+    #FIXME Use auth
+    if request.method == 'POST':
+        form = MediaForm(request.POST, request.FILES)
+        if form.is_valid():
+            new_object = form.save(commit = False)
+            new_object.save()
+            form.clean()
+    else:
+        form = MediaForm()
+    return render_to_response('utils/upload.html', {'form': form})
 
 def next_redirect(data, default, default_view, **get_kwargs):
     """

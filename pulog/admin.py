@@ -19,7 +19,7 @@ class PostAdmin(admin.ModelAdmin):
         'status': admin.VERTICAL,
         'type': admin.VERTICAL
     }
-    inlines = [MediaAdmin,]
+#    inlines = [MediaAdmin,]
     search_fields = ('title', 'author', 'content')
 
     class Media:

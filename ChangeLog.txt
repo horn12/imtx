@@ -1,3 +1,11 @@
+2008-11-03 TualatriX <tualatrix@gmail.com>
+
+	* pulog/admin.py, models.py: Removed the relation between Media and
+	Post.
+	* pulog/views/utils.py, pulog/urlspy: Added the upload view and url.
+	* pulog/templates/utils/upload.html: Added the upload html for common
+	admin use.
+
 2008-11-02 TualatriX <tualatrix@gmail.com>
 
 	* pulog/templatetags/menu.py: Fixed the filter for menu(static page).

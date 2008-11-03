@@ -27,6 +27,10 @@ urlpatterns = patterns('',
             {'document_root': MEDIA_ROOT}),
 )
 
+urlpatterns += patterns('pulog.views.utils',
+    (r'^upload/$', 'upload'),
+)
+
 urlpatterns += patterns('pulog.views',
     (r'^$', 'index'),
     (r'^archives/$', 'index'),

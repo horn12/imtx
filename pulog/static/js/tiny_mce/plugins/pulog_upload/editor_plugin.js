@@ -15,9 +15,9 @@
 			// Register the command so that it can be invoked by using tinyMCE.activeEditor.execCommand('mceUpload');
 			ed.addCommand('mceUpload', function() {
 				ed.windowManager.open({
-					file : url + '/upload.htm',
-					width : 320 + parseInt(ed.getLang('pulog_upload.delta_width', 0)),
-					height : 140 + parseInt(ed.getLang('pulog_upload.delta_height', 0)),
+					file : '/upload/',
+					width : 540 + parseInt(ed.getLang('pulog_upload.delta_width', 0)),
+					height : 300 + parseInt(ed.getLang('pulog_upload.delta_height', 0)),
 					inline : 1
 				}, {
 					plugin_url : url, // Plugin absolute URL
