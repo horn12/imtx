@@ -1,4 +1,12 @@
 {% load media %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>{#pulog_upload_dlg.title}</title>
+	<script type="text/javascript" src="/static/js/tiny_mce/tiny_mce_popup.js"></script>
+	<script type="text/javascript" src="/static/js/tiny_mce/plugins/pulog_upload/js/dialog.js"></script>
+</head>
+<body>
 
 {% get_media as images %}
 
@@ -12,3 +20,6 @@
 {{ image.image.get_thumb_url }}
 <a href="{{image.image.url}}"><img src="{{ image.get_thumb_url }}" title="{{ image.title }}" /></a><br />
 {% endfor %}
+
+</body>
+</html>
