@@ -1,3 +1,8 @@
+2008-11-07 TualatriX <tualatrix@gmail.com>
+	
+	* pulog/models.py: Added the get_admin_url method for post.
+	* pulog/views.py: Changed the view of single-post.
+
 2008-11-03 TualatriX <tualatrix@gmail.com>
 
 	* pulog/admin.py, models.py: Removed the relation between Media and

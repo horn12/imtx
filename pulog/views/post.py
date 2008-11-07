@@ -176,31 +176,12 @@ def single_post(request, post_id):
     post = get_object_or_404(Post, id = post_id)
 
     if post:
-        if not post_id in request.session:
-            request.session[post_id] = 'visited'
-            post.view = post.view + 1
-            post.save()
+        post.view = post.view + 1
+        post.save()
 
-#        author = ''
-#        email = ''
-#        url = ''
-#        if 'author' in request.COOKIES:
-#            author = request.COOKIES['author']
-#        if 'email' in request.COOKIES:
-#            email = request.COOKIES['email']
-#        if 'url' in request.COOKIES:
-#            url = request.COOKIES['url']
-
-#        qd = QueryDict('author=%s&email=%s&url=%s' % (author, email, url))
-#        form = CommentForm(qd)
-
-        return render_to_response('post/post_detail.html', 
-                    {
-                        'post': post,
-#                        'form': form,
-                    },
-                    context_instance = RequestContext(request),
-                    )
+        return render_to_response('post/post_detail.html', {'post': post},
+                context_instance = RequestContext(request),
+                )
     else:
         return Http404
 
@@ -210,6 +191,7 @@ def static_pages(request, page):
             if post.slug == page:
                 return render_to_response('post/page.html', 
                         {'post': post, 'current': post.slug},
+                            context_instance = RequestContext(request),
                         )
         except TypeError:
             raise Http404

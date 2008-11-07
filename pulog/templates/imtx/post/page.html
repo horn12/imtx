@@ -11,5 +11,7 @@
 		{% endautoescape %}
 	</div>
 </div>
-	<p><small><a href="/admin/post/post/{{ post.id }}/">Edit</a></small></p>
+	{% if user.is_staff %}
+	<p><small><a href="{{ post.get_admin_url }}">Edit</a></small></p>
+	{% endif %}
 {% endblock %}

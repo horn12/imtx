@@ -281,8 +281,10 @@ class Post(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-#        return '/archives/%d.html' % self.id
         return ('post-single', [str(self.id)])
+
+    def get_admin_url(self):
+        return '/admin/pulog/post/%d/' % self.id
 
     def get_author(self):
         try:
