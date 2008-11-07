@@ -9,9 +9,9 @@ var UploadDialog = {
 		//f.somearg.value = tinyMCEPopup.getWindowArg('post_url');
 	},
 
-	insert : function(url,alt) {
+	insert : function(url,alt, link) {
 		// Insert the contents from the input into the document
-		tinyMCEPopup.editor.execCommand('mceInsertContent', false,'<img src=\"' + url + '\" alt=\"' + alt + '\" />');
+		tinyMCEPopup.editor.execCommand('mceInsertContent', false,'<a href=\"' + link + '\">' + '<img src=\"' + url + '\" alt=\"' + alt + '\" /></a>');
 		tinyMCEPopup.close();
 	}
 };

@@ -17,6 +17,8 @@
 	<input type="submit" value="upload"/>
 	<!--<input type="button" id="insert" name="insert" value="{#insert}" onclick="UploadDialog({{ image.image.url }}).insert();" />-->
 </form> 
+
+<div>
 {% for image in images %}
 {{ image.image.get_thumb_url }}
 <div>
@@ -24,10 +26,11 @@
         <a href="{{image.image.url}}"><img src="{{ image.get_thumb_url }}" title="{{ image.title }}" /></a><br />
     </div>
     <div>
-        <input type="button" id="insert" name="insert" value="{#insert}" onclick="UploadDialog.insert('{{image.image.url}}', '{{ image.title}}');" />
+	    <input type="button" id="insert" name="insert" value="{#insert}" onclick="UploadDialog.insert('{{image.get_thumb_url}}', '{{ image.title}}', '{{ image.image.url }}');" />
     </div>
 </div>
 {% endfor %}
+</div>
 
 </body>
 </html>
