@@ -2,7 +2,7 @@ import os
 from django.contrib import admin
 from django.conf.urls.defaults import *
 from django.views.generic import list_detail
-from settings import MEDIA_ROOT, TEMPLATE_ROOT
+from django.conf import settings
 from pulog.models import Post, Category
 from pulog.feed import LatestPosts
 admin.autodiscover()
@@ -20,11 +20,11 @@ urlpatterns = patterns('',
         (r'^feed/(?P<url>.*)/$', 'django.contrib.syndication.views.feed', 
             {'feed_dict': feed}),
         (r'^templates/(?P<path>.*)$', 'django.views.static.serve',
-            {'document_root': TEMPLATE_ROOT}),
+            {'document_root': settings.TEMPLATE_ROOT}),
 #        (r'^static/(?P<path>.*)$', 'django.views.static.serve',
 #            {'document_root': MEDIA_ROOT}),
         (r'^static/(?P<path>.*)$', 'pulog.media_serve.serve', 
-            {'document_root': MEDIA_ROOT}),
+            {'document_root': settings.MEDIA_ROOT}),
 )
 
 urlpatterns += patterns('pulog.views.utils',
