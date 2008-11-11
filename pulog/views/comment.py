@@ -36,7 +36,7 @@ def post_comment(request, next=None):
         if not data.get('name', ''):
             try:
                 data['name'] = request.user.get_profile().nickname
-            except DoesNotExist:
+            except:
                 data['name'] = request.user.get_full_name() or request.user.username
         if not data.get('email', ''):
             data["email"] = request.user.email

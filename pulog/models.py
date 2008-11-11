@@ -11,6 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.db.models.fields.files import ImageFieldFile
 from pulog.managers import PostManager
 from pulog.managers import CommentManager
+from pulog.signals import comment_was_posted
 from django.conf import settings
 
 import tagging
@@ -377,3 +378,37 @@ class Media(models.Model):
 
     def get_logo_url(self):
         return self.image.url + '?width=' + self.LOGO_SIZE + '&height=' + self.LOGO_SIZE
+
+def on_comment_was_posted(sender, comment, request, *args, **kwargs):
+    # spam checking can be enabled/disabled per the comment's target Model
+    #if comment.content_type.model_class() != Entry:
+    #    return
+
+    try:
+        from akismet import Akismet
+    except:
+        return
+
+    ak = Akismet(
+        key=settings.AKISMET_API_KEY,
+        blog_url='http://%s/' % Site.objects.get(pk=settings.SITE_ID).domain
+    )
+
+    if ak.verify_key():
+        data = {
+            'user_ip': request.META.get('REMOTE_ADDR', '127.0.0.1'),
+            'user_agent': request.META.get('HTTP_USER_AGENT', ''),
+            'referrer': request.META.get('HTTP_REFERER', ''),
+            'comment_type': 'comment',
+            'comment_author': comment.user_name.encode('utf-8'),
+        }
+
+        if ak.comment_check(comment.comment.encode('utf-8'), data=data, build_data=True):
+            comment.flags.create(
+                user=comment.content_object.author,
+                flag='spam'
+            )
+            comment.is_public = False
+            comment.save()
+
+comment_was_posted.connect(on_comment_was_posted)
