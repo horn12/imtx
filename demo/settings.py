@@ -37,7 +37,7 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'pulog/static')
+MEDIA_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -69,14 +69,13 @@ ROOT_URLCONF = 'pulog.urls'
 
 AUTH_PROFILE_MODULE = 'pulog.Profile'
 
-TEMPLATE_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'pulog/templates')
+TEMPLATE_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join(TEMPLATE_ROOT, 'imtx'),
-#    'D:/Pulog/trunk/pulog/templates/ImTX'
+    TEMPLATE_ROOT,
 )
 
 INSTALLED_APPS = (

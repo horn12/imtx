@@ -24,8 +24,8 @@ class PostAdmin(admin.ModelAdmin):
 
     class Media:
         js = (
-            '/static/js/tiny_mce/tiny_mce.js',
-            '/static/js/textareas.js',
+            '/media/js/tiny_mce/tiny_mce.js',
+            '/media/js/textareas.js',
         )
 
 class CommentsAdmin(admin.ModelAdmin):
