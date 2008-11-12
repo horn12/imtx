@@ -34,7 +34,7 @@ class CommentsAdmin(admin.ModelAdmin):
            {'fields': ('content_type', 'object_pk', 'site')}
         ),
         (_('Content'),
-           {'fields': ('user', 'user_name', 'user_email', 'user_url', 'comment')}
+           {'fields': ('user', 'user_name', 'user_email', 'user_url', 'content')}
         ),
         (_('Metadata'),
            {'fields': ('date', 'ip_address', 'is_public', 'is_removed')}

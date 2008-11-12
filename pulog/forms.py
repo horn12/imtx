@@ -20,22 +20,17 @@ class MediaForm(forms.ModelForm):
 
 COMMENT_MAX_LENGTH = getattr(settings,'COMMENT_MAX_LENGTH', 3000)
 
-class CommentForm2(forms.Form):
-#    author = forms.CharField(widget=forms.TextInput(attrs = {'onBlur': 'checkUser()'}))
-    author = forms.CharField()
-    email = forms.EmailField()
-    url = forms.URLField(required = False)
-    content = forms.CharField(widget=forms.Textarea(attrs = {'rows': '10', 'id': 'comment'}))
-
 class CommentForm(forms.Form):
     name          = forms.CharField(label=_("Name"), max_length=50)
     email         = forms.EmailField(label=_("Email address"))
     url           = forms.URLField(label=_("URL"), required=False)
-    comment       = forms.CharField(label=_('Comment'), widget=forms.Textarea,
+    content       = forms.CharField(label=_('Comment'), widget=forms.Textarea,
                                     max_length=COMMENT_MAX_LENGTH)
     content_type  = forms.CharField(widget=forms.HiddenInput)
     object_pk     = forms.CharField(widget=forms.HiddenInput)
-    timestamp     = forms.IntegerField(widget=forms.HiddenInput)
+
+    parent_id        = forms.IntegerField(widget = forms.HiddenInput, initial = 0)
+    timestamp     = forms.IntegerField(widget = forms.HiddenInput)
     security_hash = forms.CharField(min_length=40, max_length=40, widget=forms.HiddenInput)
 
     def __init__(self, target_object, data=None, initial=None):
@@ -63,11 +58,12 @@ class CommentForm(forms.Form):
             user_name    = self.cleaned_data["name"],
             user_email   = self.cleaned_data["email"],
             user_url     = self.cleaned_data["url"],
-            comment      = self.cleaned_data["comment"],
+            content      = self.cleaned_data["content"],
             date  = datetime.datetime.now(),
             site_id      = settings.SITE_ID,
             is_public    = True,
             is_removed   = False,
+            parent_id    = 0,
         )
 
         # Check that this comment isn't duplicate. (Sometimes people post comments
@@ -80,7 +76,7 @@ class CommentForm(forms.Form):
             user_url = new.user_url,
         )
         for old in possible_duplicates:
-            if old.date.date() == new.date.date() and old.comment == new.comment:
+            if old.date.date() == new.date.date() and old.content == new.content:
                 return old
 
         return new
@@ -125,16 +121,16 @@ class CommentForm(forms.Form):
         If COMMENTS_ALLOW_PROFANITIES is False, check that the comment doesn't
         contain anything in PROFANITIES_LIST.
         """
-        comment = self.cleaned_data["comment"]
+        content = self.cleaned_data["content"]
         if settings.COMMENTS_ALLOW_PROFANITIES == False:
-            bad_words = [w for w in settings.PROFANITIES_LIST if w in comment.lower()]
+            bad_words = [w for w in settings.PROFANITIES_LIST if w in content.lower()]
             if bad_words:
                 plural = len(bad_words) > 1
                 raise forms.ValidationError(ungettext(
                     "Watch your mouth! The word %s is not allowed here.",
                     "Watch your mouth! The words %s are not allowed here.", plural) % \
                     get_text_list(['"%s%s%s"' % (i[0], '-'*(len(i)-2), i[-1]) for i in bad_words], 'and'))
-        return comment
+        return content
 
     def generate_security_data(self):
         """Generate a dict of security data for "initial" data."""

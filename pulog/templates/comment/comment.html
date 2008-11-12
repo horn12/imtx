@@ -1,7 +1,8 @@
 {% load i18n filter count comment %}
-
 {% get_comment_form for post as commentform %}
 {% get_comment_list for post as comment_list %}
+
+<script type="text/javascript" src="/static/js/comment-reply.js"></script>
 
 {% if comment_list %}
 <h3 id="comments">{{ commentlist }}</h3>
@@ -11,12 +12,16 @@
     {% for comment in comment_list %}
 
     <li class="{{ forloop.counter|alt }}" id="comment-{{ comment.id }}">
-    <cite>{% if comment.url %}<a href="{{ comment.url }}">{{ comment.name }}</a>{% else %}{{ comment.name }}{% endif %}</cite>{% trans " Says:" %}
-        <br />
-	<small class="commentmetadata"><a href="#comment-{{ comment.id }}" title="">{{ comment.date|date:"D d M Y" }}</a></small>
-        {% autoescape off %}
-        {{ comment.comment|urlize|linebreaks }}
-        {% endautoescape %}
+    <div id="div-comment-{{ comment.id }}">
+	    <cite>{% if comment.url %}<a href="{{ comment.url }}">{{ comment.name }}</a>{% else %}{{ comment.name }}{% endif %}</cite>{% trans " Says:" %}
+		<br />
+		<small class="commentmetadata"><a href="#comment-{{ comment.id }}" title="">{{ comment.date|date:"D d M Y" }}</a></small>
+		<p> {% autoescape off %}
+		{{ comment.content|urlize|linebreaks }}
+		{% endautoescape %}</p>
+<!--		<div class="reply">
+			<a rel='nofollow' href="{{ comment.get_absolute_url }}#respond" onclick='return addComment.moveForm("div-comment-{{ comment.id }}", "{{ comment.id }}", "commentform")'>Reply</a>
+		</div> -->
     </li>
     {% endfor %}
 </ol>
@@ -39,11 +44,12 @@
 
     {% endif %}
 
-    <p>{{ commentform.comment }}
+    <p>{{ commentform.content }}
     {{ commentform.content_type }}
     {{ commentform.object_pk }}
     {{ commentform.timestamp }}
     {{ commentform.security_hash }}
+    {{ commentform.parent_id }}
 
     <p><input name="submit" type="image" src="/static/css/images/submit.png" id="submit" tabindex="5" value="Submit Comment" />
     <input type="hidden" name="post_id" value="{{ post.id }}" />

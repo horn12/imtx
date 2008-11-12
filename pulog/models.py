@@ -53,11 +53,13 @@ class Comment(BaseCommentAbstractModel):
     # user; otherwise at least user_name should have been set and the comment
     # was posted by a non-authenticated user.
     user        = models.ForeignKey(User, blank=True, null=True, related_name="%(class)s_comments")
-    user_name   = models.CharField(_("user's name"), max_length=50, blank=True)
-    user_email  = models.EmailField(_("user's email address"), blank=True)
-    user_url    = models.URLField(_("user's URL"), blank=True)
+    user_name   = models.CharField(_("user's name"), max_length = 50, blank = True)
+    user_email  = models.EmailField(_("user's email address"), blank = True)
+    user_url    = models.URLField(_("user's URL"), blank = True)
 
-    comment = models.TextField(_('comment'), max_length=COMMENT_MAX_LENGTH)
+    content = models.TextField(_('comment'), max_length=COMMENT_MAX_LENGTH)
+    parent = models.ForeignKey('self', blank = True)
+    mail_notify = models.BooleanField(default = False)
 
     # Metadata about the comment
     date = models.DateTimeField(_('date/time submitted'), default=None)
@@ -83,6 +85,8 @@ class Comment(BaseCommentAbstractModel):
     def save(self, force_insert=False, force_update=False):
         if self.date is None:
             self.date = datetime.datetime.now()
+        if self.parent_id is None:
+            self.parent_id = 0
         super(Comment, self).save(force_insert, force_update)
 
     def _get_userinfo(self):
@@ -389,10 +393,13 @@ def on_comment_was_posted(sender, comment, request, *args, **kwargs):
     except:
         return
 
-    ak = Akismet(
-        key=settings.AKISMET_API_KEY,
-        blog_url='http://%s/' % Site.objects.get(pk=settings.SITE_ID).domain
-    )
+    if hasattr(settings, 'AKISMET_API_KEY'):
+        ak = Akismet(
+            key = settings.AKISMET_API_KEY,
+            blog_url='http://%s/' % Site.objects.get(pk=settings.SITE_ID).domain
+        )
+    else:
+        return
 
     if ak.verify_key():
         data = {
@@ -403,7 +410,7 @@ def on_comment_was_posted(sender, comment, request, *args, **kwargs):
             'comment_author': comment.user_name.encode('utf-8'),
         }
 
-        if ak.comment_check(comment.comment.encode('utf-8'), data=data, build_data=True):
+        if ak.comment_check(comment.content.encode('utf-8'), data=data, build_data=True):
             comment.flags.create(
                 user=comment.content_object.author,
                 flag='spam'
