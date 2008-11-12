@@ -13,7 +13,7 @@ def get_recent_posts(context):
 
 @register.inclusion_tag('sidebar/recent_comments.html', takes_context = True)
 def get_recent_comments(context):
-    comments = Comment.objects.all().order_by('-date')[:10]
+    comments = Comment.objects.in_public()[:10]
 
     return {'comments': comments}
 

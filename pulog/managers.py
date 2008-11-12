@@ -5,6 +5,9 @@ from django.utils.encoding import force_unicode
 
 class CommentManager(models.Manager):
 
+    def in_public(self):
+        return self.get_query_set().filter(is_public = True, is_removed = False).order_by('-date')
+
     def in_moderation(self):
         """
         QuerySet for all comments currently in the moderation queue.
