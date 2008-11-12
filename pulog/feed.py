@@ -11,7 +11,7 @@ class LatestPosts(Feed):
 	description_template = 'feed/latest_description.html'
 
 	def items(self):
-		posts = Post.objects.filter(type = 'post').order_by('-date')
+		posts = Post.objects.get_post()
 		return posts
 
 class LatestCommentFeed(Feed):
@@ -46,4 +46,3 @@ class LatestCommentFeed(Feed):
         
     def item_pubdate(self, item):
         return item.date
-
