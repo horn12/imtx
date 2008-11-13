@@ -18,37 +18,16 @@ import tagging
 
 COMMENT_MAX_LENGTH = getattr(settings, 'COMMENT_MAX_LENGTH', 3000)
 
-class BaseCommentAbstractModel(models.Model):
+class Comment(models.Model):
     """
-    An abstract base class that any custom comment models probably should
-    subclass.
+    A user comment about some object.
     """
-
-    # Content-object field
     content_type   = models.ForeignKey(ContentType,
             related_name="content_type_set_for_%(class)s")
     object_pk      = models.PositiveIntegerField(_('object id'))
     content_object = generic.GenericForeignKey(ct_field="content_type", fk_field="object_pk")
-
-    # Metadata about the comment
     site        = models.ForeignKey(Site)
-
-    class Meta:
-        abstract = True
-
-    def get_content_object_url(self):
-        """
-        Get a URL suitable for redirecting to the content object.
-        """
-        model = ContentType.objects.get(pk = self.content_type_id).model_class()
-        object = model.objects.get(pk = self.object_pk)
-        return object.get_absolute_url()
-
-class Comment(BaseCommentAbstractModel):
-    """
-    A user comment about some object.
-    """
-
+    
     # Who posted this comment? If ``user`` is set then it was an authenticated
     # user; otherwise at least user_name should have been set and the comment
     # was posted by a non-authenticated user.
@@ -57,7 +36,7 @@ class Comment(BaseCommentAbstractModel):
     user_email  = models.EmailField(_("user's email address"), blank = True)
     user_url    = models.URLField(_("user's URL"), blank = True)
 
-    content = models.TextField(_('comment'), max_length=COMMENT_MAX_LENGTH)
+    content = models.TextField(_('Content'), max_length=COMMENT_MAX_LENGTH)
     parent = models.ForeignKey('self', blank = True)
     mail_notify = models.BooleanField(default = False)
 
@@ -78,9 +57,17 @@ class Comment(BaseCommentAbstractModel):
     class Meta:
         ordering = ('date',)
         permissions = [("can_moderate", "Can moderate comments")]
+        
+    def get_content_object_url(self):
+        """
+        Get a URL suitable for redirecting to the content object.
+        """
+        model = ContentType.objects.get(pk = self.content_type_id).model_class()
+        object = model.objects.get(pk = self.object_pk)
+        return object.get_absolute_url()
 
     def __unicode__(self):
-        return "%s: %s..." % (self.name, self.comment[:50])
+        return "%s: %s..." % (self.name, self.content[:50])
 
     def save(self, force_insert=False, force_update=False):
         if self.date is None:
@@ -125,6 +112,11 @@ class Comment(BaseCommentAbstractModel):
                                    "user and thus the name is read-only."))
         self.user_name = val
     name = property(_get_name, _set_name, doc="The name of the user who posted this comment")
+    def _get_object(self):
+        model = ContentType.objects.get(pk = self.content_type_id).model_class()
+        object = model.objects.get(pk = self.object_pk)
+        return object
+    object = property(_get_object)
 
     def _get_email(self):
         return self.userinfo["email"]
@@ -151,7 +143,7 @@ class Comment(BaseCommentAbstractModel):
         d = {
             'user': self.user,
             'date': self.date,
-            'comment': self.comment,
+            'comment': self.content,
             'domain': self.site.domain,
             'url': self.get_absolute_url()
         }
@@ -384,10 +376,6 @@ class Media(models.Model):
         return self.image.url + '?width=' + self.LOGO_SIZE + '&height=' + self.LOGO_SIZE
 
 def on_comment_was_posted(sender, comment, request, *args, **kwargs):
-    # spam checking can be enabled/disabled per the comment's target Model
-    #if comment.content_type.model_class() != Entry:
-    #    return
-
     try:
         from akismet import Akismet
     except:

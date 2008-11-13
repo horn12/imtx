@@ -37,15 +37,15 @@ class CommentsAdmin(admin.ModelAdmin):
            {'fields': ('user', 'user_name', 'user_email', 'user_url', 'content')}
         ),
         (_('Metadata'),
-           {'fields': ('date', 'ip_address', 'is_public', 'is_removed')}
+           {'fields': ('date', 'ip_address', 'is_public', 'is_removed', 'parent', 'mail_notify')}
         ),
      )
 
-    list_display = ('name', 'content_type', 'object_pk', 'ip_address', 'date', 'is_public', 'is_removed')
-    list_filter = ('date', 'site', 'is_public', 'is_removed')
+    list_display = ('name', 'object', 'ip_address', 'is_public', 'is_removed')
+    list_filter = ('date', 'is_public', 'is_removed')
     date_hierarchy = 'date'
     ordering = ('-date',)
-    search_fields = ('comment', 'user__username', 'user_name', 'user_email', 'user_url', 'ip_address')
+    search_fields = ('content', 'user__username', 'user_name', 'user_email', 'user_url', 'ip_address')
 
 admin.site.register(Post, PostAdmin)
 admin.site.register(Comment, CommentsAdmin)
