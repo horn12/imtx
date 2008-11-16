@@ -41,7 +41,7 @@ class CommentsAdmin(admin.ModelAdmin):
         ),
      )
 
-    list_display = ('name', 'object', 'ip_address', 'is_public', 'is_removed')
+    list_display = ('name', 'content_type', 'object_pk', 'ip_address', 'date', 'is_public', 'is_removed')
     list_filter = ('date', 'is_public', 'is_removed')
     date_hierarchy = 'date'
     ordering = ('-date',)

@@ -1,7 +1,7 @@
 
 addComment = {
 	moveForm : function(commId, parentId, respondId) {
-		var t = this, div, comm = t.I(commId), respond = t.I(respondId), cancel = t.I('cancel-comment-reply-link'), parent = t.I('parent_id');
+		var t = this, div, comm = t.I(commId), respond = t.I(respondId), cancel = t.I('cancel-comment-reply-link'), parent = t.I('id_parent_id');
 
 		if ( ! comm || ! respond || ! cancel || ! parent )
 			return;
@@ -16,16 +16,16 @@ addComment = {
 		}
 
 		comm.parentNode.insertBefore(respond, comm.nextSibling);
+
 		parent.value = parentId;
 		cancel.style.display = '';
 
 		cancel.onclick = function() {
 			var t = addComment, temp = t.I('wp-temp-form-div'), respond = t.I(t.respondId);
-
 			if ( ! temp || ! respond )
 				return;
 
-			t.I('comment_parent').value = '0';
+			t.I('id_parent_id').value = '0';
 			temp.parentNode.insertBefore(respond, temp);
 			temp.parentNode.removeChild(temp);
 			this.style.display = 'none';

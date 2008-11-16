@@ -22,22 +22,23 @@ class Comment(models.Model):
     """
     A user comment about some object.
     """
-    content_type   = models.ForeignKey(ContentType,
-            related_name="content_type_set_for_%(class)s")
+    content_type   = models.ForeignKey(ContentType)
+#            related_name="content_type_set_for_%(class)s")
     object_pk      = models.PositiveIntegerField(_('object id'))
     content_object = generic.GenericForeignKey(ct_field="content_type", fk_field="object_pk")
-    site        = models.ForeignKey(Site)
+    site        = models.ForeignKey(Site, related_name="comment for %(class)s")
     
     # Who posted this comment? If ``user`` is set then it was an authenticated
     # user; otherwise at least user_name should have been set and the comment
     # was posted by a non-authenticated user.
-    user        = models.ForeignKey(User, blank=True, null=True, related_name="%(class)s_comments")
+    user        = models.ForeignKey(User, blank=True, null=True)
+#            related_name="%(class)s_comments")
     user_name   = models.CharField(_("user's name"), max_length = 50, blank = True)
     user_email  = models.EmailField(_("user's email address"), blank = True)
     user_url    = models.URLField(_("user's URL"), blank = True)
 
     content = models.TextField(_('Content'), max_length=COMMENT_MAX_LENGTH)
-    parent = models.ForeignKey('self', blank = True)
+    parent = models.ForeignKey('self', null = True)
     mail_notify = models.BooleanField(default = False)
 
     # Metadata about the comment
@@ -72,8 +73,6 @@ class Comment(models.Model):
     def save(self, force_insert=False, force_update=False):
         if self.date is None:
             self.date = datetime.datetime.now()
-        if self.parent_id is None:
-            self.parent_id = 0
         super(Comment, self).save(force_insert, force_update)
 
     def _get_userinfo(self):
@@ -162,8 +161,10 @@ class CommentFlag(models.Model):
     design users are only allowed to flag a comment with a given flag once;
     if you want rating look elsewhere.
     """
-    user      = models.ForeignKey(User, related_name="comment_flags")
-    comment   = models.ForeignKey(Comment, related_name="flags")
+    user      = models.ForeignKey(User)
+   # , related_name="comment_flags")
+    comment   = models.ForeignKey(Comment)
+    #, related_name="flags")
     flag      = models.CharField(max_length=30, db_index=True)
     flag_date = models.DateTimeField(default=None)
 
