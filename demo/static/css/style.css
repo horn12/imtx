@@ -443,7 +443,6 @@ img.alignleft {
 #commentform #submit {
 	margin: 0;
 	padding: 0;
-	float: left;
 	border: none;
 	width: 175px;
 	height: 30px;
