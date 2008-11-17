@@ -6,13 +6,46 @@ from django.utils.encoding import force_unicode
 class CommentManager(models.Manager):
 
     def in_public(self):
-        return self.get_query_set().filter(is_public = True, is_removed = False).order_by('-date')
+        return self.get_query_set().filter(is_public = True, is_removed = False).order_by('date')
 
     def in_moderation(self):
         """
         QuerySet for all comments currently in the moderation queue.
         """
         return self.get_query_set().filter(is_public=False, is_removed=False)
+
+    def get_sorted_comments(self, qs):
+        def sort_comment(root, list, sorted):
+            sorted.append(root)
+            list.remove(root)
+            if root.has_children():
+                children = root.get_children()
+                for child in children:
+                    if child.has_children():
+                        sort_comment(child, list, sorted)
+                    else:
+                        sorted.append(child)
+                        list.remove(child)
+
+            if len(list) > 0:
+                next = list[0]
+                sort_comment(next, list, sorted)
+
+        comments = list(qs)
+        sorted = []
+        first = comments[0]
+        sort_comment(first, comments, sorted)
+
+        return sorted
+
+    def get_children_by_id(self, id):
+        list = []
+        comments = self.get_query_set().filter(is_public = True, is_removed = False).order_by('date')
+        for comment in comments:
+            if comment.parent_id == id:
+                list.append(comment)
+
+        return list
 
     def for_model(self, model):
         """

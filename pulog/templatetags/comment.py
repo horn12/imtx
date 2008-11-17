@@ -27,6 +27,8 @@ class BaseCommentNode(template.Node):
         if len(tokens) == 5:
             if tokens[3] != 'as':
                 raise template.TemplateSyntaxError("Third argument in %r must be 'as'" % tokens[0])
+            # contentype parser.compile_filter(tokens[2]),
+            # as_variable tokens[4]
             return cls(
                 object_expr = parser.compile_filter(tokens[2]),
                 as_varname = tokens[4],
@@ -106,7 +108,7 @@ class BaseCommentNode(template.Node):
 class CommentListNode(BaseCommentNode):
     """Insert a list of comments into the context."""
     def get_context_value_from_queryset(self, context, qs):
-        return list(qs)
+        return self.comment_model.objects.get_sorted_comments(qs)
 
 class CommentCountNode(BaseCommentNode):
     """Insert a count of comments into the context."""

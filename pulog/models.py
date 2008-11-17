@@ -17,6 +17,7 @@ from django.conf import settings
 import tagging
 
 COMMENT_MAX_LENGTH = getattr(settings, 'COMMENT_MAX_LENGTH', 3000)
+COMMENT_MAX_DEPTH = getattr(settings, 'COMMENT_MAX_DEPTH', 4)
 
 class Comment(models.Model):
     """
@@ -38,7 +39,10 @@ class Comment(models.Model):
     user_url    = models.URLField(_("user's URL"), blank = True)
 
     content = models.TextField(_('Content'), max_length=COMMENT_MAX_LENGTH)
-    parent = models.ForeignKey('self', null = True)
+    parent = models.ForeignKey('self', null = True, 
+                                       blank = True, 
+                                       default = None, 
+                                       related_name = 'children')
     mail_notify = models.BooleanField(default = False)
 
     # Metadata about the comment
@@ -74,6 +78,21 @@ class Comment(models.Model):
         if self.date is None:
             self.date = datetime.datetime.now()
         super(Comment, self).save(force_insert, force_update)
+
+    def has_parent(self):
+        return bool(self.parent_id)
+
+    def get_parent(self):
+        if self.parent_id:
+            self.objects.get(pk = self.parent_id)
+        else:
+            return None
+
+    def has_children(self):
+        return bool(self.children.get_children_by_id(self.id))
+
+    def get_children(self):
+        return self.children.get_children_by_id(self.id)
 
     def _get_userinfo(self):
         """

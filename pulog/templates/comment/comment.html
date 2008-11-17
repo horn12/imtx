@@ -51,16 +51,16 @@
 
     {% endif %}
 
+    <p>
     {{ commentform.content }}
     {{ commentform.content_type }}
     {{ commentform.object_pk }}
     {{ commentform.timestamp }}
     {{ commentform.security_hash }}
-    {{ commentform.parent_id }}
+    {{ commentform.parent_id }}</p>
 
-    <input name="submit" type="image" src="/static/css/images/submit.png" id="submit" tabindex="5" value="Submit Comment" />
-
-    <input type="hidden" name="post_id" value="{{ post.id }}" />
+    <p><input name="submit" type="image" src="/static/css/images/submit.png" id="submit" tabindex="5" value="Submit Comment" />
+    <input type="hidden" name="post_id" value="{{ post.id }}" /></p>
 </form>
 </div>
 {% endif %}

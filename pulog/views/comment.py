@@ -95,6 +95,7 @@ def post_comment(request, next=None):
 
     # Otherwise create the comment
     comment = form.get_comment_object()
+    comment.parent_id = data['parent_id']
     comment.ip_address = request.META.get("REMOTE_ADDR", None)
     if request.user.is_authenticated():
         comment.user = request.user
