@@ -84,9 +84,48 @@ class Comment(models.Model):
 
     def get_parent(self):
         if self.parent_id:
-            self.objects.get(pk = self.parent_id)
+            return Comment.objects.get(pk = self.parent_id)
         else:
             return None
+
+    def get_depth(self):
+        def _get_depth(object, list):
+            if object.has_parent():
+                parent = object.get_parent()
+                list.append(parent)
+                _get_depth(parent, list)
+
+        list = [1]
+        _get_depth(self, list)
+
+        return len(list)
+
+    def is_last_child(self):
+        '''Check whether this is the last child'''
+        def get_root(object):
+            if object.has_parent():
+                return get_root(object.get_parent())
+            else:
+                return object
+
+        def get_inherit(object, list):
+            if object and object.has_children():
+                for child in object.get_children():
+                    if child.has_children():
+                        list.append(child)
+                        get_inherit(child, list)
+                    else:
+                        list.append(child)
+
+        list = []
+        last = True
+        get_inherit(get_root(self), list)
+        for item in list:
+            if self.date < item.date:
+                last = False
+                break
+
+        return last
 
     def has_children(self):
         return bool(self.children.get_children_by_id(self.id))

@@ -166,6 +166,28 @@ class RenderCommentFormNode(CommentFormNode):
         else:
             return ''
 
+class ThreadedCommentNode(BaseCommentNode):
+    def handle_token(cls, parser, token):
+        """Class method to parse render_comment_form and return a Node."""
+        tokens = token.contents.split()
+        if tokens[1] != 'for':
+            raise template.TemplateSyntaxError("Second argument in %r tag must be 'for'" % tokens[0])
+
+        # {% render_comment_form for obj %}
+        if len(tokens) == 3:
+            return cls(object_expr=parser.compile_filter(tokens[2]))
+
+        # {% render_comment_form for app.models pk %}
+        elif len(tokens) == 4:
+            return cls(
+                ctype = BaseCommentNode.lookup_content_type(tokens[2], tokens[0]),
+                object_pk_expr = parser.compile_filter(tokens[3])
+            )
+    handle_token = classmethod(handle_token)
+
+    def render(self, context):
+        qs = self.get_query_set(context)
+        return self.comment_model.objects.get_comments_list(qs)
 # We could just register each classmethod directly, but then we'd lose out on
 # the automagic docstrings-into-admin-docs tricks. So each node gets a cute
 # wrapper function that just exists to hold the docstring.
@@ -249,8 +271,12 @@ def comment_form_target():
     """
     return 'test'
 
+def get_threaded_comment_list(parser, token):
+    return ThreadedCommentNode.handle_token(parser, token)
+
 register.tag(get_comment_count)
 register.tag(get_comment_list)
 register.tag(get_comment_form)
 register.tag(render_comment_form)
+register.tag(get_threaded_comment_list)
 #register.simple_tag(comment_form_target)
