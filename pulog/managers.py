@@ -67,14 +67,15 @@ class CommentManager(models.Manager):
                     'depth': comment.get_depth(),
                     'parity': comment.get_parity(),
                 })
-            html.append('<div id="div-comment-%(id)d"><div class="comment-author vcard"><cite><a href="http://wordpress.org/" rel="external nofollow">%(name)s</a></cite> Says: </div>\n'
+            html.append('<div id="div-comment-%(id)d"><div class="comment-author vcard"><cite><a href="%(user_url)s" rel="external nofollow">%(name)s</a></cite> Says: </div>\n'
                '<div class="comment-meta commentmetadata"><a href="%(url)s">%(date)s</a>&nbsp;&nbsp;<a href="%(edit)s" title="Edit comment">edit</a></div>\n'
                '<p>%(content)s</p>\n'
                '<div class="reply"><a rel="nofollow" href="%(url)s#respond" onclick=\'return addComment.moveForm("div-comment-%(id)d", "%(id)d", "respond")\'>Reply</a></div></div>\n\n'
                 % {
                     'id': comment.id,
                     'url': comment.url,
-                    'name': comment.name,
+                    'name': comment.user_name,
+                    'user_url': comment.user_url,
                     'date': comment.date.strftime('%D %d:%M %Y'),
                     'depth': comment.get_depth(),
                     'edit': comment.get_admin_url(),
