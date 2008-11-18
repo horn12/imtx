@@ -100,6 +100,25 @@ class Comment(models.Model):
 
         return len(list)
 
+    def get_parity(self):
+        def _get_depth_odd(object):
+            comments = list(Comment.objects.filter(content_type = object.content_type, 
+                        object_pk = object.object_pk))
+            for comment in comments:
+                if comment.get_depth() != object.get_depth():
+                    comments.remove(comment)
+
+            if object.has_parent():
+                parent = object.get_parent()
+                podd = _get_depth_odd(parent)
+                return bool((podd + 1) % 2)
+
+            return bool((comments.index(object) + 1) % 2)
+        if _get_depth_odd(self):
+            return 'even'
+        else:
+            return 'odd'
+
     def is_last_child(self):
         '''Check whether this is the last child'''
         def get_root(object):
@@ -192,6 +211,9 @@ class Comment(models.Model):
 
     def get_absolute_url(self, anchor_pattern="#comment-%(id)s"):
         return self.get_content_object_url() + (anchor_pattern % self.__dict__)
+
+    def get_admin_url(self):
+        return '/admin/pulog/comment/%d/' % self.id
 
     def get_as_text(self):
         """
