@@ -9,7 +9,7 @@ COMMENT_MAX_DEPTH = getattr(settings, 'COMMENT_MAX_DEPTH', 5)
 class CommentManager(models.Manager):
 
     def in_public(self):
-        return self.get_query_set().filter(is_public = True, is_removed = False).order_by('date')
+        return self.get_query_set().filter(is_public = True, is_removed = False).order_by('-date')
 
     def in_moderation(self):
         """
