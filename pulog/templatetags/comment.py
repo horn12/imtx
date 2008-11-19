@@ -203,7 +203,9 @@ class ThreadedCommentNode(BaseCommentNode):
                     return dict[depth]
                 else:
                     if 1 in dict:
-                        dict[1] = not dict[1]
+                        previous = dict[1] 
+                        dict.clear()
+                        dict[1] = not previous
                     else:
                         dict[1] = True
 
