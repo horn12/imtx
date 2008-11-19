@@ -17,7 +17,7 @@ from django.conf import settings
 import tagging
 
 COMMENT_MAX_LENGTH = getattr(settings, 'COMMENT_MAX_LENGTH', 3000)
-COMMENT_MAX_DEPTH = getattr(settings, 'COMMENT_MAX_DEPTH', 4)
+COMMENT_MAX_DEPTH = getattr(settings, 'COMMENT_MAX_DEPTH', 5)
 
 class Comment(models.Model):
     """

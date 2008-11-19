@@ -269,13 +269,14 @@ html>body .entry li {
 	border: 1px solid #C0D8F3;
 	}
 
+	/*
 .depth-2 .depth-3 .depth-4 .depth-5{
 	background-color: #e2e2e2;
 	border: 1px solid #999;
 	margin: 5px 2px 2px 4px;
 	padding: 4px 2px 2px 4px;
 	background-color: white;
-}
+}*/
 
 .entry p a:visited {
 	color: #b85b5a;

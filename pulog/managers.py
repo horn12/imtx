@@ -2,6 +2,9 @@ from django.db import models
 from django.dispatch import dispatcher
 from django.contrib.contenttypes.models import ContentType
 from django.utils.encoding import force_unicode
+from django.conf import settings
+
+COMMENT_MAX_DEPTH = getattr(settings, 'COMMENT_MAX_DEPTH', 5)
 
 class CommentManager(models.Manager):
 
@@ -69,8 +72,7 @@ class CommentManager(models.Manager):
                 })
             html.append('<div id="div-comment-%(id)d"><div class="comment-author vcard"><cite><a href="%(user_url)s" rel="external nofollow">%(name)s</a></cite> Says: </div>\n'
                '<div class="comment-meta commentmetadata"><a href="%(url)s">%(date)s</a>&nbsp;&nbsp;<a href="%(edit)s" title="Edit comment">edit</a></div>\n'
-               '<p>%(content)s</p>\n'
-               '<div class="reply"><a rel="nofollow" href="%(url)s#respond" onclick=\'return addComment.moveForm("div-comment-%(id)d", "%(id)d", "respond")\'>Reply</a></div></div>\n\n'
+               '<p>%(content)s</p>\n' 
                 % {
                     'id': comment.id,
                     'url': comment.url,
@@ -81,6 +83,13 @@ class CommentManager(models.Manager):
                     'edit': comment.get_admin_url(),
                     'content': comment.content,
                     'parity': get_even_or_odd(comment, list),
+                })
+
+            if comment.get_depth() < COMMENT_MAX_DEPTH:
+                html.append('<div class="reply"><a rel="nofollow" href="%(url)s#respond" onclick=\'return addComment.moveForm("div-comment-%(id)d", "%(id)d", "respond")\'>Reply</a></div></div>\n\n'
+                % {
+                    'id': comment.id,
+                    'url': comment.url,
                 })
 
         def append_comment_end(html):
