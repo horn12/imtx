@@ -15,6 +15,11 @@ from pulog.signals import comment_was_posted
 from django.conf import settings
 
 import tagging
+import logging
+logging.basicConfig(level=logging.DEBUG,
+        format='%(asctime)s %(levelname)s %(message)s',
+        filename='/tmp/pulog.log',
+        filemode='w')
 
 COMMENT_MAX_LENGTH = getattr(settings, 'COMMENT_MAX_LENGTH', 3000)
 COMMENT_MAX_DEPTH = getattr(settings, 'COMMENT_MAX_DEPTH', 5)
@@ -114,6 +119,7 @@ class Comment(models.Model):
                 return bool((podd + 1) % 2)
 
             return bool((comments.index(object) + 1) % 2)
+
         if _get_depth_odd(self):
             return 'even'
         else:
