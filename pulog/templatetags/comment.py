@@ -234,9 +234,15 @@ class ThreadedCommentNode(BaseCommentNode):
                 html.append('<li class="comment %(parity)s thread-%(parity)s depth-%(depth)d" id="comment-%(id)d">\n' % commentmeta)
             else:
                 html.append('<li class="comment %(parity)s depth-%(depth)d" id="comment-%(id)d">\n' % commentmeta)
-            html.append('<div id="div-comment-%(id)d"><div class="comment-author vcard"><cite><a href="%(user_url)s" rel="external nofollow">%(name)s</a></cite> Says: </div>\n'
-               '<div class="comment-meta commentmetadata"><a href="%(url)s">%(date)s</a>&nbsp;&nbsp;<a href="%(edit)s" title="Edit comment">edit</a></div>\n'
-               '<p>%(content)s</p>\n' % commentmeta)
+
+            if commentmeta['url']:
+                html.append('<div id="div-comment-%(id)d"><div class="comment-author vcard"><cite><a href="%(user_url)s" rel="external nofollow">%(name)s</a></cite> Says: </div>\n'
+                   '<div class="comment-meta commentmetadata"><a href="%(url)s">%(date)s</a>&nbsp;&nbsp;<a href="%(edit)s" title="Edit comment">edit</a></div>\n'
+                   '<p>%(content)s</p>\n' % commentmeta)
+            else:
+                html.append('<div id="div-comment-%(id)d"><div class="comment-author vcard"><cite>%(name)s</cite> Says: </div>\n'
+                   '<div class="comment-meta commentmetadata"><a href="%(url)s">%(date)s</a>&nbsp;&nbsp;<a href="%(edit)s" title="Edit comment">edit</a></div>\n'
+                   '<p>%(content)s</p>\n' % commentmeta)
 
             if comment.get_depth() < COMMENT_MAX_DEPTH:
                 html.append('<div class="reply"><a rel="nofollow" href="%(url)s#respond" onclick=\'return addComment.moveForm("div-comment-%(id)d", "%(id)d", "respond")\'>Reply</a></div></div>\n\n' % commentmeta)

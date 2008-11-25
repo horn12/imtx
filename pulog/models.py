@@ -465,6 +465,7 @@ class Media(models.Model):
 def on_comment_was_posted(sender, comment, request, *args, **kwargs):
     try:
         from akismet import Akismet
+        from akismet import AkismetError
     except:
         return
 
@@ -476,21 +477,24 @@ def on_comment_was_posted(sender, comment, request, *args, **kwargs):
     else:
         return
 
-    if ak.verify_key():
-        data = {
-            'user_ip': request.META.get('REMOTE_ADDR', '127.0.0.1'),
-            'user_agent': request.META.get('HTTP_USER_AGENT', ''),
-            'referrer': request.META.get('HTTP_REFERER', ''),
-            'comment_type': 'comment',
-            'comment_author': comment.user_name.encode('utf-8'),
-        }
+    try:
+        if ak.verify_key():
+            data = {
+                'user_ip': request.META.get('REMOTE_ADDR', '127.0.0.1'),
+                'user_agent': request.META.get('HTTP_USER_AGENT', ''),
+                'referrer': request.META.get('HTTP_REFERER', ''),
+                'comment_type': 'comment',
+                'comment_author': comment.user_name.encode('utf-8'),
+            }
 
-        if ak.comment_check(comment.content.encode('utf-8'), data=data, build_data=True):
-            comment.flags.create(
-                user=comment.content_object.author,
-                flag='spam'
-            )
-            comment.is_public = False
-            comment.save()
+            if ak.comment_check(comment.content.encode('utf-8'), data=data, build_data=True):
+                comment.flags.create(
+                    user=comment.content_object.author,
+                    flag='spam'
+                )
+                comment.is_public = False
+                comment.save()
+    except AkismetError:
+        comment.save()
 
 comment_was_posted.connect(on_comment_was_posted)
