@@ -1,3 +1,9 @@
+2008-12-30 TualatriX <tualatrix@gmail.com>
+
+	* pulog/urls.py: Fixed the static page url issue.
+	* pulog/models.py: Change the type and status to CharField.
+	* pulog/managers.py: Change the type and status to CharField.
+
 2008-11-07 TualatriX <tualatrix@gmail.com>
 	
 	* pulog/models.py: Added the get_admin_url method for post. 

@@ -322,24 +322,13 @@ class Profile(models.Model):
 		return self.nickname
 
 class Post(models.Model):
-    (
-        PAGE_TYPE,
-        POST_TYPE,
-    ) = range(2)
-    (
-        PUBLISHED_STATUS,
-        PENDING_STATUS,
-        DRAFT_STATUS,
-    ) = range(3)
-
     TYPE_CHOICES = (
-        (PAGE_TYPE, _('Page')),
-        (POST_TYPE, _('Post')),
+        ('page', _('Page')),
+        ('post', _('Post')),
     )
     STATUS_CHOICES = (
-        (PUBLISHED_STATUS, _('Published')),
-        (PENDING_STATUS, _('Pending Review')),
-        (DRAFT_STATUS, _('Unpublished')),
+        ('publish', _('Published')),
+        ('draft', _('Unpublished')),
     )
     title = models.CharField(max_length = 64)
     slug = models.SlugField(unique = True, blank = True)
@@ -348,8 +337,8 @@ class Post(models.Model):
     author = models.ForeignKey(User)
     category = models.ManyToManyField(Category)
     view = models.IntegerField(default = 0, editable = False)
-    type = models.IntegerField(default = POST_TYPE, choices = TYPE_CHOICES)
-    status = models.IntegerField(default = PUBLISHED_STATUS, choices = STATUS_CHOICES)
+    type = models.CharField(max_length = 20, default = 'post', choices = TYPE_CHOICES)
+    status = models.CharField(max_length = 20, default = 'publish', choices = STATUS_CHOICES)
     enable_comment = models.BooleanField(default = True)
     comment =  generic.GenericRelation(Comment, 
                     object_id_field = 'object_pk',
