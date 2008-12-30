@@ -42,7 +42,7 @@ urlpatterns += patterns('pulog.views',
     (r'^archives/(?P<year>\d{4})/(?P<month>[^/]+)/page/(?P<page_num>\d+)/$',
         'archive_view'),
     (r'^page/(?P<num>\d+)/$', 'page'),
-    (r'^(\w+)/$', 'static_pages'),
+    (r'^([-\w]+)/$', 'static_pages'),
 #   (r'^(?P<year>\d{4})/(?P<month>\d{1,2})/page/(?P<page_num>\d+)$', 'archive_view'),
 )
 
