@@ -404,28 +404,11 @@ class Post(models.Model):
 
 tagging.register(Post)
 
-#class Comment(models.Model):
-#    post = models.ForeignKey(Post, related_name = 'comments')
-#    author = models.CharField(max_length = 32)
-#    email = models.EmailField()
-#    url = models.URLField(blank = True)
-#    IP = models.IPAddressField(editable = False)
-#    date = models.DateTimeField(auto_now_add = True, editable = False)
-#    content = models.TextField()
-#
-#    def __unicode__(self):
-#        return '%s: %s' % (self.author, self.content)
-#
-#    def get_display(self):
-#        return html.strip_tags(self.content)
-#
-#    def get_absolute_url(self):
-#        return '%s#comment-%d' % (self.post.get_absolute_url(), self.id )
-
 class Link(models.Model):
     url = models.URLField()
     name = models.CharField(max_length = 255)
     description = models.TextField()
+    is_public   = models.BooleanField(_('is public'), default = True)
 
     def __unicode__(self):
         return '%s: %s' % (self.name, self.url)

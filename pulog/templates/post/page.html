@@ -7,7 +7,7 @@
 	<h2 class="pagetitle">{{ post.title }}</h2>
 	<div class="entry">
 		{% autoescape off %}
-		{{ post.content }}
+		{{ post.content|linebreaks }}
 		{% endautoescape %}
 	</div>
 </div>
