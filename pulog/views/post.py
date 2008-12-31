@@ -241,6 +241,7 @@ def category_view(request, slugname, page_num = None):
     link = '/archives/category/%s' % slugname
 
     page = None
+    range = None
     if len(posts) > 5:
         pagi = Paginator(posts, 5)
         range = get_page_range(current_page, pagi.page_range)
@@ -268,6 +269,7 @@ def archive_view(request, year, month, page_num = None):
     link = '/archives/%s/%s' % (year, month)
 
     page = None
+    range = None
     if len(posts) > 5:
         pagi = Paginator(posts, 5)
         range = get_page_range(current_page, pagi.page_range)
