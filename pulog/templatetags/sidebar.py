@@ -28,6 +28,6 @@ def get_categories(context):
     return {'categories': Category.objects.all(),
         'posts': Post.objects.get_post()}
 
-@register.inclusion_tag('sidebar/archive_list.html')
+@register.inclusion_tag('sidebar/archive_list.html', takes_context = True)
 def get_archive(context):
     return {'months': Post.objects.dates('date', 'month')}
