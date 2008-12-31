@@ -47,11 +47,11 @@ def index(request):
         current_page = 1
         posts = page.object_list
         range = get_page_range(current_page, pagi.page_range)
-        print range
     else:
         page = None
         current_page = None
         first, last = None, None
+        range = None
 
     if SEARCH:
         response = render_to_response('post/search.html', {
