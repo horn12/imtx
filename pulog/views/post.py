@@ -66,7 +66,7 @@ def search(request):
         Q(content__icontains = query)
     )
 
-    return Post.objects.filter(qset).distinct().order_by('-date')
+    return Post.objects.filter(qset, status = 'publish').distinct().order_by('-date')
 
 def page(request, num):
     query = html.escape(request.GET.get('s', ''))
