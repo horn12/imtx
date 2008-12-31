@@ -30,10 +30,30 @@
                     <span class="pages">
                         Page {{ current_page }} of {{ page.paginator.num_pages }}
                     </span>{% if query %}
-                    {% if page.has_previous %}<a href="/page/{{ page.previous_page_number }}?s={{ query }}">上页</a>{% endif %}{% for num in page.paginator.page_range %}{% ifequal num current_page %}<span class="current">{{ num }}</span>{% else %}<a href="/page/{{ num }}?s={{ query }}">{{ num }}</a>{% endifequal %}{% endfor %}{% if page.has_next %}<a href="/page/{{ page.next_page_number }}?s={{ query }}">下页</a>{% endif %}
+			{% if page.has_previous %}
+				{% ifnotequal range.0 1 %} <a href="{{ link }}/page/1/?s={{ query }}">第一页</a>{% endifnotequal %}
+				<a href="{{ link }}/page/{{ page.previous_page_number }}?s={{ query }}">上页</a>
+			{% endif %}
+			{% for num in range %}
+				{% ifequal num current_page %}<span class="current">{{ num }}</span>
+				{% else %}<a href="{{ link }}/page/{{ num }}?s={{ query }}">{{ num }}</a>
+				{% endifequal %}
+			{% endfor %}
+			{% if page.has_next %}<a href="{{ link }}/page/{{ page.next_page_number }}?s={{ query }}">下页</a>
+				{% ifnotequal current_page page.next_page_number %}<a href="{{ link }}/page/{{ page.paginator.num_pages }}?s={{ query }}">最后页</a>{% endifnotequal %}
+			{% endif %}
                     {% else %}
-                    {% if page.has_previous %}<a href="{{ link }}/page/{{ page.previous_page_number }}">上页</a>{% endif %}{% for num in page.paginator.page_range %}{% ifequal num current_page %}<span class="current">{{ num }}</span>{% else %}<a href="{{ link }}/page/{{ num }}">{{ num }}</a>{% endifequal %}{% endfor %}{% if page.has_next %}<a href="{{ link }}/page/{{ page.next_page_number }}">下页</a>{% endif %}
-                    {% endif %}
+			{% if page.has_previous %}
+				{% ifnotequal range.0 1 %} <a href="{{ link }}/page/1/">第一页</a>{% endifnotequal %}
+				<a href="{{ link }}/page/{{ page.previous_page_number }}">上页</a>{% endif %}
+				{% for num in range %}
+					{% ifequal num current_page %}<span class="current">{{ num }}</span>
+					{% else %}<a href="{{ link }}/page/{{ num }}">{{ num }}</a>
+					{% endifequal %}
+				{% endfor %}
+				{% if page.has_next %}<a href="{{ link }}/page/{{ page.next_page_number }}">下页</a>
+					{% ifnotequal current_page page.next_page_number %}<a href="{{ link }}/page/{{ page.paginator.num_pages }}">最后页</a>{% endifnotequal %}{% endif %}
+				{% endif %}
                 </div>
                 {% endif %}
             </div>
