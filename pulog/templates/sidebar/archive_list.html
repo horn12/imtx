@@ -1,7 +1,7 @@
 {% if months %}
 <ul>
-	{% for month in months %}
-	<li><a href="{{ month.link }}">{{ month.title }}</a> ({{ month.get_post_count }})</li>
+	{% for month in months reversed %}
+	<li><a href="/archives/{{ month|date:"Y/m/" }}">{{ month|date:"F Y" }}</a></li>
 	{% endfor %}
 </ul>
 {% endif %}
