@@ -11,6 +11,9 @@ from pulog.models import Post, Category, Comment
 from pulog.forms import CommentForm
 
 def get_page_range(current, range):
+    if range[-1] < 8:
+        return xrange(1, range[-1] + 1)
+
     if range[-1] - current < 4:
         first = range[-1] - 7
     elif current > 4:
@@ -239,7 +242,9 @@ def category_view(request, slugname, page_num = None):
 
     page = None
     if len(posts) > 5:
-        page = Paginator(posts, 5).page(current_page)
+        pagi = Paginator(posts, 5)
+        range = get_page_range(current_page, pagi.page_range)
+        page = pagi.page(current_page)
         posts = page.object_list
 
     return render_to_response('post/archive.html', 
@@ -247,6 +252,7 @@ def category_view(request, slugname, page_num = None):
                 'posts': posts,
                 'page': page,
                 'current_page': current_page,
+                'range': range,
                 'link': link},
                 context_instance = RequestContext(request)
                 )
@@ -263,7 +269,9 @@ def archive_view(request, year, month, page_num = None):
 
     page = None
     if len(posts) > 5:
-        page = Paginator(posts, 5).page(current_page)
+        pagi = Paginator(posts, 5)
+        range = get_page_range(current_page, pagi.page_range)
+        page = pagi.page(current_page)
         posts = page.object_list
     
     return render_to_response('post/archive.html', 
@@ -271,6 +279,7 @@ def archive_view(request, year, month, page_num = None):
                 'month': month,
                 'posts': posts,
                 'page': page,
+                'range': range,
                 'current_page': current_page,
                 'link': link},
                 context_instance = RequestContext(request)
