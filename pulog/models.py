@@ -14,7 +14,6 @@ from pulog.managers import CommentManager
 from pulog.signals import comment_was_posted
 from django.conf import settings
 
-import tagging
 import logging
 logging.basicConfig(level=logging.DEBUG,
         format='%(asctime)s %(levelname)s %(message)s',
@@ -293,20 +292,6 @@ class Category(models.Model):
     def get_absolute_url(self):
         return ('post-category', [str(self.slug)])
 
-class Tag(models.Model):
-    '''Tag entity'''
-    name = models.CharField('Name', unique = True, max_length = 64)
-    slug = models.CharField('Slug', max_length = 255, unique = True,\
-            blank = True, help_text = 'Use as url')
-    reference_count = models.IntegerField('Reference count', default = 0,\
-            editable = False)
-
-    def __unicode__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return '/tag/%s/' % self.slug
-
 class Profile(models.Model):
 	user = models.ForeignKey(User, unique = True)
 
@@ -402,8 +387,6 @@ class Post(models.Model):
     def get_categories(self):
         return self.category.all()
 
-tagging.register(Post)
-
 class Link(models.Model):
     url = models.URLField()
     name = models.CharField(max_length = 255)
@@ -412,6 +395,22 @@ class Link(models.Model):
 
     def __unicode__(self):
         return '%s: %s' % (self.name, self.url)
+
+class Tag(models.Model):
+    '''Tag entity'''
+    name = models.CharField('Name', unique = True, max_length = 64)
+    slug = models.CharField('Slug', max_length = 255, unique = True,\
+            blank = True, help_text = 'Use as url')
+
+    content_type   = models.ForeignKey(ContentType)
+    object_pk      = models.PositiveIntegerField(_('object id'))
+    content_object = generic.GenericForeignKey(ct_field="content_type", fk_field="object_pk")
+
+    def __unicode__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return '/archives/tag/%s/' % self.slug
 
 class Media(models.Model):
     UPLOAD_ROOT = 'upload/%Y/%m'
