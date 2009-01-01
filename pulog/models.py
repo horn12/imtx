@@ -1,5 +1,6 @@
 import datetime
 from django.db import models
+from django.conf import settings
 from django.core import urlresolvers
 from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
@@ -11,8 +12,9 @@ from django.utils.translation import ugettext_lazy as _
 from django.db.models.fields.files import ImageFieldFile
 from pulog.managers import PostManager
 from pulog.managers import CommentManager
+from pulog.managers import TagManager
+from pulog.managers import TaggedItemManager
 from pulog.signals import comment_was_posted
-from django.conf import settings
 
 import logging
 logging.basicConfig(level=logging.DEBUG,
@@ -270,6 +272,34 @@ class CommentFlag(models.Model):
             self.flag_date = datetime.datetime.now()
         super(CommentFlag, self).save(force_insert, force_update)
 
+class Tag(models.Model):
+    '''Tag entity'''
+    name = models.CharField('Name', unique = True, max_length = 64)
+    slug = models.CharField('Slug', max_length = 255, unique = True,\
+            blank = True, help_text = 'Use as url')
+    objects = TagManager()
+
+
+    def __unicode__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return '/archives/tag/%s/' % self.slug
+
+class TaggedItem(models.Model):
+    """
+    Holds the relationship between a tag and the item being tagged.
+    """
+    tag = models.ForeignKey(Tag, verbose_name=_('tag'), related_name='items')
+    content_type = models.ForeignKey(ContentType, verbose_name=_('content type'))
+    object_id = models.PositiveIntegerField(_('object id'), db_index=True)
+    content_object = generic.GenericForeignKey('content_type', 'object_id')
+
+    objects = TaggedItemManager()
+
+    def __unicode__(self):
+        return u'%s [%s]' % (self.content_object, self.tag)
+
 class Category(models.Model):
     title = models.CharField(max_length = 250, help_text = _('Maximum 250 '
             'characters.'))
@@ -306,6 +336,8 @@ class Profile(models.Model):
 	def __unicode__(self):
 		return self.nickname
 
+from pulog.fields import TagField
+
 class Post(models.Model):
     TYPE_CHOICES = (
         ('page', _('Page')),
@@ -329,6 +361,7 @@ class Post(models.Model):
                     object_id_field = 'object_pk',
                     content_type_field = 'content_type')
     objects = PostManager()
+    tag = TagField()
 
     def save(self):
         self.content = html.clean_html(self.content)
@@ -395,22 +428,6 @@ class Link(models.Model):
 
     def __unicode__(self):
         return '%s: %s' % (self.name, self.url)
-
-class Tag(models.Model):
-    '''Tag entity'''
-    name = models.CharField('Name', unique = True, max_length = 64)
-    slug = models.CharField('Slug', max_length = 255, unique = True,\
-            blank = True, help_text = 'Use as url')
-
-    content_type   = models.ForeignKey(ContentType)
-    object_pk      = models.PositiveIntegerField(_('object id'))
-    content_object = generic.GenericForeignKey(ct_field="content_type", fk_field="object_pk")
-
-    def __unicode__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return '/archives/tag/%s/' % self.slug
 
 class Media(models.Model):
     UPLOAD_ROOT = 'upload/%Y/%m'

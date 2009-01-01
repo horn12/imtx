@@ -8,6 +8,8 @@ from pulog.models import Link
 from pulog.models import Profile
 from pulog.models import Media
 from pulog.models import Comment
+from pulog.models import Tag
+from pulog.models import TaggedItem
 
 class MediaAdmin(admin.StackedInline):
     model = Media
@@ -54,3 +56,5 @@ admin.site.register(Category)
 admin.site.register(Profile)
 admin.site.register(Link)
 admin.site.register(Media)
+admin.site.register(Tag)
+admin.site.register(TaggedItem)
