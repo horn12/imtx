@@ -12,19 +12,19 @@
         <div id="header">
             <h1><a href="/">I'm TualatriX!</a></h1>
             <form action="/" method="GET">
-                <input type="text" value="Search..." onfocus="if (value =='Search...'){value =''}" onblur="if (value ==''){value='Search...'}" name="s" id="s" />
-                <input type="image" id="searchsubmit" value="Search" src="/static/css/images/search.gif" />
+		    <div>
+			    <input type="text" value="Search..." onfocus="if (value =='Search...'){value =''}" onblur="if (value ==''){value='Search...'}" name="s" id="s" />
+			    <input type="image" id="searchsubmit" value="Search" src="/static/css/images/search.gif" />
+		    </div>
             </form>
         </div> 
 
         <div id="menu">
 		{% get_menu %}
         </div>
-
         <div class="contain">
             <div id="content" class="narrowcolumn">
                 {% block content %}{% endblock %}
-                {% block comment %}{% endblock %}
                 {% if page %}
                 <div class="pagenavi">
                     <span class="pages">
@@ -57,8 +57,8 @@
                 </div>
                 {% endif %}
             </div>
-        </div>
-        <hr />
 
 {% include "sidebar.html" %}
+	</div>
+        <hr />
 {% include "footer.html" %}
