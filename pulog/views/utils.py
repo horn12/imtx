@@ -14,6 +14,15 @@ from pulog.models import Comment
 from pulog.models import Media
 from pulog.forms import MediaForm
 
+def break_lines(request):
+    from pulog.models import Post
+    from pulog.utils import new_linebreaks
+    for p in Post.objects.all():
+        p.content = new_linebreaks(p.content)
+        p.save()
+
+    return HttpResponseRedirect('/')
+
 def upload(request):
     #FIXME Use auth
     if request.method == 'POST':

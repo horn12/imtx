@@ -11,11 +11,11 @@
 	<div class="entry">
 		{% autoescape off %}
 		{% if post.pagebreak %}
-			{{ post.excerpt|linebreaks }}
+			{{ post.excerpt }}
             <p><span id="more-{{ post.id }}"></span></p>
-			{{ post.remain|linebreaks }}
+			{{ post.remain }}
 		{% else %}
-			{{ post.content|linebreaks }}
+			{{ post.content }}
 		{% endif %}
 		{% endautoescape %}
         <p class="meta"> 

@@ -364,7 +364,7 @@ class Post(models.Model):
     tag = TagField()
 
     def save(self):
-        self.content = html.clean_html(self.content)
+#        self.content = html.clean_html(self.content)
         super(Post, self).save()
 
     def __unicode__(self):

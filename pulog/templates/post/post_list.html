@@ -12,7 +12,7 @@
 		<div class="clear"></div>
 		<div class="entry">
 			{% autoescape off %}
-			{{ post.excerpt|linebreaks }} {% if post.pagebreak %}<a href="{{ post.get_absolute_url }}#more-{{ post.id }}">Read More...</a>{% endif %}
+			{{ post.excerpt }} {% if post.pagebreak %}<a href="{{ post.get_absolute_url }}#more-{{ post.id }}">Read More...</a>{% endif %}
 			{% endautoescape %}
 		</div>
 		</div>

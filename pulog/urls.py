@@ -16,6 +16,7 @@ feed = {
 }
 
 urlpatterns = patterns('',
+        (r'linebreak/', 'pulog.views.utils.break_lines'),
         (r'^admin/(.*)', admin.site.root),
         (r'^feed/(?P<url>.*)/$', 'django.contrib.syndication.views.feed', 
             {'feed_dict': feed}),

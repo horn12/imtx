@@ -16,6 +16,32 @@ try:
 except NameError:
     from sets import Set as set
 
+def new_linebreaks(value):
+    from django.utils.encoding import force_unicode
+    value = re.sub(r'\r\n|\r|\n', '\n', force_unicode(value))
+    paras = re.split('\n+', value)
+
+    list = []
+    for p in paras:
+        if p.strip() and p.strip().startswith('<li') or \
+                p.strip().startswith('<ul') or \
+                p.strip().startswith('<h1') or \
+                p.strip().startswith('<h2') or \
+                p.strip().startswith('<h3') or \
+                p.strip().startswith('<h4') or \
+                p.strip().startswith('<hr') or \
+                p.strip().startswith('</h1>') or \
+                p.strip().startswith('</h2>') or \
+                p.strip().startswith('</h3>') or \
+                p.strip().startswith('</h4>') or \
+                p.strip().startswith('</ul>') or \
+                p.strip().startswith('</li>'):
+            list.append(p.strip())
+        else:
+            list.append(u'<p>%s</p>' % p.strip().replace('\n', ''))
+
+    return u''.join(list)
+	
 def parse_tag_input(input):
     """
     Parses tag input, with multiple word input being activated and
