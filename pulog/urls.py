@@ -1,14 +1,37 @@
 import os
+from django.conf import settings
 from django.contrib import admin
 from django.conf.urls.defaults import *
 from django.views.generic import list_detail
-from django.conf import settings
+from django.contrib.sitemaps import Sitemap
 from pulog.models import Post, Category
 from pulog.feed import LatestPosts
+
 admin.autodiscover()
 
-post_info = {
-    'queryset': Post.objects.get_post(),
+class PageSitemap(Sitemap):
+    changefreq = "weekly"
+    priority = 0.6
+
+    def items(self):
+        return Post.objects.get_page()
+
+    def lastmod(self, obj):
+        return obj.date
+
+class PostSitemap(Sitemap):
+    changefreq = "monthly"
+    priority = 0.2
+
+    def items(self):
+        return Post.objects.get_post()
+
+    def lastmod(self, obj):
+        return obj.date
+
+sitemaps = {
+    'posts': PostSitemap,
+    'pages': PageSitemap,
 }
 
 feed = {
@@ -17,6 +40,7 @@ feed = {
 
 urlpatterns = patterns('',
         (r'linebreak/', 'pulog.views.utils.break_lines'),
+        (r'^sitemap.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
         (r'^admin/(.*)', admin.site.root),
         (r'^feed/(?P<url>.*)/$', 'django.contrib.syndication.views.feed', 
             {'feed_dict': feed}),
