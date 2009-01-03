@@ -1,8 +1,29 @@
+2009-01-03 TualatriX <tualatrix@gmail.com>
+
+	* pulog/urls.py: Added the sitemap.
+
+2009-01-02 TualatriX <tualatrix@gmail.com>
+
+	* pulog/templates/base.html: Fixed the div error of sidebar and
+	contain.
+
+2009-01-01 TualatriX <tualatrix@gmail.com>
+
+	* pulog/utils.py, pulog/models.py: Merged the tagging.
+
+2008-12-31 TualatriX <tualatrix@gmail.com>
+
+	* pulog/templates/base.html, pulog/views/post.py: Improved the
+	paginator.
+	* pulog/templatetags/sidebar.py: Imporved the archive_list tag.
+
 2008-12-30 TualatriX <tualatrix@gmail.com>
 
-	* pulog/urls.py: Fixed the static page url issue.
-	* pulog/models.py: Change the type and status to CharField.
-	* pulog/managers.py: Change the type and status to CharField.
+	* pulog/urls.py: Fixed the page slug issus.
+	* pulog/models.py: Changed the status and type back to CharField.
+	* pulog/models.py: Added the is_public field to link.
+	* pulog/views/post.py: Fixed the search function, only search the
+	published post.
 
 2008-11-07 TualatriX <tualatrix@gmail.com>
 	
