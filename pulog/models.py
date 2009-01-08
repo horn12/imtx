@@ -14,7 +14,7 @@ from pulog.managers import PostManager
 from pulog.managers import CommentManager
 from pulog.managers import TagManager
 from pulog.managers import TaggedItemManager
-from pulog.signals import comment_was_posted
+from pulog.signals import comment_was_posted, comment_save
 
 import logging
 logging.basicConfig(level=logging.DEBUG,
@@ -84,6 +84,7 @@ class Comment(models.Model):
         if self.date is None:
             self.date = datetime.datetime.now()
         super(Comment, self).save(force_insert, force_update)
+        comment_save.send(sender = self.__class__, comment = self, object = self.object)
 
     def has_parent(self):
         return bool(self.parent_id)
@@ -360,11 +361,13 @@ class Post(models.Model):
     comment =  generic.GenericRelation(Comment, 
                     object_id_field = 'object_pk',
                     content_type_field = 'content_type')
+    comment_count = models.IntegerField()
     objects = PostManager()
     tag = TagField()
 
     def save(self):
         self.content = html.clean_html(self.content)
+        self.comment_count = self.get_comment_count()
         super(Post, self).save()
 
     def __unicode__(self):
@@ -394,9 +397,8 @@ class Post(models.Model):
         comments = self.comments.order_by('id')
         return comments
 
-    def get_comments_count(self):
-        comments = self.comments.order_by('id')
-        return len(comments)
+    def get_comment_count(self):
+        return Comment.objects.for_model(self).count()
 
     def __get_excerpt(self):
         return self.content.split('<!--more-->')[0]
@@ -485,4 +487,8 @@ def on_comment_was_posted(sender, comment, request, *args, **kwargs):
     except AkismetError:
         comment.save()
 
+def on_comment_save(sender, comment, *args, **kwargs):
+    comment.object.save()
+
 comment_was_posted.connect(on_comment_was_posted)
+comment_save.connect(on_comment_save)

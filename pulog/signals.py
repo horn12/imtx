@@ -9,6 +9,8 @@ from django.dispatch import Signal
 # discarded and a 403 (not allowed) response. This signal is sent at more or less
 # the same time (just before, actually) as the Comment object's pre-save signal,
 # except that the HTTP request is sent along with this signal.
+comment_save = Signal(providing_args=["comment", "object"])
+
 comment_will_be_posted = Signal(providing_args=["comment", "request"])
 
 # Sent just after a comment was posted. See above for how this differs
