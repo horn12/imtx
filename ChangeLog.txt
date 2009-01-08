@@ -1,3 +1,8 @@
+2009-01-08 TualatriX <tualatrix@gmail.com>
+
+	* pulog/models.py, signals.py: Added the comment_count and related
+	signal to Post model.
+
 2009-01-03 TualatriX <tualatrix@gmail.com>
 
 	* pulog/urls.py: Added the sitemap.
