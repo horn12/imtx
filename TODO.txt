@@ -1,8 +1,4 @@
-* Ul 不需要breaklines
 * 补上Archive count的统计
+* Use flatpage instead of Post.page
 * Create more common filters for blog templates.
-* Implement the upload file feature.
-* Implement the tag feature.
-* Implement groups for authors/administrators and the corresponding privileges.
-* Solve the problem of the relation between post and comment.
-* Use the Akismet to comment.
+* Cleanup the code.
