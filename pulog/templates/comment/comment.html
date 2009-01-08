@@ -1,5 +1,8 @@
 {% load i18n filter count comment %}
 {% get_comment_form for post as commentform %}
+
+<h3 id="comments">{{ post.get_comment_count }} Comments</h3>
+
 {% get_threaded_comment_list for post %}
 
 <script type="text/javascript" src="/static/js/comment-reply.js"></script>
@@ -7,6 +10,7 @@
 {% if comment_list %}
 <h3 id="comments">{{ commentlist }}</h3>
 {% endif %}
+
 
 {% comment %}
 <ol class="commentlist">

@@ -2,6 +2,8 @@
 
 	* pulog/models.py, signals.py: Added the comment_count and related
 	signal to Post model.
+	* pulog/templates/post/title.html, comment/comment.html: Show comment
+	count.
 
 2009-01-03 TualatriX <tualatrix@gmail.com>
 
