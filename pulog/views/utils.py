@@ -24,6 +24,9 @@ def break_lines(request):
 
     return HttpResponseRedirect('/')
 
+def redirect_feed(request):
+    return HttpResponseRedirect(urlresolvers.reverse('feed', args=('latest',)))
+
 def upload(request):
     #FIXME Use auth
     if request.method == 'POST':
