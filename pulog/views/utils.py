@@ -18,8 +18,8 @@ def break_lines(request):
     from pulog.models import Post
     from pulog.utils import new_linebreaks
     for p in Post.objects.all():
-#        p.content = new_linebreaks(p.content)
-        p.content = p.content.replace('http://imtx.cn/wp-content', 'http://ldcn.org/static/uploads')
+        p.content = new_linebreaks(p.content)
+#        p.content = p.content.replace('http://imtx.cn/wp-content', 'http://ldcn.org/static/uploads')
         p.save()
 
     return HttpResponseRedirect('/')

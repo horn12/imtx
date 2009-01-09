@@ -23,22 +23,22 @@ def new_linebreaks(value):
 
     list = []
     for p in paras:
-        if p.strip() and p.strip().startswith('<li') or \
-                p.strip().startswith('<ul') or \
-                p.strip().startswith('<h1') or \
-                p.strip().startswith('<h2') or \
-                p.strip().startswith('<h3') or \
-                p.strip().startswith('<h4') or \
-                p.strip().startswith('<hr') or \
-                p.strip().startswith('</h1>') or \
-                p.strip().startswith('</h2>') or \
-                p.strip().startswith('</h3>') or \
-                p.strip().startswith('</h4>') or \
-                p.strip().startswith('</ul>') or \
-                p.strip().startswith('</li>'):
+        if p.strip() and p.strip().startswith(u'<li') or \
+                p.strip().startswith(u'<ul') or \
+                p.strip().startswith(u'<h1') or \
+                p.strip().startswith(u'<h2') or \
+                p.strip().startswith(u'<h3') or \
+                p.strip().startswith(u'<h4') or \
+                p.strip().startswith(u'<hr') or \
+                p.strip().startswith(u'</h1>') or \
+                p.strip().startswith(u'</h2>') or \
+                p.strip().startswith(u'</h3>') or \
+                p.strip().startswith(u'</h4>') or \
+                p.strip().startswith(u'</ul>') or \
+                p.strip().startswith(u'</li>'):
             list.append(p.strip())
         else:
-            list.append(u'<p>%s</p>' % p.strip().replace('\n', ''))
+            list.append(u'<p>%s</p>' % p.strip().replace(u'\n', u''))
 
     return u''.join(list)
 	

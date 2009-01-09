@@ -1,7 +1,7 @@
 2009-01-09 TualatriX <tualatrix@gmail.com>
 
 	* pulog/feed.py: Set the latest feed item to 10.
-	* pulog/urls.py, views/utils.py: Set the Redirect from /feed/ to
+	* pulog/urls.py, views/utils.py: Set the Redirect from /feed/ /rss to
 	/feed/latest/.
 
 2009-01-08 TualatriX <tualatrix@gmail.com>

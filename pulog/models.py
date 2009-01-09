@@ -366,7 +366,10 @@ class Post(models.Model):
     tag = TagField()
 
     def save(self):
-        self.content = html.clean_html(self.content)
+        try:
+            self.content = html.clean_html(self.content)
+        except:
+            print self.content
         self.comment_count = self.get_comment_count()
         super(Post, self).save()
 
