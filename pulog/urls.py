@@ -41,6 +41,7 @@ feed = {
 urlpatterns = patterns('',
         (r'linebreak/', 'pulog.views.utils.break_lines'),
         (r'^sitemap.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
+        (r'^robots.txt$', 'pulog.views.utils.robots_txt'),
         (r'^admin/(.*)', admin.site.root),
         (r'^static/(?P<path>.*)$', 'pulog.media_serve.serve', 
             {'document_root': settings.MEDIA_ROOT}),

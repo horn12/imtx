@@ -3,6 +3,8 @@
 	* pulog/feed.py: Set the latest feed item to 10.
 	* pulog/urls.py, views/utils.py: Set the Redirect from /feed/ /rss to
 	/feed/latest/.
+	* pulog/urls.py, templates/robots.txt, views/utils.py: Added the view of
+	robots.txt
 
 2009-01-08 TualatriX <tualatrix@gmail.com>
 

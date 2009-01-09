@@ -24,6 +24,9 @@ def break_lines(request):
 
     return HttpResponseRedirect('/')
 
+def robots_txt(request):
+    return render_to_response('robots.txt', mimetype='text/plain')
+
 def redirect_feed(request):
     return HttpResponseRedirect(urlresolvers.reverse('feed', args=('latest',)))
 
