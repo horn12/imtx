@@ -1,3 +1,7 @@
+2009-01-09 TualatriX <tualatrix@gmail.com>
+
+	* pulog/feed.py: Set the latest feed item to 10.
+
 2009-01-08 TualatriX <tualatrix@gmail.com>
 
 	* pulog/models.py, signals.py: Added the comment_count and related

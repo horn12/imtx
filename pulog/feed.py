@@ -11,7 +11,7 @@ class LatestPosts(Feed):
 	description_template = 'feed/latest_description.html'
 
 	def items(self):
-		posts = Post.objects.get_post()
+		posts = Post.objects.get_post()[:10]
 		return posts
 
 class LatestCommentFeed(Feed):
