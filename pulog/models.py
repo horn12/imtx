@@ -435,7 +435,7 @@ class Link(models.Model):
         return '%s: %s' % (self.name, self.url)
 
 class Media(models.Model):
-    UPLOAD_ROOT = 'upload/%Y/%m'
+    UPLOAD_ROOT = 'uploads/%Y/%m'
     THUMB_SIZE = '480'
     LOGO_SIZE = '48'
 
