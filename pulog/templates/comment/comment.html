@@ -1,7 +1,7 @@
 {% load i18n filter count comment %}
 {% get_comment_form for post as commentform %}
 
-<h3 id="comments">{{ post.get_comment_count }} Comments</h3>
+<h3 id="comments">{{ post.comment_count }} Comments</h3>
 
 {% get_threaded_comment_list for post %}
 
