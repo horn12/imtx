@@ -82,8 +82,11 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.admin',
+    'django.contrib.sitemaps',
     'pulog',
 )
 
 #Akisment
 AKISMET_API_KEY = ''
+MAX_TAG_LENGTH = 50
+FORCE_LOWERCASE_TAGS = False
