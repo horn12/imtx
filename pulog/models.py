@@ -15,7 +15,6 @@ from pulog.managers import CommentManager
 from pulog.managers import TagManager
 from pulog.managers import TaggedItemManager
 from pulog.signals import comment_was_posted, comment_save
-from pulog import register
 
 import logging
 logging.basicConfig(level=logging.DEBUG,
@@ -425,8 +424,6 @@ class Post(models.Model):
 
     def get_categories(self):
         return self.category.all()
-
-register(Post)
 
 class Link(models.Model):
     url = models.URLField()

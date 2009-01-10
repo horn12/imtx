@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.forms.util import ErrorList
 from django.utils import encoding, html
 from pulog.models import Post, Category, Comment
+from pulog.models import Tag, TaggedItem
 from pulog.forms import CommentForm
 
 def get_page_range(current, range):
@@ -257,6 +258,37 @@ def category_view(request, slugname, page_num = None):
                 'link': link},
                 context_instance = RequestContext(request)
                 )
+
+def tag_view(request, slug, page_num = None):
+    slug = encoding.iri_to_uri(slug)
+    tag = Tag.objects.get(slug = slug)
+    posts = TaggedItem.objects.get_by_model(Post, tag).order_by('-date')
+
+    if page_num:
+        current_page = int(page_num)
+    else:
+        current_page = 1
+    
+    link = '/archives/tag/%s' % slug
+
+    page = None
+    range = None
+    if len(posts) > 5:
+        pagi = Paginator(posts, 5)
+        range = get_page_range(current_page, pagi.page_range)
+        page = pagi.page(current_page)
+        posts = page.object_list
+
+    return render_to_response('post/archive.html', 
+                {'category': tag, 
+                'posts': posts,
+                'page': page,
+                'current_page': current_page,
+                'range': range,
+                'link': link},
+                context_instance = RequestContext(request)
+                )
+
 
 def archive_view(request, year, month, page_num = None):
     posts = Post.objects.get_post_by_date(year, month)

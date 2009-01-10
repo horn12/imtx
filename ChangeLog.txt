@@ -1,3 +1,11 @@
+2009-01-10 TualatriX <tualatrix@gmail.com>
+
+	* pulog/templates/post/title.html
+	pulog/templates/comment/comment.html: Use comment_count instead of
+	get_comment_count.
+	* pulog/views/post.py, urls.py: Add the view of tag.
+	* pulog/templatetags/sidebar.py: Change the latest items from 10 to 20.  
+
 2009-01-09 TualatriX <tualatrix@gmail.com>
 
 	* pulog/feed.py: Set the latest feed item to 10.
