@@ -369,7 +369,7 @@ class Post(models.Model):
         try:
             self.content = html.clean_html(self.content)
         except:
-            print self.content
+            pass
         self.comment_count = self.get_comment_count()
         super(Post, self).save()
 
