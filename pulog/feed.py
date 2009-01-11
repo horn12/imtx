@@ -3,16 +3,19 @@ from pulog.models import Post
 from pulog.models import Comment
 
 class LatestPosts(Feed):
-	title = "I'm TualatriX"
-	link = '/'
-	description = "Hello! This is TualatriX's blog"
-	author = 'TualatriX'
-	title_template = 'feed/latest_title.html'
-	description_template = 'feed/latest_description.html'
+    title = "I'm TualatriX"
+    link = '/'
+    description = "Hello! This is TualatriX's blog"
+    author = 'TualatriX'
+    title_template = 'feed/latest_title.html'
+    description_template = 'feed/latest_description.html'
 
-	def items(self):
-		posts = Post.objects.get_post()[:10]
-		return posts
+    def items(self):
+        posts = Post.objects.get_post()[:10]
+        return posts
+
+    def item_pubdate(self, item):
+        return item.date
 
 class LatestCommentFeed(Feed):
     """Feed of latest comments on the current site."""
