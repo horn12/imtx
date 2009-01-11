@@ -30,6 +30,9 @@ def robots_txt(request):
 def redirect_feed(request):
     return HttpResponseRedirect(urlresolvers.reverse('feed', args=('latest',)))
 
+def favicon_view(request):
+    return HttpResponseRedirect('/static/img/favicon.ico')
+
 def upload(request):
     #FIXME Use auth
     if request.method == 'POST':
