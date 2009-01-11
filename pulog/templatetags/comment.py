@@ -219,10 +219,10 @@ class ThreadedCommentNode(BaseCommentNode):
         def append_comment_start(comment, list, html):
             commentmeta = {
                     'id': comment.id,
-                    'url': comment.url,
+                    'url': comment.get_absolute_url(),
                     'name': comment.user_name,
                     'user_url': comment.user_url,
-                    'date': comment.date.strftime('%D %d:%M %Y'),
+                    'date': comment.date.strftime('%Y %B %d, %H:%M'),
                     'depth': comment.get_depth(),
                     'edit': comment.get_admin_url(),
                     'content': comment.content,
