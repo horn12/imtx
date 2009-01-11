@@ -361,7 +361,7 @@ class Post(models.Model):
     comment =  generic.GenericRelation(Comment, 
                     object_id_field = 'object_pk',
                     content_type_field = 'content_type')
-    comment_count = models.IntegerField()
+    comment_count = models.IntegerField(blank = True)
     objects = PostManager()
     tag = TagField()
 
