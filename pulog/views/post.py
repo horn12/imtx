@@ -229,9 +229,9 @@ def static_pages(request, page):
 
     raise Http404
 
-def category_view(request, slugname, page_num = None):
-    slugname = encoding.iri_to_uri(slugname)
-    cat = Category.objects.filter(slug = slugname)[0]
+def category_view(request, slug, page_num = None):
+    slug = encoding.iri_to_uri(slug)
+    cat = get_object_or_404(Category, slug = slug)
     posts = Post.objects.get_post_by_category(cat)
 
     if page_num:
@@ -239,7 +239,7 @@ def category_view(request, slugname, page_num = None):
     else:
         current_page = 1
     
-    link = '/archives/category/%s' % slugname
+    link = '/archives/category/%s' % slug
 
     page = None
     range = None
@@ -261,7 +261,7 @@ def category_view(request, slugname, page_num = None):
 
 def tag_view(request, slug, page_num = None):
     slug = encoding.iri_to_uri(slug)
-    tag = Tag.objects.get(slug = slug)
+    tag = get_object_or_404(Tag, slug = slug)
     posts = TaggedItem.objects.get_by_model(Post, tag).order_by('-date')
 
     if page_num:
