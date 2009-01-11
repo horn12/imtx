@@ -487,10 +487,10 @@ def on_comment_was_posted(sender, comment, request, *args, **kwargs):
             }
 
             if ak.comment_check(comment.content.encode('utf-8'), data=data, build_data=True):
-                comment.flags.create(
-                    user=comment.content_object.author,
-                    flag='spam'
-                )
+#                comment.flags.create(
+#                    user=comment.content_object.author,
+#                    flag='spam'
+#                )
                 comment.is_public = False
                 comment.save()
     except AkismetError:
