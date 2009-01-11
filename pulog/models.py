@@ -401,7 +401,10 @@ class Post(models.Model):
         return comments
 
     def get_comment_count(self):
-        return Comment.objects.for_model(self).count()
+        try:
+            return Comment.objects.for_model(self).count()
+        except:
+            return 0
 
     def __get_excerpt(self):
         return self.content.split('<!--more-->')[0]
