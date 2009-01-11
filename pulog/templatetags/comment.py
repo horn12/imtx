@@ -235,12 +235,12 @@ class ThreadedCommentNode(BaseCommentNode):
             else:
                 html.append('<li class="comment %(parity)s depth-%(depth)d" id="comment-%(id)d">\n' % commentmeta)
 
-            if commentmeta['url']:
-                html.append('<div id="div-comment-%(id)d"><div class="comment-author vcard"><cite><a href="%(user_url)s" rel="external nofollow">%(name)s</a></cite> Says: </div>\n'
+            if commentmeta['user_url']:
+                html.append('<div id="div-comment-%(id)d"><div class="comment-author vcard"><cite><a href="%(user_url)s" rel="external nofollow">%(name)s</a></cite></div>\n'
                    '<div class="comment-meta commentmetadata"><a href="%(url)s">%(date)s</a>&nbsp;&nbsp;<a href="%(edit)s" title="Edit comment">edit</a></div>\n'
                    '<p>%(content)s</p>\n' % commentmeta)
             else:
-                html.append('<div id="div-comment-%(id)d"><div class="comment-author vcard"><cite>%(name)s</cite> Says: </div>\n'
+                html.append('<div id="div-comment-%(id)d"><div class="comment-author vcard">%(name)s</div>\n'
                    '<div class="comment-meta commentmetadata"><a href="%(url)s">%(date)s</a>&nbsp;&nbsp;<a href="%(edit)s" title="Edit comment">edit</a></div>\n'
                    '<p>%(content)s</p>\n' % commentmeta)
 
