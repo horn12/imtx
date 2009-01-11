@@ -58,17 +58,17 @@ def parse_tag_input(input):
     # Special case - if there are no commas or double quotes in the
     # input, we don't *do* a recall... I mean, we know we only need to
     # split on spaces.
-    if u',' not in input and u'"' not in input:
-        words = list(set(split_strip(input, u' ')))
-        words.sort()
-        return words
+#    if u',' not in input and u'"' not in input:
+#        words = list(set(split_strip(input, u' ')))
+#        words.sort()
+#        return words
 
     words = []
     buffer = []
     # Defer splitting of non-quoted sections until we know if there are
     # any unquoted commas.
     to_be_split = []
-    saw_loose_comma = False
+    saw_loose_comma = True
     open_quote = False
     i = iter(input)
     try:
@@ -137,7 +137,8 @@ def edit_string_for_tags(tags):
     it will be space-delimited.
     """
     names = []
-    use_commas = False
+    use_commas = True
+    print 'use_commas'
     for tag in tags:
         name = tag.name
         if u',' in name:

@@ -12,14 +12,17 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
 from pulog.models import Comment
 from pulog.models import Media
+from pulog.models import Tag
 from pulog.forms import MediaForm
 
 def break_lines(request):
     from pulog.models import Post
     from pulog.utils import new_linebreaks
     for p in Post.objects.all():
-        p.content = new_linebreaks(p.content)
+#        p.content = new_linebreaks(p.content)
 #        p.content = p.content.replace('http://imtx.cn/wp-content', 'http://imtx.cn/static/uploads')
+        p.tag = ','.join([t.name for t in Tag.objects.get_for_object(p)])
+
         p.save()
 
     return HttpResponseRedirect('/')
