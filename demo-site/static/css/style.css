@@ -204,6 +204,12 @@ a:hover {
 
 /* Content Start */
 
+#tags{
+	font-style: italic;
+	font-weight: bold;
+	font-size: 12px;
+}
+
 #content {
 	font-size: 1em;
 	}

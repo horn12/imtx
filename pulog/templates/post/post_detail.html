@@ -18,6 +18,10 @@
 			{{ post.content }}
 		{% endif %}
 		{% endautoescape %}
+
+		<p>
+		<div id="tags">Tags: {% for tag in post.get_tags %}{% if forloop.last %}<a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>. {% else %}<a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>, {% endif %}{% endfor %}</div>
+		</p>
         <p class="meta"> 
         {% if post.enable_comment %}
         <small> &raquo; <a href="#comments">{% trans "You can leave a comment." %}</a></small>

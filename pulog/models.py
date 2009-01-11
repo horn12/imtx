@@ -400,6 +400,9 @@ class Post(models.Model):
         comments = self.comments.order_by('id')
         return comments
 
+    def get_tags(self):
+        return list(Tag.objects.get_for_object(self))
+
     def get_comment_count(self):
         try:
             return Comment.objects.for_model(self).count()
