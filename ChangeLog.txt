@@ -1,10 +1,15 @@
+2009-01-11 TualatriX <tualatrix@gmail.com>
+
+	* demo-site/static/img/favicon.ico, pulog/templates/base.html: Added
+	the favicon.
+
 2009-01-10 TualatriX <tualatrix@gmail.com>
 
 	* pulog/templates/post/title.html
 	pulog/templates/comment/comment.html: Use comment_count instead of
 	get_comment_count.
-	* pulog/views/post.py, urls.py: Add the view of tag.
-	* pulog/templatetags/sidebar.py: Change the latest items from 10 to 20.  
+	* pulog/views/post.py, urls.py: Added the view of tag.
+	* pulog/templatetags/sidebar.py: Changed the latest items from 10 to 20.  
 
 2009-01-09 TualatriX <tualatrix@gmail.com>
 
