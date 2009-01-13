@@ -11,6 +11,7 @@ from pulog.models import Comment
 from pulog.models import Tag
 from pulog.models import TaggedItem
 
+#TODO In tiny_mce, implement the StackedInline
 class MediaAdmin(admin.StackedInline):
     model = Media
 
@@ -22,7 +23,6 @@ class PostAdmin(admin.ModelAdmin):
         'status': admin.VERTICAL,
         'type': admin.VERTICAL
     }
-#    inlines = [MediaAdmin,]
     search_fields = ('title', 'author', 'content')
 
     class Media:

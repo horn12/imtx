@@ -1,3 +1,7 @@
+2009-01-13 TualatriX <tualatrix@gmail.com>
+
+	* pulog/feed.py: Use the date__lte=datetime.datetime.now()
+
 2009-01-11 TualatriX <tualatrix@gmail.com>
 
 	* demo-site/static/img/favicon.ico, pulog/templates/base.html: Added

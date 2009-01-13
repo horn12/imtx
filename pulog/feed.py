@@ -1,3 +1,4 @@
+import datetime
 from django.contrib.syndication.feeds import Feed  
 from pulog.models import Post
 from pulog.models import Comment
@@ -11,7 +12,8 @@ class LatestPosts(Feed):
     description_template = 'feed/latest_description.html'
 
     def items(self):
-        posts = Post.objects.get_post()[:10]
+        #TODO What's the meaning of lte?
+        posts = Post.objects.get_post().filter(date__lte=datetime.datetime.now())[:10]
         return posts
 
     def item_pubdate(self, item):
