@@ -2,6 +2,8 @@
 
 	* pulog/models.py, utls.py, views/favourites.py, templates/favourites:
 	the previous version of Favourite.
+	* pulog/models.py, managers.py: Fixed the bug caused the duplicated
+	tag(for slug). Override the get_or_create of TagManager.
 
 2009-01-13 TualatriX <tualatrix@gmail.com>
 
