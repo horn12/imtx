@@ -13,6 +13,7 @@ from django.db.models.fields.files import ImageFieldFile
 from pulog.managers import PostManager
 from pulog.managers import CommentManager
 from pulog.managers import TagManager
+from pulog.managers import FavouriteManager
 from pulog.managers import TaggedItemManager
 from pulog.signals import comment_was_posted, comment_save
 
@@ -338,6 +339,31 @@ class Profile(models.Model):
 		return self.nickname
 
 from pulog.fields import TagField
+
+class Favourite(models.Model):
+    title = models.CharField(max_length = 64)
+    content = models.TextField()
+    link = models.URLField(verify_exists = True, blank = True)
+    view = models.IntegerField(default = 0, editable = False)
+    pub_date = models.DateTimeField(auto_now_add = True)
+    mod_date = models.DateTimeField()
+    is_public = models.BooleanField(default = True)
+    tag = TagField()
+
+    objects = FavouriteManager()
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('favourite-single', [str(self.id)])
+
+    def get_admin_url(self):
+        return '/admin/pulog/favourite/%d/' % self.id
+
+    def get_tags(self):
+        return list(Tag.objects.get_for_object(self))
+
+	def __unicode__(self):
+		return self.title
 
 class Post(models.Model):
     TYPE_CHOICES = (

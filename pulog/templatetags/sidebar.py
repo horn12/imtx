@@ -3,7 +3,7 @@ import datetime
 from django.utils.translation import gettext as _
 from django.template import Library
 from django.db import connection
-from pulog.models import Post, Category, Comment, Link
+from pulog.models import Post, Category, Comment, Link, Favourite
 
 register = Library()
 
@@ -17,6 +17,10 @@ def get_recent_comments(context):
     comments = Comment.objects.in_public()[:20]
 
     return {'comments': comments}
+
+@register.inclusion_tag('sidebar/recent_favourites.html', takes_context = True)
+def get_recent_favourites(context):
+    return {'favourites': Favourite.objects.get_public()[:20]}
 
 @register.inclusion_tag('sidebar/links.html', takes_context = True)
 def get_links(context):

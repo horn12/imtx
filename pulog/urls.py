@@ -4,6 +4,9 @@ from django.contrib import admin
 from django.conf.urls.defaults import *
 from django.views.generic import list_detail
 from django.contrib.sitemaps import Sitemap
+from django.contrib.sitemaps import views as sitemap_views
+from django.views.decorators.cache import cache_page
+
 from pulog.models import Post, Category
 from pulog.feed import LatestPosts
 
@@ -40,7 +43,7 @@ feed = {
 
 urlpatterns = patterns('',
     #    (r'linebreak/', 'pulog.views.utils.break_lines'),
-        (r'^sitemap.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
+        (r'^sitemap.xml$', cache_page(sitemap_views.sitemap, 60 * 60 * 6), {'sitemaps': sitemaps}),
         (r'^robots.txt$', 'pulog.views.utils.robots_txt'),
         (r'^favicon.ico$', 'pulog.views.utils.favicon_view'),
         (r'^admin/(.*)', admin.site.root),
@@ -56,6 +59,11 @@ urlpatterns = patterns('',
 
 urlpatterns += patterns('pulog.views.utils',
     (r'^upload/$', 'upload'),
+)
+
+urlpatterns += patterns('pulog.views.favourites',
+    (r'^favourites/$', 'index'),
+    url(r'^favourites/(?P<id>\d+).html$', 'single', name = 'favourite-single'),
 )
 
 urlpatterns += patterns('pulog.views',

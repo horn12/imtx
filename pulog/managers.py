@@ -11,6 +11,10 @@ from pulog.utils import LOGARITHMIC, URLify
 
 qn = connection.ops.quote_name
 
+class FavouriteManager(models.Manager):
+    def get_public(self):
+        return self.get_query_set().filter(is_public = True).order_by('-mod_date')
+
 class CommentManager(models.Manager):
 
     def in_public(self):

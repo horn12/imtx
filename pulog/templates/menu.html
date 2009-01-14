@@ -3,6 +3,7 @@
 {% else %}
 	<li class="current_page_item"><a href="/" title="Home">首页</a></li>
 {% endif %}
+	<li class="page_item"><a href="/favourites/" title="Home">收藏</a></li>
 {% for menu_item in menus %}{% ifequal current menu_item.slug %}
 	<li class="current_page_item"><a href="/{{ menu_item.slug }}/" title="Home">{{ menu_item.title }}</a></li>
 	{% else %}

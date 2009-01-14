@@ -1,3 +1,8 @@
+2009-01-14 TualatriX <tualatrix@gmail.com>
+
+	* pulog/models.py, utls.py, views/favourites.py, templates/favourites:
+	the previous version of Favourite.
+
 2009-01-13 TualatriX <tualatrix@gmail.com>
 
 	* pulog/feed.py: Use the date__lte=datetime.datetime.now()

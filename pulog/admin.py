@@ -10,6 +10,7 @@ from pulog.models import Media
 from pulog.models import Comment
 from pulog.models import Tag
 from pulog.models import TaggedItem
+from pulog.models import Favourite
 
 #TODO In tiny_mce, implement the StackedInline
 class MediaAdmin(admin.StackedInline):
@@ -50,6 +51,15 @@ class CommentsAdmin(admin.ModelAdmin):
     ordering = ('-date',)
     search_fields = ('content', 'user__username', 'user_name', 'user_email', 'user_url', 'ip_address')
 
+class FavouriteAdmin(admin.ModelAdmin):
+    list_display = ('title', 'content', 'tag')
+
+    class Media:
+        js = (
+            '/static/js/tiny_mce/tiny_mce.js',
+            '/static/js/textareas.js',
+        )
+
 admin.site.register(Post, PostAdmin)
 admin.site.register(Comment, CommentsAdmin)
 admin.site.register(Category)
@@ -58,3 +68,4 @@ admin.site.register(Link)
 admin.site.register(Media)
 admin.site.register(Tag)
 admin.site.register(TaggedItem)
+admin.site.register(Favourite, FavouriteAdmin)

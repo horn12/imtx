@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %} {{ favourite.title }} | I'm TualatriX {% endblock %}
+
+{% block content %}
+	<div class="favourite" id="favourite-{{ favourite.id }}">
+	<h2><a href="{{ favourite.get_absolute_url }}" rel="bookmark" title="Permanent Link to {{ favourite.title }}">{{ favourite.title }}</a></h2>
+
+	
+	<div class="clear"></div>
+	<div class="entry">
+		{% autoescape off %}
+			{{ favourite.content }}
+		{% endautoescape %}
+
+		<p>
+		{% if favourite.link %}
+		<b><a href="{{ favourite.link }}">Read more about "{{ favourite.title }}"...</a></b>
+		{% endif %}
+		{% if favourite.get_tags %}
+		<div id="tags">Tags: {% for tag in favourite.get_tags %}{% if forloop.last %}<a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>. {% else %}<a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>, {% endif %}{% endfor %}</div>
+		{% endif %}
+		</p>
+        <p class="meta"> 
+        {% if favourite.enable_comment %}
+        <small> &raquo; <a href="#comments">{% trans "You can leave a comment." %}</a></small>
+        {% else %}
+        <small> &raquo; {% trans "Comments are currently closed." %}</a></small>
+        {% endif %}
+        </p>
+	</div>
+</div>
+{% endblock %}

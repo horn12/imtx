@@ -5,7 +5,7 @@ from pulog.models import Comment
 
 class LatestPosts(Feed):
     title = "I'm TualatriX"
-    link = '/'
+    link = 'http://imtx.cn/'
     description = "Hello! This is TualatriX's blog"
     author = 'TualatriX'
     title_template = 'feed/latest_title.html'
@@ -13,8 +13,7 @@ class LatestPosts(Feed):
 
     def items(self):
         #TODO What's the meaning of lte?
-        posts = Post.objects.get_post().filter(date__lte=datetime.datetime.now())[:10]
-        return posts
+        return Post.objects.get_post().filter(date__lte=datetime.datetime.now())[:10]
 
     def item_pubdate(self, item):
         return item.date
