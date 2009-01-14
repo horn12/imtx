@@ -16,7 +16,7 @@
 
 		<p>
 		{% if favourite.link %}
-		<b><a href="{{ favourite.link }}">Read more about "{{ favourite.title }}"...</a></b>
+		<b>Read more:<a href="{{ favourite.link }}"> "{{ favourite.link }}"a></b>
 		{% endif %}
 		{% if favourite.get_tags %}
 		<div id="tags">Tags: {% for tag in favourite.get_tags %}{% if forloop.last %}<a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>. {% else %}<a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>, {% endif %}{% endfor %}</div>
