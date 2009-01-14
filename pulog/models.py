@@ -281,7 +281,6 @@ class Tag(models.Model):
             blank = True, help_text = 'Use as url')
     objects = TagManager()
 
-
     def __unicode__(self):
         return self.name
 

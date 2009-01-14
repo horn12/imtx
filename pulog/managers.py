@@ -110,8 +110,16 @@ class TagManager(models.Manager):
         current_tag_names = [tag.name for tag in current_tags]
         for tag_name in updated_tag_names:
             if tag_name not in current_tag_names:
-                tag, created = self.get_or_create(name=tag_name, slug=URLify(tag_name, None))
+                tag, created = self.get_or_create(tag_name)
                 TaggedItem._default_manager.create(tag=tag, content_object=obj)
+
+    def get_or_create(self, name):
+        tag, created = self.get_query_set().get_or_create(slug = URLify(name))
+        if created:
+            tag.name = name
+            tag.save()
+
+        return tag, created
 
     def add_tag(self, obj, tag_name):
         from pulog.models import TaggedItem
@@ -124,7 +132,7 @@ class TagManager(models.Manager):
         if len(tag_names) > 1:
             raise AttributeError(_('Multiple tags were given: "%s".') % tag_name)
         tag_name = tag_names[0]
-        tag, created = self.get_or_create(name=tag_name, slug=URLify(tag_name, None))
+        tag, created = self.get_or_create(tag_name)
         ctype = ContentType.objects.get_for_model(obj)
         TaggedItem._default_manager.get_or_create(
             tag=tag, content_type=ctype, object_id=obj.pk)

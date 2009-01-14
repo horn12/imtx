@@ -290,7 +290,7 @@ def calculate_cloud(tags, steps=4, distribution=LOGARITHMIC):
                     font_set = True
     return tags
 
-def URLify(s, num_chars):
+def URLify(s, num_chars = None):
     '''
     Changes, e.g., "Petty theft" to "petty_theft".
     This function is the Python equivalent of the javascript function
