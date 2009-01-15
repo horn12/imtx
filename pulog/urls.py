@@ -73,15 +73,18 @@ urlpatterns += patterns('pulog.views',
     url(r'^archives/category/(?P<slug>[-\w]+)/$', 'category_view', name = 'post-category'),
     (r'^archives/category/(?P<slug>[-\w]+)/page/(?P<page_num>\d+)/$', 
         'category_view'),
-    url(r'^archives/tag/(?P<slug>[-\w]+)/$', 'tag_view', name = 'post-tag'),
-    (r'^archives/tag/(?P<slug>[-\w]+)/page/(?P<page_num>\d+)/$', 
-        'tag_view'),
     (r'^archives/(?P<year>\d{4})/(?P<month>\d{1,2})/$', 'archive_view'),
     (r'^archives/(?P<year>\d{4})/(?P<month>\d{1,2})/page/(?P<page_num>\d+)/$',
         'archive_view'),
     (r'^page/(?P<num>\d+)/$', 'page'),
     (r'^([-\w]+)/$', 'static_pages'),
 #   (r'^(?P<year>\d{4})/(?P<month>\d{1,2})/page/(?P<page_num>\d+)$', 'archive_view'),
+)
+
+urlpatterns += patterns('pulog.views.tag',
+    url(r'^archives/tag/(?P<slug>[-\w]+)/$', 'tag_view', name = 'post-tag'),
+    (r'^archives/tag/(?P<slug>[-\w]+)/page/(?P<page_num>\d+)/$', 
+        'tag_view'),
 )
 
 urlpatterns += patterns('pulog.views',

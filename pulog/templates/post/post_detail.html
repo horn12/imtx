@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n utils %}
 
 {% block title %} {{ post.title }} | I'm TualatriX {% endblock %}
 
@@ -30,6 +30,7 @@
         {% endif %}
         </p>
 	</div>
+	{% wrapper post as object %}
 </div>
 {% endblock %}
 

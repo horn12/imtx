@@ -10,25 +10,7 @@ from django.utils import encoding, html
 from pulog.models import Post, Category, Comment
 from pulog.models import Tag, TaggedItem
 from pulog.forms import CommentForm
-
-def get_page_range(current, range):
-    if range[-1] < 8:
-        return xrange(1, range[-1] + 1)
-
-    if range[-1] - current < 4:
-        first = range[-1] - 7
-    elif current > 4:
-        first = current - 3
-    else:
-        first = 1
-
-    if first + 7 < range[-1]:
-        last = first + 8
-    else:
-        last = range[-1] + 1
-        
-    print first, last
-    return xrange(first, last)
+from pulog.utils import get_page_range
 
 def index(request):
     query = html.escape(request.GET.get('s', ''))
@@ -258,37 +240,6 @@ def category_view(request, slug, page_num = None):
                 'link': link},
                 context_instance = RequestContext(request)
                 )
-
-def tag_view(request, slug, page_num = None):
-    slug = encoding.iri_to_uri(slug)
-    tag = get_object_or_404(Tag, slug = slug)
-    posts = TaggedItem.objects.get_by_model(Post, tag).order_by('-date')
-
-    if page_num:
-        current_page = int(page_num)
-    else:
-        current_page = 1
-    
-    link = '/archives/tag/%s' % slug
-
-    page = None
-    range = None
-    if len(posts) > 5:
-        pagi = Paginator(posts, 5)
-        range = get_page_range(current_page, pagi.page_range)
-        page = pagi.page(current_page)
-        posts = page.object_list
-
-    return render_to_response('post/archive.html', 
-                {'category': tag, 
-                'posts': posts,
-                'page': page,
-                'current_page': current_page,
-                'range': range,
-                'link': link},
-                context_instance = RequestContext(request)
-                )
-
 
 def archive_view(request, year, month, page_num = None):
     posts = Post.objects.get_post_by_date(year, month)

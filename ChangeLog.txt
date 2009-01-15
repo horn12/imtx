@@ -1,3 +1,8 @@
+2009-01-15 TualatriX <tualatrix@gmail.com>
+
+	* pulog/views/tag.py: Separated the tag view form post.py, so in the
+	future can do more thing.
+
 2009-01-14 TualatriX <tualatrix@gmail.com>
 
 	* pulog/models.py, utls.py, views/favourites.py, templates/favourites:

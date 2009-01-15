@@ -16,6 +16,25 @@ try:
 except NameError:
     from sets import Set as set
 
+
+def get_page_range(current, range):
+    if range[-1] < 8:
+        return xrange(1, range[-1] + 1)
+
+    if range[-1] - current < 4:
+        first = range[-1] - 7
+    elif current > 4:
+        first = current - 3
+    else:
+        first = 1
+
+    if first + 7 < range[-1]:
+        last = first + 8
+    else:
+        last = range[-1] + 1
+        
+    return xrange(first, last)
+    
 def new_linebreaks(value):
     from django.utils.encoding import force_unicode
     value = re.sub(r'\r\n|\r|\n', '\n', force_unicode(value))
