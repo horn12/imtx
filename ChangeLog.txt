@@ -2,6 +2,10 @@
 
 	* pulog/views/tag.py: Separated the tag view form post.py, so in the
 	future can do more thing.
+	* pulog/models.py,templatetags/utils.py,
+	templates/favourites/favourite_detail.html: Make the Comment common
+	for object, and open the Comment for Favourite. Remove the
+	enable_comment field.
 
 2009-01-14 TualatriX <tualatrix@gmail.com>
 

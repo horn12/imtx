@@ -342,11 +342,12 @@ from pulog.fields import TagField
 class Favourite(models.Model):
     title = models.CharField(max_length = 64)
     content = models.TextField()
-    link = models.URLField(verify_exists = True, blank = True)
+    link = models.URLField(verify_exists = False)
     view = models.IntegerField(default = 0, editable = False)
     pub_date = models.DateTimeField(auto_now_add = True)
     mod_date = models.DateTimeField()
     is_public = models.BooleanField(default = True)
+    comment_count = models.IntegerField(blank = True)
     tag = TagField()
 
     objects = FavouriteManager()
@@ -360,6 +361,12 @@ class Favourite(models.Model):
 
     def get_tags(self):
         return list(Tag.objects.get_for_object(self))
+
+    def get_comment_count(self):
+        try:
+            return Comment.objects.for_model(self).count()
+        except:
+            return 0
 
 	def __unicode__(self):
 		return self.title
@@ -382,7 +389,6 @@ class Post(models.Model):
     view = models.IntegerField(default = 0, editable = False)
     type = models.CharField(max_length = 20, default = 'post', choices = TYPE_CHOICES)
     status = models.CharField(max_length = 20, default = 'publish', choices = STATUS_CHOICES)
-    enable_comment = models.BooleanField(default = True)
     comment =  generic.GenericRelation(Comment, 
                     object_id_field = 'object_pk',
                     content_type_field = 'content_type')

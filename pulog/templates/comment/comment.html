@@ -1,16 +1,15 @@
 {% load i18n filter count comment %}
-{% get_comment_form for post as commentform %}
+{% get_comment_form for object as commentform %}
 
-<h3 id="comments">{{ post.comment_count }} Comments</h3>
+<h3 id="comments">{{ object.comment_count }} Comments</h3>
 
-{% get_threaded_comment_list for post %}
+{% get_threaded_comment_list for object %}
 
 <script type="text/javascript" src="/static/js/comment-reply.js"></script>
 
 {% if comment_list %}
 <h3 id="comments">{{ commentlist }}</h3>
 {% endif %}
-
 
 {% comment %}
 <ol class="commentlist">
@@ -33,7 +32,6 @@
 </ol>
 {% endcomment %}
 
-{% if post.enable_comment %}
 <div id="respond">
 <h3>{% trans "Leave a Comment" %}</h3>
 <div class="cancel-comment-reply">
@@ -66,7 +64,6 @@
     {{ commentform.parent_id }}</p>
 
     <p><input name="submit" type="image" src="/static/css/images/submit.png" id="submit" tabindex="5" value="Submit Comment" />
-    <input type="hidden" name="post_id" value="{{ post.id }}" /></p>
+    <input type="hidden" name="object_id" value="{{ object.id }}" /></p>
 </form>
 </div>
-{% endif %}
