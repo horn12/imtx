@@ -4,9 +4,12 @@ from django.template.loader import render_to_string
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.utils.encoding import smart_unicode
+from django.utils.html import linebreaks
+
 from pulog.models import Comment
 from pulog.forms import CommentForm
 from django.conf import settings
+
 
 COMMENT_MAX_DEPTH = getattr(settings, 'COMMENT_MAX_DEPTH', 5)
 
@@ -225,7 +228,7 @@ class ThreadedCommentNode(BaseCommentNode):
                     'date': comment.date.strftime('%Y %B %d, %H:%M'),
                     'depth': comment.get_depth(),
                     'edit': comment.get_admin_url(),
-                    'content': comment.content,
+                    'content': linebreaks(comment.content),
 #                    'parity': comment.get_parity(),
                     'parity': get_even_or_odd(comment),
                 }

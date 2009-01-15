@@ -6,6 +6,7 @@
 	templates/favourites/favourite_detail.html: Make the Comment common
 	for object, and open the Comment for Favourite. Remove the
 	enable_comment field.
+	* pulog/templatetags/comment.py: Linebreak for Comment.content.
 
 2009-01-14 TualatriX <tualatrix@gmail.com>
 
