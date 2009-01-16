@@ -9,6 +9,7 @@ from django.forms.util import ErrorList
 from django.utils import encoding, html
 
 from pulog.models import Favourite
+from pulog.utils import get_page_range
 
 def index(request):
     favourites = Favourite.objects.get_public()
