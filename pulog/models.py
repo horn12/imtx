@@ -347,7 +347,7 @@ class Favourite(models.Model):
     pub_date = models.DateTimeField(auto_now_add = True)
     mod_date = models.DateTimeField()
     is_public = models.BooleanField(default = True)
-    comment_count = models.IntegerField(blank = True)
+    comment_count = models.IntegerField(default = 0)
     tag = TagField()
 
     objects = FavouriteManager()
@@ -392,7 +392,7 @@ class Post(models.Model):
     comment =  generic.GenericRelation(Comment, 
                     object_id_field = 'object_pk',
                     content_type_field = 'content_type')
-    comment_count = models.IntegerField(blank = True)
+    comment_count = models.IntegerField(default = 0)
     objects = PostManager()
     tag = TagField()
 
