@@ -9,7 +9,7 @@ class MediaNode(template.Node):
         self.var_name = var_name
 
     def render(self, context):
-        context[self.var_name] = Media.objects.all()
+        context[self.var_name] = Media.objects.all().order_by('-date')[:10]
         return ''
 
 @register.tag
