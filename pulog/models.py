@@ -473,7 +473,7 @@ class Link(models.Model):
 
 class Media(models.Model):
     UPLOAD_ROOT = 'uploads/%Y/%m'
-    THUMB_SIZE = '480'
+    THUMB_SIZE = '640'
     LOGO_SIZE = '48'
 
     title = models.CharField(max_length = 120)
