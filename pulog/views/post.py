@@ -191,7 +191,6 @@ def single_post(request, post_id):
     if post:
         post.view = post.view + 1
         post.save()
-
         return render_to_response('post/post_detail.html', {'post': post},
                 context_instance = RequestContext(request),
                 )

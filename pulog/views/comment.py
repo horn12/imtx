@@ -23,7 +23,8 @@ class CommentPostBadRequest(http.HttpResponseBadRequest):
         if settings.DEBUG:
             self.content = render_to_string("comment/400-debug.html", {"why": why})
 
-def post_comment(request, next=None):
+@require_POST
+def post_comment(request, next = None):
     """
     Post a comment.
 
@@ -66,9 +67,6 @@ def post_comment(request, next=None):
             "No object matching content-type %r and object PK %r exists." % \
                 (escape(ctype), escape(object_pk)))
 
-    # Do we want to preview the comment?
-    preview = "preview" in data
-
     # Construct the comment form
     form = CommentForm(target, data=data)
 
@@ -78,20 +76,15 @@ def post_comment(request, next=None):
             "The comment form failed security verification: %s" % \
                 escape(str(form.security_errors())))
 
-    # If there are errors or if we requested a preview show the comment
-    if form.errors or preview:
-        template_list = [
-            "comment/%s_%s_preview.html" % tuple(str(model._meta).split(".")),
-            "comment/%s_preview.html" % model._meta.app_label,
-            "comment/preview.html",
-        ]
-        return render_to_response(
-            template_list, {
-                "comment" : form.data.get("comment", ""),
-                "form" : form,
-            },
-            RequestContext(request, {})
-        )
+    # If there are errors
+    if form.errors:
+        for field in ['author', 'email', 'content', 'url']:
+            if field in form.errors:                                              
+                if form.errors[field][0]:                                         
+                    message = '[%s] %s' % (field.title(), form.errors[field][0].capitalize())
+                    break
+
+        return render_to_response('post/error.html', {'message': message})
 
     # Otherwise create the comment
     comment = form.get_comment_object()
@@ -120,12 +113,15 @@ def post_comment(request, next=None):
         request = request
     )
 
+    response = HttpResponseRedirect('%s#comment-%d' % (target.get_absolute_url(), comment.id))
+    response.set_cookie('ip', comment.ip_address, max_age = 30)
+    response.set_cookie('author', comment.user_name)
+    response.set_cookie('email', comment.user_email)
+    response.set_cookie('url', comment.user_url)
 
-    return HttpResponseRedirect('%s#comment-%d' % (target.get_absolute_url(), comment.id))
+    return response
 
     return next_redirect(data, next, comment_done, c=comment._get_pk_val())
-
-post_comment = require_POST(post_comment)
 
 comment_done = confirmation_view(
     template = "comment/posted.html",

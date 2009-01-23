@@ -1,6 +1,8 @@
 2009-01-23 TualatriX <tualatrix@gmail.com>
 
 	* templatetags/media.py: Make the get_image_url return no thumb.
+	* views/comment.py: Fixed the bug caused by non email. Prepare the
+	cookie for comment.
 
 2009-01-22 TualatriX <tualatrix@gmail.com>
 
