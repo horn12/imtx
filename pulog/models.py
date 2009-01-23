@@ -487,7 +487,8 @@ class Media(models.Model):
         return _('<Media: %s, uploaded at %s>') % (self.title, self.date.strftime('%I:%M%p, %Y/%m/%d'))
 
     def get_thumb_url(self):
-        return self.image.url + '?width=' + self.THUMB_SIZE
+        return self.image.url
+#        return self.image.url + '?width=' + self.THUMB_SIZE
 
     def get_logo_url(self):
         return self.image.url + '?width=' + self.LOGO_SIZE + '&height=' + self.LOGO_SIZE
