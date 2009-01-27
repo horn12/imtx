@@ -1,6 +1,7 @@
 2009-01-27 TualatriX <tualatrix@gmail.com>
 
 	* templates/base.html: Add the google-auth to base.html.
+	* urls.py: Add the index.html to index view.
 
 2009-01-23 TualatriX <tualatrix@gmail.com>
 
