@@ -7,7 +7,7 @@ from django.contrib.sitemaps import Sitemap
 from django.contrib.sitemaps import views as sitemap_views
 from django.views.decorators.cache import cache_page
 
-from pulog.models import Post, Category
+from pulog.models import Post, Category, Favourite
 from pulog.feed import LatestPosts
 
 admin.autodiscover()
@@ -32,9 +32,20 @@ class PostSitemap(Sitemap):
     def lastmod(self, obj):
         return obj.date
 
+class FavSitemap(Sitemap):
+    changefreq = "monthly"
+    priority = 0.2
+
+    def items(self):
+        return Favourite.objects.all()
+
+    def lastmod(self, obj):
+        return obj.pub_date
+
 sitemaps = {
     'posts': PostSitemap,
     'pages': PageSitemap,
+    'favourites': FavSitemap,
 }
 
 feed = {

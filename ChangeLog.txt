@@ -1,3 +1,7 @@
+2009-01-28 TualatriX <tualatrix@gmail.com>
+
+	* urls.py: Add the Favourite to Sitemap.
+
 2009-01-27 TualatriX <tualatrix@gmail.com>
 
 	* templates/base.html: Add the google-auth to base.html.
