@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load i18n pagination %}
+
 
 {% block title %} {{ tag.name }} | I'm TualatriX!{% endblock %}
 
@@ -6,6 +8,7 @@
 	<h2 class="pagetitle">Items for {{ tag.name }}</h2>
 
 	{% if posts %}
+		{% pre_pagination posts page %}
 		{% for post in posts %}
 		<div class="post" id="post-{{ post.id }}">
 		{% include "post/title.html" %}
@@ -23,4 +26,5 @@
 			没有任何文档
 		</div>
 	{% endif %}
+	{% do_pagination %}
 {% endblock %}
