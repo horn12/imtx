@@ -1,7 +1,6 @@
 from django.template import RequestContext
 from django.core.paginator import Paginator, InvalidPage
 from django.shortcuts import render_to_response, get_object_or_404
-from pulog.utils import get_page_range
 from pulog.models import Tag
 from pulog.models import Post
 from pulog.models import TaggedItem

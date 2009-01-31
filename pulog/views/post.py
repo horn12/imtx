@@ -1,19 +1,18 @@
 from django.http import Http404, HttpResponse, HttpResponseRedirect, QueryDict
-from django.core.paginator import Paginator, InvalidPage
 from django.conf.urls.defaults import *
 from django.db.models import Q
 from django.template import TemplateDoesNotExist, RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.auth.models import User
 from django.forms.util import ErrorList
-from django.utils import encoding, html
+
 from pulog.models import Post, Category, Comment
 from pulog.models import Tag, TaggedItem
 from pulog.forms import CommentForm
-from pulog.utils import get_page_range
+from pulog.views.utils import get_page_and_query
 
 def index(request):
-    query = html.escape(request.GET.get('s', ''))
+    page, query = get_page_and_query(request)
 
     if query:
         if 'search' in request.COOKIES:
@@ -27,47 +26,25 @@ def index(request):
         posts = Post.objects.get_post()
         SEARCH = False
 
-    if len(posts) > 5:
-        pagi = Paginator(posts, 5)
-        page = pagi.page(1)
-        current_page = 1
-        posts = page.object_list
-        range = get_page_range(current_page, pagi.page_range)
-    else:
-        page = None
-        current_page = None
-        first, last = None, None
-        range = None
-
     if SEARCH:
         response = render_to_response('post/search.html', {
-            'page': page,
-            'posts': posts,
-            'query': query,
-            'range': range,
-            'current_page': current_page},
-            context_instance = RequestContext(request),
+                    'posts': posts,
+                    'page': page,
+                    'query': query,
+                    }, context_instance = RequestContext(request),
         )
         response.set_cookie('search',request.META['REMOTE_ADDR'], max_age = 10)
 
         return response
     else:
-        return render_to_response('post/post_list.html', 
-                    {'page': page,
+        return render_to_response('post/post_list.html', {
                     'posts': posts,
-                    'range': range,
-                    'current_page': current_page},
-                    context_instance = RequestContext(request)
-                    )
+                    'page': page,
+                    }, context_instance = RequestContext(request)
+                )
 
 def search(request):
-    query = html.escape(request.GET.get('s', ''))
-    page_num = html.escape(request.GET.get('p', ''))
-
-    if not page_num:
-        page_num = 1
-
-    link = request.path
+    page, query = get_page_and_query(request)
 
     qset = (
         Q(title__icontains = query) |
@@ -96,7 +73,6 @@ def page(request, num):
     posts = page.object_list
     current_page = num
     range = get_page_range(current_page, pagi.page_range)
-    print range
 
     if SEARCH:
         return render_to_response('post/search.html', {
@@ -210,61 +186,28 @@ def static_pages(request, page):
 
     raise Http404
 
-def category_view(request, slug, page_num = None):
-    slug = encoding.iri_to_uri(slug)
+def category_view(request, slug):
     cat = get_object_or_404(Category, slug = slug)
     posts = Post.objects.get_post_by_category(cat)
+    page, query = get_page_and_query(request)
 
-    if page_num:
-        current_page = int(page_num)
-    else:
-        current_page = 1
-    
-    link = '/archives/category/%s' % slug
-
-    page = None
-    range = None
-    if len(posts) > 5:
-        pagi = Paginator(posts, 5)
-        range = get_page_range(current_page, pagi.page_range)
-        page = pagi.page(current_page)
-        posts = page.object_list
-
-    return render_to_response('post/archive.html', 
-                {'category': cat, 
+    return render_to_response('post/archive.html', {
+                'category': cat, 
                 'posts': posts,
+                'path': request.path,
                 'page': page,
-                'current_page': current_page,
-                'range': range,
-                'link': link},
-                context_instance = RequestContext(request)
-                )
+                }, context_instance = RequestContext(request)
+            )
 
-def archive_view(request, year, month, page_num = None):
+def archive_view(request, year, month):
     posts = Post.objects.get_post_by_date(year, month)
-
-    if page_num:
-        current_page = int(page_num)
-    else:
-        current_page = 1
+    page, query = get_page_and_query(request)
     
-    link = '/archives/%s/%s' % (year, month)
-
-    page = None
-    range = None
-    if len(posts) > 5:
-        pagi = Paginator(posts, 5)
-        range = get_page_range(current_page, pagi.page_range)
-        page = pagi.page(current_page)
-        posts = page.object_list
-    
-    return render_to_response('post/archive.html', 
-                { 'year': year,
+    return render_to_response('post/archive.html', {
+                'year': year,
                 'month': month,
                 'posts': posts,
+                'path': request.path,
                 'page': page,
-                'range': range,
-                'current_page': current_page,
-                'link': link},
-                context_instance = RequestContext(request)
-                )
+                }, context_instance = RequestContext(request)
+            )

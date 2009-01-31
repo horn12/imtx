@@ -7,31 +7,18 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.auth.models import User
 from django.forms.util import ErrorList
 from django.utils import encoding, html
-
 from pulog.models import Favourite
-from pulog.utils import get_page_range
+from pulog.views.utils import get_page_and_query
 
 def index(request):
     favourites = Favourite.objects.get_public()
+    page, query = get_page_and_query(request)
 
-    if len(favourites) > 5:
-        pagi = Paginator(favourites, 5)
-        page = pagi.page(1)
-        current_page = 1
-        favourites = page.object_list
-        range = get_page_range(current_page, pagi.page_range)
-    else:
-        page = None
-        current_page = None
-        first, last = None, None
-        range = None
-
-    return render_to_response('favourites/favourite_list.html', 
-                {'page': page,
-                'favourites': favourites,
-                'range': range,
-                'current_page': current_page},
-                context_instance = RequestContext(request)
+    return render_to_response('favourites/favourite_list.html', {
+                    'page': page,
+                    'favourites': favourites,
+                    'pagi_path': request.path,
+                    }, context_instance = RequestContext(request)
                 )
 
 def single(request, id):

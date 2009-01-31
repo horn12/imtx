@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load filter %}
 
-{% block title %} TualatriX's Blog {% endblock %}
+{% block title %} {{ query }} | I'm TualatriX{% endblock %}
 
 {% block content %}
 	<h2 class="pagetitle">Search Results for {{ query }}</h2>
@@ -18,5 +18,4 @@
 			没有任何文档
 		</div>
 	{% endif %}
-
 {% endblock %}

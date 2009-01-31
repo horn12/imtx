@@ -1,6 +1,7 @@
 {% extends "base.html" %}
+{% load i18n pagination %}
 
-{% block title %} TualatriX's Blog {% endblock %}
+{% block title %} I'm TualatriX{% endblock %}
 
 {% block content %}
 	{% if category %}
@@ -12,6 +13,8 @@
 	{% if results %}
 	<h2 class="pagetitle">Archive for {{ query }}</h2>
 	{% endif %}
+
+	{% pre_pagination posts page %}
 	{% if posts %}
 		{% for post in posts %}
 		<div class="post" id="post-{{ post.id }}">
@@ -30,4 +33,5 @@
 			没有任何文档
 		</div>
 	{% endif %}
+	{% do_pagination %}
 {% endblock %}

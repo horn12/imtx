@@ -9,6 +9,7 @@ from django.core import urlresolvers
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils import html
 from django.conf import settings
 from pulog.models import Comment
 from pulog.models import Media
@@ -35,6 +36,14 @@ def redirect_feed(request):
 
 def favicon_view(request):
     return HttpResponseRedirect('/static/img/favicon.ico')
+
+def get_page_and_query(request):
+    page = request.GET.get('page', '')
+    if not page:
+        page = 1
+
+    query = html.escape(request.GET.get('s', ''))
+    return page, query
 
 def upload(request):
     #FIXME Use auth

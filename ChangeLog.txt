@@ -1,3 +1,7 @@
+2009-01-31 TualatriX <tualatrix@gmail.com>
+
+	* pulog/***: Rewrite the pagination, more powerful!
+
 2009-01-28 TualatriX <tualatrix@gmail.com>
 
 	* urls.py: Add the Favourite to Sitemap.
