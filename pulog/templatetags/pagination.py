@@ -59,3 +59,16 @@ def do_pagination(context):
             'pagi_range': context['pagi_range'],
             'pagi_path': pagi_path,
             }
+
+@register.inclusion_tag('pagination_search.html', takes_context = True)
+def do_pagination_search(context):
+    if 'pagi_path' in context:
+        pagi_path = context['pagi_path']
+    else:
+        pagi_path = ''
+    return {
+            'pagi_page': context['pagi_page'],
+            'pagi_current': context['pagi_current'],
+            'pagi_range': context['pagi_range'],
+            'pagi_path': pagi_path,
+            }

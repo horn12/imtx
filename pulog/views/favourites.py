@@ -8,11 +8,11 @@ from django.contrib.auth.models import User
 from django.forms.util import ErrorList
 from django.utils import encoding, html
 from pulog.models import Favourite
-from pulog.views.utils import get_page_and_query
+from pulog.views.utils import get_page
 
 def index(request):
     favourites = Favourite.objects.get_public()
-    page, query = get_page_and_query(request)
+    page = get_page(request)
 
     return render_to_response('favourites/favourite_list.html', {
                     'page': page,

@@ -9,89 +9,19 @@ from django.forms.util import ErrorList
 from pulog.models import Post, Category, Comment
 from pulog.models import Tag, TaggedItem
 from pulog.forms import CommentForm
-from pulog.views.utils import get_page_and_query
+from pulog.views.utils import get_page
 
 def index(request):
-    page, query = get_page_and_query(request)
+    page = get_page(request)
 
-    if query:
-        if 'search' in request.COOKIES:
-            message = 'You are searching too often. Slow down.'
-            return render_to_response('post/error.html',
-                    {'message': message}
-                    )
-        posts = search(request)
-        SEARCH = True
-    else:
-        posts = Post.objects.get_post()
-        SEARCH = False
+    posts = Post.objects.get_post()
+    return render_to_response('post/post_list.html', {
+                'posts': posts,
+                'page': page,
+                }, context_instance = RequestContext(request)
+            )
 
-    if SEARCH:
-        response = render_to_response('post/search.html', {
-                    'posts': posts,
-                    'page': page,
-                    'query': query,
-                    }, context_instance = RequestContext(request),
-        )
-        response.set_cookie('search',request.META['REMOTE_ADDR'], max_age = 10)
-
-        return response
-    else:
-        return render_to_response('post/post_list.html', {
-                    'posts': posts,
-                    'page': page,
-                    }, context_instance = RequestContext(request)
-                )
-
-def search(request):
-    page, query = get_page_and_query(request)
-
-    qset = (
-        Q(title__icontains = query) |
-        Q(content__icontains = query)
-    )
-
-    return Post.objects.filter(qset, status = 'publish').distinct().order_by('-date')
-
-def page(request, num):
-    query = html.escape(request.GET.get('s', ''))
-
-    if query:
-        posts = search(request)
-        SEARCH = True
-    else:
-        posts = Post.objects.get_post()
-        SEARCH = False
-
-    if num:
-        num = int(num)
-    else:
-        num = 1
-
-    pagi = Paginator(posts, 5)
-    page = pagi.page(num)
-    posts = page.object_list
-    current_page = num
-    range = get_page_range(current_page, pagi.page_range)
-
-    if SEARCH:
-        return render_to_response('post/search.html', {
-            'page': page,
-            'posts': posts,
-            'query': query,
-            'range': range,
-            'current_page': current_page},
-            context_instance = RequestContext(request),
-        )
-    else:
-        return render_to_response('post/post_list.html', 
-                    {'page': page,
-                    'posts': posts,
-                    'range': range,
-                    'current_page': current_page},
-                    context_instance = RequestContext(request)
-                    )
-
+#Dep
 def comments_post(request):
     post = Post.objects.filter(id = int(request.POST['post_id']))[0]
     form = CommentForm(request.POST)
@@ -189,7 +119,7 @@ def static_pages(request, page):
 def category_view(request, slug):
     cat = get_object_or_404(Category, slug = slug)
     posts = Post.objects.get_post_by_category(cat)
-    page, query = get_page_and_query(request)
+    page = get_page(request)
 
     return render_to_response('post/archive.html', {
                 'category': cat, 
@@ -201,7 +131,7 @@ def category_view(request, slug):
 
 def archive_view(request, year, month):
     posts = Post.objects.get_post_by_date(year, month)
-    page, query = get_page_and_query(request)
+    page = get_page(request)
     
     return render_to_response('post/archive.html', {
                 'year': year,

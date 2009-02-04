@@ -21,15 +21,19 @@ from pulog.forms import MediaForm
 def search(request):
     query = get_query(request)
     page = get_page(request)
+
     qd = request.GET.copy()
-#    qd.update({'page':''})
-    print dir(qd)
     if 'page' in qd:
         qd.pop('page')
-    print qd.urlencode()
 
     posts = None
+
     if query:
+        if 'search' in request.COOKIES:
+            message = 'You are searching too often. Slow down.'
+            return render_to_response('post/error.html',
+                    {'message': message}
+                    )
         qset = (
             Q(title__icontains = query) |
             Q(content__icontains = query)
@@ -37,12 +41,15 @@ def search(request):
 
         posts = Post.objects.filter(qset, status = 'publish').distinct().order_by('-date')
 
-
-    return render_to_response('post/search.html', {
+    response = render_to_response('search.html', {
+                              'query': query,
                               'posts': posts,
                               'page': page,
                               'pagi_path': qd.urlencode(),
                               })
+    response.set_cookie('search',request.META['REMOTE_ADDR'], max_age = 5)
+
+    return response
 
 def break_lines(request):
     from pulog.models import Post
@@ -74,14 +81,6 @@ def get_page(request):
 def get_query(request):
     query = html.escape(request.GET.get('s', ''))
     return query
-
-def get_page_and_query(request):
-    page = request.GET.get('page', '')
-    if not page:
-        page = 1
-
-    query = html.escape(request.GET.get('s', ''))
-    return page, query
 
 def upload(request):
     #FIXME Use auth
