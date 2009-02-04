@@ -239,12 +239,15 @@ class ThreadedCommentNode(BaseCommentNode):
                 html.append('<li class="comment %(parity)s depth-%(depth)d" id="comment-%(id)d">\n' % commentmeta)
 
             if commentmeta['user_url']:
-                html.append('<div id="div-comment-%(id)d"><div class="comment-author vcard"><cite><a href="%(user_url)s" rel="external nofollow">%(name)s</a></cite></div>\n'
-                   '<div class="comment-meta commentmetadata"><a href="%(url)s">%(date)s</a>&nbsp;&nbsp;<a href="%(edit)s" title="Edit comment">edit</a></div>\n'
+                html.append('<div id="div-comment-%(id)d"><div class="comment-author vcard"><cite><a href="%(user_url)s" rel="external nofollow">%(name)s</a></cite></div>\n' % commentmeta)
+            else:
+                html.append('<div id="div-comment-%(id)d"><div class="comment-author vcard">%(name)s</div>\n' % commentmeta)
+
+            if context['user'].is_staff:
+                html.append('<div class="comment-meta commentmetadata"><a href="%(url)s">%(date)s</a>&nbsp;&nbsp;<a href="%(edit)s" title="Edit comment">Edit</a></div>\n'
                    '<p>%(content)s</p>\n' % commentmeta)
             else:
-                html.append('<div id="div-comment-%(id)d"><div class="comment-author vcard">%(name)s</div>\n'
-                   '<div class="comment-meta commentmetadata"><a href="%(url)s">%(date)s</a>&nbsp;&nbsp;<a href="%(edit)s" title="Edit comment">edit</a></div>\n'
+                html.append('<div class="comment-meta commentmetadata"><a href="%(url)s">%(date)s</a></div>\n'
                    '<p>%(content)s</p>\n' % commentmeta)
 
             if comment.get_depth() < COMMENT_MAX_DEPTH:
