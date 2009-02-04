@@ -10,11 +10,39 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import html
+from django.db.models import Q
 from django.conf import settings
+from pulog.models import Tag
+from pulog.models import Post
 from pulog.models import Comment
 from pulog.models import Media
-from pulog.models import Tag
 from pulog.forms import MediaForm
+
+def search(request):
+    query = get_query(request)
+    page = get_page(request)
+    qd = request.GET.copy()
+#    qd.update({'page':''})
+    print dir(qd)
+    if 'page' in qd:
+        qd.pop('page')
+    print qd.urlencode()
+
+    posts = None
+    if query:
+        qset = (
+            Q(title__icontains = query) |
+            Q(content__icontains = query)
+        )
+
+        posts = Post.objects.filter(qset, status = 'publish').distinct().order_by('-date')
+
+
+    return render_to_response('post/search.html', {
+                              'posts': posts,
+                              'page': page,
+                              'pagi_path': qd.urlencode(),
+                              })
 
 def break_lines(request):
     from pulog.models import Post
@@ -36,6 +64,16 @@ def redirect_feed(request):
 
 def favicon_view(request):
     return HttpResponseRedirect('/static/img/favicon.ico')
+
+def get_page(request):
+    page = request.GET.get('page', '')
+    if not page:
+        page = 1
+    return page
+
+def get_query(request):
+    query = html.escape(request.GET.get('s', ''))
+    return query
 
 def get_page_and_query(request):
     page = request.GET.get('page', '')
