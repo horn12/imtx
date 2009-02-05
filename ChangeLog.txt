@@ -1,3 +1,8 @@
+2009-02-05 TualatriX <tualatrix@gmail.com>
+
+	* templates/menu.html, views/favourites.py: Menu and Favourite not
+	works.
+
 2009-02-04 TualatriX <tualatrix@gmail.com>
 
 	* templatetags/comment.py: Make the Edit displayed for Admin only.

@@ -94,14 +94,11 @@ def comments_post(request):
 def single_post(request, post_id):
     post = get_object_or_404(Post, id = post_id)
 
-    if post:
-        post.view = post.view + 1
-        post.save()
-        return render_to_response('post/post_detail.html', {'post': post},
-                context_instance = RequestContext(request),
-                )
-    else:
-        return Http404
+    post.view = post.view + 1
+    post.save()
+    return render_to_response('post/post_detail.html', {'post': post},
+            context_instance = RequestContext(request),
+            )
 
 def static_pages(request, page):
     for post in Post.objects.get_page():

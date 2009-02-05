@@ -18,6 +18,7 @@ def index(request):
                     'page': page,
                     'favourites': favourites,
                     'pagi_path': request.path,
+                    'current': 'favourites',
                     }, context_instance = RequestContext(request)
                 )
 
@@ -28,7 +29,10 @@ def single(request, id):
         favourite.view = favourite.view + 1
         favourite.save()
 
-        return render_to_response('favourites/favourite_detail.html', {'favourite': favourite},
+        return render_to_response('favourites/favourite_detail.html', {
+                      'favourite': favourite,
+                      'current': 'favourites',
+                      },
                 context_instance = RequestContext(request),
                 )
     else:
