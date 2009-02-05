@@ -24,15 +24,16 @@ def get_page_range(current, range):
     return xrange(first, last)
 
 class PaginationNode(template.Node):
-    def __init__(self, objects, page):
+    def __init__(self, objects, page, per_page = OBJECTS_PER_PAGE):
         self.object_var_name = objects 
+        self.per_page = int(per_page)
         self.objects_to_be_paginated = template.Variable(objects)
         self.current_page = template.Variable(page)
 
     def render(self, context):
         objects = self.objects_to_be_paginated.resolve(context)
         current = int(self.current_page.resolve(context))
-        pagi = Paginator(objects, OBJECTS_PER_PAGE)
+        pagi = Paginator(objects, self.per_page)
         page = pagi.page(current)
 
         context[self.object_var_name] = page.object_list
@@ -43,9 +44,12 @@ class PaginationNode(template.Node):
 
 @register.tag
 def pre_pagination(parser, token):
-    tag_name, objects, page = token.split_contents()
-
-    return PaginationNode(objects, page)
+    try:
+        tag_name, objects, page, per_page = token.split_contents()
+        return PaginationNode(objects, page, per_page)
+    except:
+        tag_name, objects, page = token.split_contents()
+        return PaginationNode(objects, page)
 	
 @register.inclusion_tag('pagination.html', takes_context = True)
 def do_pagination(context):

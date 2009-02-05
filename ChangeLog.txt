@@ -2,6 +2,7 @@
 
 	* templates/menu.html, views/favourites.py: Menu and Favourite not
 	works.
+	* templates/comment/comment_list.html: Add a comment list page.
 
 2009-02-04 TualatriX <tualatrix@gmail.com>
 

@@ -11,6 +11,8 @@ from django.utils.html import escape
 from django.views.decorators.http import require_POST
 from pulog.forms import CommentForm
 from pulog import signals
+from pulog.models import Comment
+from pulog.views.utils import get_page
 
 class CommentPostBadRequest(http.HttpResponseBadRequest):
     """
@@ -22,6 +24,16 @@ class CommentPostBadRequest(http.HttpResponseBadRequest):
         super(CommentPostBadRequest, self).__init__()
         if settings.DEBUG:
             self.content = render_to_string("comment/400-debug.html", {"why": why})
+
+def comment_list(request):
+    page = get_page(request)
+    comments = Comment.objects.in_public()
+
+    return render_to_response('comment/comment_list.html', {
+                'comments': comments,
+                'page': page,
+                'current': 'comments',
+                }, context_instance = RequestContext(request))
 
 @require_POST
 def post_comment(request, next = None):

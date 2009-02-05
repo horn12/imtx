@@ -78,6 +78,11 @@ class Comment(models.Model):
         object = model.objects.get(pk = self.object_pk)
         return object.get_absolute_url()
 
+    def get_content_object_title(self):
+        model = ContentType.objects.get(pk = self.content_type_id).model_class()
+        object = model.objects.get(pk = self.object_pk)
+        return object.title
+
     def __unicode__(self):
         return "%s: %s..." % (self.name, self.content[:50])
 

@@ -8,6 +8,11 @@
     {% else %}
 	<li class="page_item"><a href="/favourites/" title="Home">收藏</a></li>
 {% endifequal %}
+{% ifequal current 'comments' %}
+	<li class="current_page_item"><a href="/comments/" title="Home">评论</a></li>
+    {% else %}
+	<li class="page_item"><a href="/comments/" title="Home">评论</a></li>
+{% endifequal %}
 {% for menu_item in menus %}{% ifequal current menu_item.slug %}
 	<li class="current_page_item"><a href="/{{ menu_item.slug }}/" title="Home">{{ menu_item.title }}</a></li>
 	{% else %}
