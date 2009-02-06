@@ -126,10 +126,10 @@ def post_comment(request, next = None):
     )
 
     response = HttpResponseRedirect('%s#comment-%d' % (target.get_absolute_url(), comment.id))
-    response.set_cookie('ip', comment.ip_address, max_age = 30)
-    response.set_cookie('author', comment.user_name)
-    response.set_cookie('email', comment.user_email)
-    response.set_cookie('url', comment.user_url)
+#    response.set_cookie('ip', comment.ip_address, max_age = 30)
+#    response.set_cookie('author', comment.user_name)
+#    response.set_cookie('email', comment.user_email)
+#    response.set_cookie('url', comment.user_url)
 
     return response
 
