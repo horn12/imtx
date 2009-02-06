@@ -96,8 +96,26 @@ def single_post(request, post_id):
 
     post.view = post.view + 1
     post.save()
-    return render_to_response('post/post_detail.html', {'post': post},
-            context_instance = RequestContext(request),
+
+    name = None
+    if 'name' in request.COOKIES:
+        name = request.COOKIES['name']
+
+    email = None
+    if 'email' in request.COOKIES:
+        email = request.COOKIES['email']
+
+    url = None
+    if 'url' in request.COOKIES:
+        url = request.COOKIES['url']
+
+    return render_to_response('post/post_detail.html', {
+                'post': post,
+                'comment_meta': {'name':name, 
+                                 'email': email, 
+                                 'url': url},
+                },
+                context_instance = RequestContext(request),
             )
 
 def static_pages(request, page):

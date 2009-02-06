@@ -126,8 +126,10 @@ class CommentFormNode(BaseCommentNode):
 
     def get_form(self, context):
         ctype, object_pk = self.get_target_ctype_pk(context)
+        initial_date = context['comment_meta']
+
         if object_pk:
-            return CommentForm(ctype.get_object_for_this_type(pk=object_pk))
+            return CommentForm(ctype.get_object_for_this_type(pk=object_pk), initial = initial_date)
         else:
             return None
 
