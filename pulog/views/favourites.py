@@ -9,6 +9,7 @@ from django.forms.util import ErrorList
 from django.utils import encoding, html
 from pulog.models import Favourite
 from pulog.views.utils import get_page
+from pulog.views.comment import get_comment_cookie_meta
 
 def index(request):
     favourites = Favourite.objects.get_public()
@@ -32,6 +33,7 @@ def single(request, id):
         return render_to_response('favourites/favourite_detail.html', {
                       'favourite': favourite,
                       'current': 'favourites',
+                      'comment_meta': get_comment_cookie_meta(request),
                       },
                 context_instance = RequestContext(request),
                 )

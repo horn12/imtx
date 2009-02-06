@@ -25,6 +25,22 @@ class CommentPostBadRequest(http.HttpResponseBadRequest):
         if settings.DEBUG:
             self.content = render_to_string("comment/400-debug.html", {"why": why})
 
+def get_comment_cookie_meta(request):
+    name = None
+    email = None
+    url = None
+
+    if 'name' in request.COOKIES:
+        name = request.COOKIES['name']
+
+    if 'email' in request.COOKIES:
+        email = request.COOKIES['email']
+
+    if 'url' in request.COOKIES:
+        url = request.COOKIES['url']
+
+    return {'name': name, 'email': email, 'url': url}
+
 def comment_list(request):
     page = get_page(request)
     comments = Comment.objects.in_public()

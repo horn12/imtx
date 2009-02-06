@@ -10,6 +10,7 @@ from pulog.models import Post, Category, Comment
 from pulog.models import Tag, TaggedItem
 from pulog.forms import CommentForm
 from pulog.views.utils import get_page
+from pulog.views.comment import get_comment_cookie_meta
 
 def index(request):
     page = get_page(request)
@@ -97,23 +98,9 @@ def single_post(request, post_id):
     post.view = post.view + 1
     post.save()
 
-    name = None
-    if 'name' in request.COOKIES:
-        name = request.COOKIES['name']
-
-    email = None
-    if 'email' in request.COOKIES:
-        email = request.COOKIES['email']
-
-    url = None
-    if 'url' in request.COOKIES:
-        url = request.COOKIES['url']
-
     return render_to_response('post/post_detail.html', {
                 'post': post,
-                'comment_meta': {'name':name, 
-                                 'email': email, 
-                                 'url': url},
+                'comment_meta': get_comment_cookie_meta(request),
                 },
                 context_instance = RequestContext(request),
             )
