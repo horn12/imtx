@@ -21,10 +21,10 @@
 		</div>
 		</div>
 		{% endfor %}
+		{% do_pagination %}
 	{% else %}
 		<div class="entry">
 			没有任何文档
 		</div>
 	{% endif %}
-	{% do_pagination %}
 {% endblock %}

@@ -1,3 +1,7 @@
+2009-02-08 TualatriX <tualatrix@gmail.com>
+
+	* templates/tag/tag.html: Fix a bug caused KeyError
+
 2009-02-06 TualatriX <tualatrix@gmail.com>
 
 	* templatetags/comment.py, views/comment.py,
