@@ -1,6 +1,7 @@
 2009-02-08 TualatriX <tualatrix@gmail.com>
 
 	* templates/tag/tag.html: Fix a bug caused KeyError
+	* templates/comment/comment.html: Fix the bug that button for tab.
 
 2009-02-06 TualatriX <tualatrix@gmail.com>
 
