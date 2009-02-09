@@ -1,3 +1,7 @@
+2009-02-09 TualatriX <tualatrix@gmail.com>
+
+	* pulog/urls.py, view/utils.py: Remove the favicon and robots views.
+
 2009-02-08 TualatriX <tualatrix@gmail.com>
 
 	* templates/tag/tag.html: Fix a bug caused KeyError

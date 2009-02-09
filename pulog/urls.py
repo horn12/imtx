@@ -55,8 +55,6 @@ feed = {
 urlpatterns = patterns('',
 #        (r'linebreak/', 'pulog.views.utils.break_lines'),
         (r'^sitemap.xml$', cache_page(sitemap_views.sitemap, 60 * 60 * 6), {'sitemaps': sitemaps}),
-        (r'^robots.txt$', 'pulog.views.utils.robots_txt'),
-        (r'^favicon.ico$', 'pulog.views.utils.favicon_view'),
         (r'^search/', 'pulog.views.utils.search'),
         (r'^comments/$', 'pulog.views.comment.comment_list'),
         (r'^admin/(.*)', admin.site.root),
