@@ -1,3 +1,7 @@
+2009-02-12 TualatriX <tualatrix@gmail.com>
+
+	* Update the tiny_mce and fix a 500 error caused by text_area.js.
+
 2009-02-09 TualatriX <tualatrix@gmail.com>
 
 	* pulog/urls.py, view/utils.py: Remove the favicon and robots views.
