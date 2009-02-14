@@ -5,6 +5,7 @@
 2009-02-09 TualatriX <tualatrix@gmail.com>
 
 	* pulog/urls.py, view/utils.py: Remove the favicon and robots views.
+	* templates/menu.html: Update to English.
 
 2009-02-08 TualatriX <tualatrix@gmail.com>
 
