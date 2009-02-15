@@ -58,6 +58,7 @@ urlpatterns = patterns('',
         (r'^search/', 'pulog.views.utils.search'),
         (r'^comments/$', 'pulog.views.comment.comment_list'),
         (r'^admin/(.*)', admin.site.root),
+        ((r'^xmlrpc/$', 'django_xmlrpc.views.handle_xmlrpc', {}, 'xmlrpc'))
         (r'^static/(?P<path>.*)$', 'pulog.media_serve.serve', 
             {'document_root': settings.MEDIA_ROOT}),
         (r'^media/(?P<path>.*)$', 'pulog.media_serve.serve', 
