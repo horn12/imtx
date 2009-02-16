@@ -16,14 +16,14 @@ def code2html(code, lang):
 
 @register.filter
 def do_highlight(value):
-    s_list = p_pre.split(value)
     f_list = p_pre.findall(value)
     if f_list:
+        s_list = p_pre.split(value)
         for code_block in p_pre.finditer(value):
             lang = p_lang.search(code_block.group()).group('lang')
             code = code_block.group('code')
             index = s_list.index(code)
-
             s_list[index] = code2html(code, lang)
 
-    return ''.join(s_list)
+        return ''.join(s_list)
+    return value
