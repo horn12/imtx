@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n utils %}
+{% load i18n utils highlight %}
 
 {% block title %} {{ post.title }} | I'm TualatriX {% endblock %}
 
@@ -15,7 +15,7 @@
             <p><span id="more-{{ post.id }}"></span></p>
 			{{ post.remain }}
 		{% else %}
-			{{ post.content }}
+			{{ post.content|highlight }} 
 		{% endif %}
 		{% endautoescape %}
 
