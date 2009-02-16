@@ -7,7 +7,7 @@ from pygments.formatters import HtmlFormatter
 register = template.Library()
 
 #pre = re.compile(r'<pre( lang=\w*).*>.*</pre>')
-p_pre = re.compile(r'<pre( lang=\w*).*>(?P<code>[\w\W]+)</pre>')
+p_pre = re.compile(r'<pre (lang=\w+).*?>(?P<code>[\w\W]+?)</pre>')
 #pre = re.compile(r'<pre( lang=\w*?).*?>.*?</pre>')
 p_lang = re.compile(r'lang=[\'"]?(?P<lang>\w+)[\'"]?')
 
