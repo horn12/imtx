@@ -13,9 +13,9 @@
 		{% if post.pagebreak %}
 			{{ post.excerpt }}
             <p><span id="more-{{ post.id }}"></span></p>
-			{{ post.remain }}
+			{{ post.remain|do_highlight }} 
 		{% else %}
-			{{ post.content|highlight }} 
+			{{ post.content|do_highlight }} 
 		{% endif %}
 		{% endautoescape %}
 
