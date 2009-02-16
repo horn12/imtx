@@ -1,3 +1,7 @@
+2009-02-16 TualatriX <tualatrix@gmail.com>
+
+	* templatetags/highlight.py: Finish the code highlight.
+
 2009-02-15 TualatriX <tualatrix@gmail.com>
 
 	* pingback, django_xmlrpc: Start to implement the pingback.
