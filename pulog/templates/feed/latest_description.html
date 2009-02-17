@@ -1,3 +1,4 @@
+{% load highlight %}
 {% autoescape off %}
-{{ obj.content }}
+{{ obj.content|do_highlight }}
 {% endautoescape %}

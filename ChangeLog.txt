@@ -1,6 +1,7 @@
 2009-02-17 TualatriX <tualatrix@gmail.com>
 
 	* tiny_mce: Fix the bug cause 500.
+	* pulog/templatetags/highlight.py: Escape the symbol to real.
 
 2009-02-16 TualatriX <tualatrix@gmail.com>
 

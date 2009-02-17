@@ -12,6 +12,9 @@ p_lang = re.compile(r'lang=[\'"]?(?P<lang>\w+)[\'"]?')
 def code2html(code, lang):
     lexer = get_lexer_by_name(lang, encoding = 'utf-8', stripall = True)
     formatter = HtmlFormatter(encoding = 'utf-8')
+    code = code.replace('&lt;', '<')
+    code = code.replace('&gt;', '>')
+    code = code.replace('&amp;', '&')
     return highlight(code, lexer, formatter)
 
 @register.filter
