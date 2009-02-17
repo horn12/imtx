@@ -1,3 +1,7 @@
+2009-02-17 TualatriX <tualatrix@gmail.com>
+
+	* tiny_mce: Fix the bug cause 500.
+
 2009-02-16 TualatriX <tualatrix@gmail.com>
 
 	* templatetags/highlight.py: Finish the code highlight.
