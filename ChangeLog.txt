@@ -2,6 +2,7 @@
 
 	* tiny_mce: Fix the bug cause 500.
 	* pulog/templatetags/highlight.py: Escape the symbol to real.
+	* pulog/views/comment.py: Set the cookie can use utf-8.
 
 2009-02-16 TualatriX <tualatrix@gmail.com>
 
