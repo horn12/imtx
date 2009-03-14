@@ -1,3 +1,8 @@
+2009-03-14 TualatriX <tualatrix@gmail.com>
+
+	* pulog/__init__.py: Set coding to ascii to utf-8.
+	* pulog/views/comment.py: Set the max_age of cookie to one year.
+
 2009-02-17 TualatriX <tualatrix@gmail.com>
 
 	* tiny_mce: Fix the bug cause 500.
