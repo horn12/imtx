@@ -1,0 +1,7 @@
+{% if favourites %}
+<ul>
+	{% for fav in favourites %}
+	<li><a href="{{ fav.get_absolute_url }}">{{ fav.title }}</a></li>
+	{% endfor %}
+</ul>
+{% endif %}

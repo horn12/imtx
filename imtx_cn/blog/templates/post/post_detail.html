@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load i18n utils highlight %}
+
+{% block title %} {{ post.title }} | I'm TualatriX {% endblock %}
+
+{% block content %}
+	<div class="post" id="post-{{ post.id }}">
+	{% include "post/title.html" %}
+	
+	<div class="clear"></div>
+	<div class="entry">
+		{% autoescape off %}
+		{% if post.pagebreak %}
+			{{ post.excerpt }}
+            <p><span id="more-{{ post.id }}"></span></p>
+			{{ post.remain|do_highlight }} 
+		{% else %}
+			{{ post.content|do_highlight }} 
+		{% endif %}
+		{% endautoescape %}
+
+		<p>
+		<div id="tags">Tags: {% for tag in post.get_tags %}{% if forloop.last %}<a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>. {% else %}<a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>, {% endif %}{% endfor %}</div>
+		</p>
+        <p class="meta"> 
+        <small> &raquo; <a href="#comments">{% trans "You can leave a comment." %}</a></small>
+        </p>
+	</div>
+</div>
+{% endblock %}
+
+{% block comment %}
+	{% var object = post %}
+	{% include "comment/comment.html" %}
+{% endblock %}
