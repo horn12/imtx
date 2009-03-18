@@ -7,7 +7,7 @@ from django.contrib.sitemaps import Sitemap
 from django.contrib.sitemaps import views as sitemap_views
 from django.views.decorators.cache import cache_page
 
-from imtx_cn.blog.models import Post, Category, Favourite
+from imtx_cn.blog.models import Post, Page, Category, Favourite
 from imtx_cn.blog.feeds import LatestPosts
 
 admin.autodiscover()
@@ -17,7 +17,7 @@ class PageSitemap(Sitemap):
     priority = 0.6
 
     def items(self):
-        return Post.objects.get_page()
+        return Page.objects.get_page()
 
     def lastmod(self, obj):
         return obj.date
