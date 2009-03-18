@@ -240,8 +240,6 @@ def on_comment_was_posted(sender, comment, request, *args, **kwargs):
     except:
         return
 
-    print type(comment.object)
-
     if hasattr(settings, 'AKISMET_API_KEY'):
         ak = Akismet(
             key = settings.AKISMET_API_KEY,
@@ -269,3 +267,6 @@ def on_comment_was_posted(sender, comment, request, *args, **kwargs):
 def on_comment_save(sender, comment, *args, **kwargs):
     object = comment.object
     object.save()
+
+comment_was_posted.connect(on_comment_was_posted)
+comment_save.connect(on_comment_save)

@@ -30,4 +30,3 @@ class TaggedItem(models.Model):
 
     def __unicode__(self):
         return u'%s [%s]' % (self.content_object, self.tag)
-
