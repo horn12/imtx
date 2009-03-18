@@ -7,7 +7,7 @@ class FavouriteManager(models.Manager):
 class PostManager(models.Manager):
     def get_post(self):
         return self.get_query_set().filter(type = 'post', status = 'publish').order_by('-date')
-    
+
     def get_post_by_category(self, cat):
         return self.get_query_set().filter(type = 'post', status = 'publish',
                 category = cat.id).order_by('-date')
