@@ -106,6 +106,7 @@ def post_comment(request, next = None):
 
     # If there are errors
     if form.errors:
+        message = None
         for field in ['author', 'email', 'content', 'url']:
             if field in form.errors:                                              
                 if form.errors[field][0]:                                         
