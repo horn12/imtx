@@ -6,6 +6,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.auth.models import User
 from django.forms.util import ErrorList
 from django.utils import html
+from django.core import urlresolvers
 
 from models import Post, Page, Category
 from imtx.apps.tagging.models import Tag
