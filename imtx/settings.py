@@ -1,5 +1,8 @@
 # Django settings for imtx project.
-import os
+
+import os.path
+from os.path import join
+settings_path = os.path.abspath(os.path.dirname(__file__))
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -36,8 +39,8 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
-ADMIN_MEDIA_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'media')
+MEDIA_ROOT = join(settings_path, 'static')
+ADMIN_MEDIA_ROOT = join(settings_path, 'media')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -71,7 +74,7 @@ ROOT_URLCONF = 'imtx.urls'
 AUTH_PROFILE_MODULE = 'blog.Profile'
 
 TEMPLATE_DIRS = (
-    os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates'),
+    join(settings_path, 'templates'),
 )
 
 INSTALLED_APPS = (
@@ -85,3 +88,6 @@ INSTALLED_APPS = (
     'imtx.apps.comments',
     'imtx.apps.pagination',
 )
+
+#Akisment
+AKISMET_API_KEY = ''
