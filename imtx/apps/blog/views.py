@@ -5,6 +5,7 @@ from django.template import TemplateDoesNotExist, RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.auth.models import User
 from django.forms.util import ErrorList
+from django.utils import html
 
 from models import Post, Page, Category
 from imtx.apps.tagging.models import Tag
