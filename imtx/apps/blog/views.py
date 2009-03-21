@@ -11,6 +11,10 @@ from imtx.apps.tagging.models import Tag
 from imtx.apps.comments.views import get_comment_cookie_meta
 from imtx.apps.pagination.utils import get_page
 
+def get_query(request):
+    query = html.escape(request.GET.get('s', ''))
+    return query
+
 def index(request):
     page = get_page(request)
 
@@ -106,30 +110,8 @@ def search(request):
 
     return response
 
-def break_lines(request):
-    from pulog.models import Post
-    from pulog.utils import new_linebreaks
-    for p in Post.objects.all():
-#        p.content = new_linebreaks(p.content)
-#        p.content = p.content.replace('http://imtx.cn/wp-content', 'http://imtx.cn/static/uploads')
-        p.tag = ','.join([t.name for t in Tag.objects.get_for_object(p)])
-
-        p.save()
-
-    return HttpResponseRedirect('/')
-
 def redirect_feed(request):
     return HttpResponseRedirect(urlresolvers.reverse('feed', args=('latest',)))
-
-def get_page(request):
-    page = request.GET.get('page', '')
-    if not page:
-        page = 1
-    return page
-
-def get_query(request):
-    query = html.escape(request.GET.get('s', ''))
-    return query
 
 def upload(request):
     #FIXME Use auth

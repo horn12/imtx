@@ -218,7 +218,7 @@ class Comment(models.Model):
         return self.get_content_object_url() + (anchor_pattern % self.__dict__)
 
     def get_admin_url(self):
-        return '/admin/pulog/comment/%d/' % self.id
+        return '/admin/comments/comment/%d/' % self.id
 
     def get_as_text(self):
         """

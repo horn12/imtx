@@ -47,7 +47,7 @@ class TagManager(models.Manager):
         return tag, created
 
     def add_tag(self, obj, tag_name):
-        from pulog.models import TaggedItem
+        from models import TaggedItem
         """
         Associates the given object with a tag.
         """
@@ -76,7 +76,7 @@ class TagManager(models.Manager):
         Perform the custom SQL query for ``usage_for_model`` and
         ``usage_for_queryset``.
         """
-        from pulog.models import TaggedItem
+        from models import TaggedItem
         if min_count is not None: counts = True
 
         model_table = qn(model._meta.db_table)
@@ -180,7 +180,7 @@ class TagManager(models.Manager):
         greater than or equal to ``min_count`` will be returned.
         Passing a value for ``min_count`` implies ``counts=True``.
         """
-        from pulog.models import TaggedItem
+        from models import TaggedItem
         if min_count is not None: counts = True
         tags = get_tag_list(tags)
         tag_count = len(tags)
