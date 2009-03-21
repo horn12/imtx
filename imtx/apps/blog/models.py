@@ -67,7 +67,7 @@ class Page(models.Model):
         return ('post-single', [str(self.id)])
 
     def get_admin_url(self):
-        return '/admin/blog/post/%d/' % self.id
+        return '/admin/blog/page/%d/' % self.id
 
     def get_author(self):
         try:
