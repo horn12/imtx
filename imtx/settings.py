@@ -83,6 +83,7 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
+    'django.contrib.sitemaps',
     'imtx.apps.blog',
     'imtx.apps.tagging',
     'imtx.apps.comments',
