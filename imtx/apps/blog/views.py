@@ -1,7 +1,7 @@
-from django.http import Http404, HttpResponse, HttpResponseRedirect, QueryDict
+from django.http import Http404, HttpResponseRedirect, QueryDict
 from django.conf.urls.defaults import *
 from django.db.models import Q
-from django.template import TemplateDoesNotExist, RequestContext
+from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.auth.models import User
 from django.forms.util import ErrorList

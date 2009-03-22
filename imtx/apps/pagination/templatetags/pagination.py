@@ -1,6 +1,6 @@
 from django import template
 from django.conf import settings
-from django.core.paginator import Paginator, InvalidPage
+from django.core.paginator import Paginator, EmptyPage
 
 register = template.Library()
 
@@ -35,12 +35,18 @@ class PaginationNode(template.Node):
         objects = self.objects_to_be_paginated.resolve(context)
         current = int(self.current_page.resolve(context))
         pagi = Paginator(objects, self.per_page)
-        page = pagi.page(current)
-
-        context[self.object_var_name] = page.object_list
-        context['pagi_page'] = page
-        context['pagi_current'] = current
-        context['pagi_range'] = get_page_range(current, pagi.page_range)
+        try:
+            page = pagi.page(current)
+        except EmptyPage:
+            context[self.object_var_name] = None
+            context['pagi_page'] = None
+            context['pagi_current'] = current
+            context['pagi_range'] = None
+        else:
+            context[self.object_var_name] = page.object_list
+            context['pagi_page'] = page
+            context['pagi_current'] = current
+            context['pagi_range'] = get_page_range(current, pagi.page_range)
         return ''
 
 @register.tag
