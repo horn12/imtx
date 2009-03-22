@@ -1,14 +1,12 @@
 from django import template
-from django.core import urlresolvers
-from django.template.loader import render_to_string
 from django.conf import settings
+from django.template.loader import render_to_string
 from django.contrib.contenttypes.models import ContentType
 from django.utils.encoding import smart_unicode
 from django.utils.html import linebreaks
 
 from imtx.apps.comments.models import Comment
 from imtx.apps.comments.forms import CommentForm
-from django.conf import settings
 
 COMMENT_MAX_DEPTH = getattr(settings, 'COMMENT_MAX_DEPTH', 5)
 
@@ -381,9 +379,6 @@ class ThreadedCommentNode(BaseCommentNode):
             html.append('</ol>')
 
         return ''.join(html)
-# We could just register each classmethod directly, but then we'd lose out on
-# the automagic docstrings-into-admin-docs tricks. So each node gets a cute
-# wrapper function that just exists to hold the docstring.
 
 @register.tag
 def get_comment_count(parser, token):

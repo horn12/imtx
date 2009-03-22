@@ -1,9 +1,10 @@
 from django import template
+from django.conf import settings
 from django.core.paginator import Paginator, InvalidPage
 
 register = template.Library()
 
-OBJECTS_PER_PAGE = 8
+OBJECTS_PER_PAGE = getattr(settings, 'OBJECTS_PER_PAGE', 8)
 
 def get_page_range(current, range):
     if range[-1] < 8:

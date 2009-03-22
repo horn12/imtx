@@ -92,3 +92,6 @@ INSTALLED_APPS = (
 
 #Akisment
 AKISMET_API_KEY = ''
+
+#Pagination
+OBJECTS_PER_PAGE = 12
