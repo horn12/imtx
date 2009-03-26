@@ -1,6 +1,6 @@
 import re
 from django import template
-from imtx.blog.models import Media
+from imtx.apps.blog.models import Media
 
 register = template.Library()
 
