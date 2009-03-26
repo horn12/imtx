@@ -9,6 +9,7 @@ from django.utils import html
 from django.core import urlresolvers
 
 from models import Post, Page, Category
+from forms import MediaForm
 from imtx.apps.tagging.models import Tag
 from imtx.apps.comments.views import get_comment_cookie_meta
 from imtx.apps.pagination.utils import get_page
