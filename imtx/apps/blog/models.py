@@ -1,5 +1,7 @@
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
 from django.contrib.contenttypes import generic
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.fields.files import ImageFieldFile
@@ -225,7 +227,7 @@ class Media(models.Model):
         return _('<Media: %s, uploaded at %s>') % (self.title, self.date.strftime('%I:%M%p, %Y/%m/%d'))
 
     def get_thumb_url(self):
-        return self.image.url
+        return 'http://%s/static/%s' % (Site.objects.get(pk=settings.SITE_ID).domain, self.image.url)
 #        return self.image.url + '?width=' + self.THUMB_SIZE
 
     def get_logo_url(self):
