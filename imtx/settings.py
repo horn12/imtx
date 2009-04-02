@@ -98,3 +98,9 @@ AKISMET_API_KEY = ''
 
 #Pagination
 OBJECTS_PER_PAGE = 12
+
+DIRECTORY_URLS = (
+    'http://ping.blogs.yandex.ru/RPC2',
+    'http://rpc.technorati.com/rpc/ping',
+)
+
