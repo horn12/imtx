@@ -66,6 +66,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'pingback.middleware.PingbackMiddleware',
 #    'imtx.middleware.maintain.MaintainMiddleware',
 )
 
@@ -88,6 +89,8 @@ INSTALLED_APPS = (
     'imtx.apps.tagging',
     'imtx.apps.comments',
     'imtx.apps.pagination',
+    'django_xmlrpc',
+    'pingback',
 )
 
 #Akisment
