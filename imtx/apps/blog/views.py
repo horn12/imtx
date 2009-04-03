@@ -127,24 +127,3 @@ def upload(request):
     else:
         form = MediaForm()
     return render_to_response('utils/upload.html', {'form': form})
-
-from datetime import time, date, datetime
-from time import strptime
-
-from pingback import create_ping_func
-from django_xmlrpc import xmlrpcdispatcher
-
-# create simple function which returns Post object and accepts
-# exactly same arguments as 'details' view.
-def pingback_blog_handler(post_id, **kwargs):
-    return Post.objects.get(id = post_id)
-
-# define association between view name and our handler
-ping_details = {'single_post': pingback_blog_handler}
-
-# create xml rpc method, which will process all
-# ping requests
-ping_func = create_ping_func(**ping_details)
-
-# register this method in the dispatcher
-xmlrpcdispatcher.register_function(ping_func, 'pingback.ping')
