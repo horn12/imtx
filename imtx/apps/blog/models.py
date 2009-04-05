@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.db.models import signals
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.contrib.contenttypes import generic
@@ -232,3 +233,13 @@ class Media(models.Model):
 
     def get_logo_url(self):
         return self.image.url + '?width=' + self.LOGO_SIZE + '&height=' + self.LOGO_SIZE
+
+from pingback.client import ping_external_links, ping_directories
+
+signals.post_save.connect(
+        ping_external_links(content_attr = 'content', url_attr = 'get_absolute_url'),
+        sender = Post, weak = False)
+
+signals.post_save.connect(
+        ping_directories(content_attr = 'content', url_attr = 'get_absolute_url'),
+        sender = Post, weak = False)

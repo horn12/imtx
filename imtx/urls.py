@@ -54,6 +54,7 @@ urlpatterns = patterns('',
     (r'^comment/', include('imtx.apps.comments.urls')),
     (r'^tag/', include('imtx.apps.tagging.urls')),
     (r'^comments/$', 'imtx.apps.comments.views.comment_list'),
+    (r'^xmlrpc/$', 'django_xmlrpc.views.handle_xmlrpc', {}, 'xmlrpc'),
 )
 
 urlpatterns += patterns('imtx.apps.blog.views',
