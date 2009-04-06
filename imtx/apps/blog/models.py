@@ -11,7 +11,7 @@ from imtx.apps.tagging.models import Tag
 from imtx.apps.tagging.fields import TagField
 from imtx.apps.comments.models import Comment
 from imtx.apps.comments.signals import  comment_save
-from managers import PostManager, PageManager
+from managers import PostManager
 
 class Category(models.Model):
     title = models.CharField(max_length = 250, help_text = _('Maximum 250 '
@@ -35,87 +35,6 @@ class Category(models.Model):
     def get_absolute_url(self):
         return ('post-category', [str(self.slug)])
 
-class Page(models.Model):
-    STATUS_CHOICES = (
-        ('publish', _('Published')),
-        ('draft', _('Unpublished')),
-    )
-    title = models.CharField(max_length = 64)
-    slug = models.SlugField(unique = True)
-    content = models.TextField()
-    date = models.DateTimeField(auto_now_add = True)
-    author = models.ForeignKey(User)
-    category = models.ManyToManyField(Category)
-    view = models.IntegerField(default = 0, editable = False)
-    status = models.CharField(max_length = 20, default = 'publish', choices = STATUS_CHOICES)
-    comment =  generic.GenericRelation(Comment, 
-                    object_id_field = 'object_pk',
-                    content_type_field = 'content_type')
-    comment_count = models.IntegerField(default = 0)
-    objects = PageManager()
-    tag = TagField()
-
-    def save(self):
-        try:
-            self.content = html.clean_html(self.content)
-        except:
-            pass
-        super(Page, self).save()
-
-        # Initial the views and comments count to 0 if the PostMeta isn't available
-        pm, created = PostMeta.objects.get_or_create(post=self, meta_key='views')
-        if created:
-            pm.meta_value = '0'
-            pm.save()
-
-        pm, created = PostMeta.objects.get_or_create(post=self, meta_key='comments_count')
-        if created:
-            pm.meta_value = '0'
-            pm.save()
-
-    def __unicode__(self):
-        return self.title
-
-    @models.permalink
-    def get_absolute_url(self):
-        return ('post-single', [str(self.id)])
-
-    def get_admin_url(self):
-        return '/admin/blog/page/%d/' % self.id
-
-    def get_author(self):
-        try:
-            profile = self.author.get_profile()
-        except Exception:
-            name = self.author.username
-        else:
-            name = profile.nickname
-
-        return name
-
-    def get_views_count(self):
-        return PostMeta.objects.get(post=self, meta_key='views').meta_value
-
-    def hit_views(self):
-        pm = PostMeta.objects.get(post=self, meta_key='views')
-        pm.meta_value = str(int(pm.meta_value) + 1)
-        pm.save()
-
-    def get_comments(self):
-        return Comment.objects.for_model(self)
-
-    def get_tags(self):
-        return list(Tag.objects.get_for_object(self))
-
-    def get_comment_count(self):
-        try:
-            return Comment.objects.for_model(self).count()
-        except:
-            return 0
-
-    def get_categories(self):
-        return self.category.all()
-
 class Post(models.Model):
     TYPE_CHOICES = (
         ('page', _('Page')),
@@ -126,6 +45,7 @@ class Post(models.Model):
         ('draft', _('Unpublished')),
     )
     title = models.CharField(max_length = 64)
+    slug = models.SlugField(blank = True, unique = True)
     content = models.TextField()
     date = models.DateTimeField(auto_now_add = True)
     author = models.ForeignKey(User)
@@ -163,7 +83,10 @@ class Post(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('single_post', [str(self.id)])
+        if self.type == 'post':
+            return ('single_post', [str(self.id)])
+        else:
+            return ('static_pages', [str(self.slug)])
 
     def get_admin_url(self):
         return '/admin/blog/post/%d/' % self.id
@@ -280,10 +203,6 @@ from pingback.client import ping_external_links, ping_directories
 signals.post_save.connect(
         ping_external_links(content_attr = 'content', url_attr = 'get_absolute_url'),
         sender = Post, weak = False)
-
-signals.post_save.connect(
-        ping_external_links(content_attr = 'content', url_attr = 'get_absolute_url'),
-        sender = Page, weak = False)
 
 #signals.post_save.connect(
 #        ping_directories(content_attr = 'content', url_attr = 'get_absolute_url'),

@@ -17,6 +17,5 @@ class PostManager(models.Manager):
                 date__year = int(year),
                 date__month = int(month)).order_by('-date')
 
-class PageManager(models.Manager):
     def get_page(self):
-        return self.get_query_set().filter(status = 'publish')
+        return self.get_query_set().filter(type='page', status = 'publish')

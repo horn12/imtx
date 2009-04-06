@@ -8,8 +8,8 @@ from django.forms.util import ErrorList
 from django.utils import html
 from django.core import urlresolvers
 
-from models import Post, Page, Category
 from forms import MediaForm
+from models import Post, Category
 from imtx.apps.tagging.models import Tag
 from imtx.apps.comments.views import get_comment_cookie_meta
 from imtx.apps.pagination.utils import get_page
@@ -41,7 +41,7 @@ def single_post(request, post_id):
             )
 
 def static_pages(request, page):
-    for post in Page.objects.get_page():
+    for post in Post.objects.get_page():
         try:
             if post.slug == page:
                 return render_to_response('post/page.html', 
@@ -139,7 +139,7 @@ def pingback_post_handler(post_id, **kwargs):
     return Post.objects.get(id=post_id)
 
 def pingback_page_handler(page, **kwargs):
-    return Page.objects.get(slug=page)
+    return Post.objects.get(slug=page)
 
 # define association between view name and our handler
 ping_details = {
