@@ -60,8 +60,18 @@ class Page(models.Model):
             self.content = html.clean_html(self.content)
         except:
             pass
-        self.comment_count = self.get_comment_count()
         super(Page, self).save()
+
+        # Initial the views and comments count to 0 if the PostMeta isn't available
+        pm, created = PostMeta.objects.get_or_create(post=self, meta_key='views')
+        if created:
+            pm.meta_value = '0'
+            pm.save()
+
+        pm, created = PostMeta.objects.get_or_create(post=self, meta_key='comments_count')
+        if created:
+            pm.meta_value = '0'
+            pm.save()
 
     def __unicode__(self):
         return self.title
@@ -84,7 +94,12 @@ class Page(models.Model):
         return name
 
     def get_views_count(self):
-        return self.view
+        return PostMeta.objects.get(post=self, meta_key='views').meta_value
+
+    def hit_views(self):
+        pm = PostMeta.objects.get(post=self, meta_key='views')
+        pm.meta_value = str(int(pm.meta_value) + 1)
+        pm.save()
 
     def get_comments(self):
         return Comment.objects.for_model(self)
@@ -265,6 +280,10 @@ from pingback.client import ping_external_links, ping_directories
 signals.post_save.connect(
         ping_external_links(content_attr = 'content', url_attr = 'get_absolute_url'),
         sender = Post, weak = False)
+
+signals.post_save.connect(
+        ping_external_links(content_attr = 'content', url_attr = 'get_absolute_url'),
+        sender = Page, weak = False)
 
 #signals.post_save.connect(
 #        ping_directories(content_attr = 'content', url_attr = 'get_absolute_url'),

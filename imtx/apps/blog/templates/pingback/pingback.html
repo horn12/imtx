@@ -7,7 +7,7 @@
 	<div class="b-pingback">
 	{% for pingback in pingbacks %}
 			<li class="b-meta">
-			{{ pingback.date|date:"M d, Y" }}:<a name="pingback-{{ pingback.id }}" href="{{ pingback.url }}" class="b-permlink">{{ pingback.title }}</a>
+			{{ pingback.date|date:"M d, Y" }}: <a name="pingback-{{ pingback.id }}" href="{{ pingback.url }}" class="b-permlink">{{ pingback.title }}</a>
 			</li>
 	{% endfor %}
 	</div>
