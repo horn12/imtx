@@ -10,6 +10,7 @@ from django.db.models.fields.files import ImageFieldFile
 from imtx.apps.tagging.models import Tag
 from imtx.apps.tagging.fields import TagField
 from imtx.apps.comments.models import Comment
+from imtx.apps.comments.signals import  comment_save
 from managers import PostManager, PageManager
 
 class Category(models.Model):
@@ -117,7 +118,7 @@ class Post(models.Model):
     view = models.IntegerField(default = 0, editable = False)
     type = models.CharField(max_length = 20, default = 'post', choices = TYPE_CHOICES)
     status = models.CharField(max_length = 20, default = 'publish', choices = STATUS_CHOICES)
-    comment =  generic.GenericRelation(Comment, 
+    comments =  generic.GenericRelation(Comment, 
                     object_id_field = 'object_pk',
                     content_type_field = 'content_type')
     comment_count = models.IntegerField(default = 0)
@@ -129,15 +130,25 @@ class Post(models.Model):
             self.content = html.clean_html(self.content)
         except:
             pass
-        self.comment_count = self.get_comment_count()
         super(Post, self).save()
+
+        # Initial the views and comments count to 0 if the PostMeta isn't available
+        pm, created = PostMeta.objects.get_or_create(post=self, meta_key='views')
+        if created:
+            pm.meta_value = '0'
+            pm.save()
+
+        pm, created = PostMeta.objects.get_or_create(post=self, meta_key='comments_count')
+        if created:
+            pm.meta_value = '0'
+            pm.save()
 
     def __unicode__(self):
         return self.title
 
     @models.permalink
     def get_absolute_url(self):
-        return ('post-single', [str(self.id)])
+        return ('single_post', [str(self.id)])
 
     def get_admin_url(self):
         return '/admin/blog/post/%d/' % self.id
@@ -153,19 +164,26 @@ class Post(models.Model):
         return name
 
     def get_views_count(self):
-        return self.view
+        return PostMeta.objects.get(post=self, meta_key='views').meta_value
+
+    def hit_views(self):
+        pm = PostMeta.objects.get(post=self, meta_key='views')
+        pm.meta_value = str(int(pm.meta_value) + 1)
+        pm.save()
+
+    def get_comments_count(self):
+        return PostMeta.objects.get(post=self.id, meta_key='comments_count').meta_value
+
+    def hit_comments(self):
+        pm = PostMeta.objects.get(post=self, meta_key='comments_count')
+        pm.meta_value = str(self.comments.count())
+        pm.save()
 
     def get_comments(self):
         return Comment.objects.for_model(self)
 
     def get_tags(self):
         return Tag.objects.get_for_object(self)
-
-    def get_comment_count(self):
-        try:
-            return Comment.objects.for_model(self).count()
-        except:
-            return 0
 
     def __get_excerpt(self):
         return self.content.split('<!--more-->')[0]
@@ -188,6 +206,14 @@ class Post(models.Model):
 
     def get_categories(self):
         return self.category.all()
+
+class PostMeta(models.Model):
+    post = models.ForeignKey(Post)
+    meta_key = models.CharField(max_length=128)
+    meta_value = models.TextField()
+
+    def __unicode__(self):
+        return '<%s: %s>' % (self.meta_key, self.meta_value)
 
 class Profile(models.Model):
 	user = models.ForeignKey(User, unique = True)
@@ -243,3 +269,9 @@ signals.post_save.connect(
 signals.post_save.connect(
         ping_directories(content_attr = 'content', url_attr = 'get_absolute_url'),
         sender = Post, weak = False)
+
+def on_comment_save(sender, comment, *args, **kwargs):
+    post = comment.object
+    post.hit_comments()
+
+comment_save.connect(on_comment_save)

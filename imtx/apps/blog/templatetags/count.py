@@ -30,8 +30,8 @@ class CountNode(template.Node):
 
 @register.tag(name="get_comments_count")
 def do_comments_count(parser, token):
-    return CountNode("comments", _("No Comments"),  _("One Comment"), _("%(count)d Comments"))
+    return CountNode("comments", _("No Comments"),  _("One Comment"), _("%(count)s Comments"))
 
 @register.tag(name="get_views_count")
 def do_views_count(parser, token):
-    return CountNode("views", _("No Views"), _("One View"), _("%(count)d Views"))
+    return CountNode("views", _("No Views"), _("One View"), _("%(count)s Views"))

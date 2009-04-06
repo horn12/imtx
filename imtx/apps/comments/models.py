@@ -264,9 +264,4 @@ def on_comment_was_posted(sender, comment, request, *args, **kwargs):
     except AkismetError:
         comment.save()
 
-def on_comment_save(sender, comment, *args, **kwargs):
-    object = comment.object
-    object.save()
-
 comment_was_posted.connect(on_comment_was_posted)
-comment_save.connect(on_comment_save)

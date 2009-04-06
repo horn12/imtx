@@ -31,8 +31,9 @@ def index(request):
 def single_post(request, post_id):
     post = get_object_or_404(Post, id = post_id)
 
-    post.view = post.view + 1
-    post.save()
+    post.hit_views()
+#    post.view = post.view + 1
+#    post.save()
 
     return render_to_response('post/post_detail.html', {
                 'post': post,
