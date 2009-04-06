@@ -9,6 +9,7 @@ from BeautifulSoup import BeautifulSoup
 from django.contrib.sites.models import Site
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import get_resolver
+from django.core import urlresolvers
 from django.conf import settings
 from django.core.urlresolvers import get_callable
 from django.utils.html import strip_tags
@@ -22,6 +23,8 @@ __version__ = '0.1.1'
 __all__ = ['Pingback', 'ping_external_links', 'ping_directories',
            'create_ping_func', '__version__']
 
+LOG_FILENAME = '/tmp/logging_example.out'
+logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG,)
 
 def create_ping_func(**kwargs):
     """
@@ -37,20 +40,22 @@ def create_ping_func(**kwargs):
     """
 
     def ping_func(source, target):
-        log = logging.getLogger('pingback')
-        log.debug('received pingback from %r to %r' % (source, target))
+        logging.debug('received pingback from %r to %r' % (source, target))
         domain = Site.objects.get_current().domain
 
         # fetch the source request, then check if it really pings the target.
         try:
             doc = urlopen(source)
         except (HTTPError, URLError):
+            logging.debug('PingbackError.SOURCE_DOES_NOT_EXIST')
             raise PingbackError(PingbackError.SOURCE_DOES_NOT_EXIST)
 
         # does the source refer to the target?
         soup = BeautifulSoup(doc.read())
         mylink = soup.find('a', href=target)
+        logging.debug('mylink %s' % mylink)
         if not mylink:
+            logging.debug('PingbackError.SOURCE_DOES_NOT_LINK')
             raise PingbackError(PingbackError.SOURCE_DOES_NOT_LINK)
 
         # grab the title of the pingback source
@@ -60,9 +65,14 @@ def create_ping_func(**kwargs):
         else:
             title = 'Unknown title'
 
+        logging.debug('got the title: %s', title)
+
         # extract the text around the incoming link
-        content = unicode(mylink.findParent())
-        i = content.index(unicode(mylink))
+        try:
+            content = unicode(mylink.findParent())
+            i = content.index(unicode(mylink))
+        except Exception, e:
+            logging.debug(e)
         content = strip_tags(content)
         max_length = getattr(settings, 'PINGBACK_RESPONSE_LENGTH', 200)
         if len(content) > max_length:
@@ -73,21 +83,26 @@ def create_ping_func(**kwargs):
             if end > len(content):
                 end = len(content)
             content = content[start:end]
+        logging.debug('got the content: %s', content)
 
         scheme, server, path, query, fragment = urlsplit(target)
 
         # check if the target is valid target
+        logging.debug('man things: %r %r %r %r %r', scheme, server, path, query, fragment)
         if not (server == domain or server.split(':')[0] == domain):
             return PingbackError.TARGET_IS_NOT_PINGABLE
 
         resolver = get_resolver(None)
+        logging.debug('got the resolver: %r', resolver)
 
         try:
             func, a, kw = resolver.resolve(path)
         except urlresolvers.Resolver404:
+            logging.debug('PingbackError.TARGET_DOES_NOT_EXIST')
             raise PingbackError(PingbackError.TARGET_DOES_NOT_EXIST)
 
         url_signatures = resolver.reverse_dict.getlist(func)
+        logging.debug('got the url_signatures: %r', url_signatures)
         # stupid workaround because django returns tuple instead of RegexURLPattern
         registered = False
         for name in kwargs:
@@ -95,6 +110,7 @@ def create_ping_func(**kwargs):
                 registered = True
                 break
         if not registered:
+            logging.debug('PingbackError.TARGET_DOES_NOT_EXIST')
             raise PingbackError(PingbackError.TARGET_IS_NOT_PINGABLE)
 
         object_resolver = kwargs[name]
@@ -103,6 +119,7 @@ def create_ping_func(**kwargs):
         content_type = ContentType.objects.get_for_model(obj)
         try:
             Pingback.objects.get(url=source, content_type=content_type, object_id=obj.id)
+            logging.debug('PingbackError.PINGBACK_ALREADY_REGISTERED')
             raise PingbackError(PingbackError.PINGBACK_ALREADY_REGISTERED)
         except Pingback.DoesNotExist:
             pass
