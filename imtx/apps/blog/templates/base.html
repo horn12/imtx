@@ -1,4 +1,4 @@
-{% load menu %}
+{% load menu utils %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
@@ -6,7 +6,7 @@
 	<link rel="stylesheet" href="/static/css/style.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="/static/css/highlight.css" type="text/css" media="screen" />
 	<link rel="alternate" type="application/rss+xml" title="订阅 TualatriX Feed" href="/feed/latest/" />
-    <link rel="pingback" href="{% url xmlrpc %}" />
+	<link rel="pingback" href="{% fullurl xmlrpc %}" />
 	<link rel="shortcut icon" type="image/ico" href="/static/img/favicon.ico" />
 	<meta name="verify-v1" content="5l8gAzcQ6k3ZBsFKJu1QhCuRjVnQqg5KLlGbPtyISGM=" />
 </head>
