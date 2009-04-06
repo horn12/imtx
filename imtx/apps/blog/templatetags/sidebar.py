@@ -5,19 +5,26 @@ from django.template import Library
 from django.db import connection
 from imtx.apps.blog.models import Post, Category, Link
 from imtx.apps.comments.models import Comment
+from pingback.models import Pingback
 
 register = Library()
 
 @register.inclusion_tag('sidebar/recent_posts.html', takes_context = True)
 def get_recent_posts(context):
     #TODO Use settings to determine the latest items.
-    return {'posts': Post.objects.get_post()[:20]}
+    return {'posts': Post.objects.get_post()[:15]}
 
 @register.inclusion_tag('sidebar/recent_comments.html', takes_context = True)
 def get_recent_comments(context):
-    comments = Comment.objects.in_public()[:20]
+    comments = Comment.objects.in_public()[:15]
 
     return {'comments': comments}
+
+@register.inclusion_tag('sidebar/recent_pingbacks.html', takes_context = True)
+def get_recent_pingbacks(context):
+    pingbacks = Pingback.objects.all().order_by('-date')[:15]
+
+    return {'pingbacks': pingbacks}
 
 @register.inclusion_tag('sidebar/links.html', takes_context = True)
 def get_links(context):
