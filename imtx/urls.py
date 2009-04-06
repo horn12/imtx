@@ -7,20 +7,10 @@ from django.contrib.sitemaps import Sitemap
 from django.contrib.sitemaps import views as sitemap_views
 from django.views.decorators.cache import cache_page
 
-from imtx.apps.blog.models import Post, Page, Category
+from imtx.apps.blog.models import Post, Category
 from imtx.apps.blog.feeds import LatestPosts
 
 admin.autodiscover()
-
-class PageSitemap(Sitemap):
-    changefreq = "weekly"
-    priority = 0.6
-
-    def items(self):
-        return Page.objects.get_page()
-
-    def lastmod(self, obj):
-        return obj.date
 
 class PostSitemap(Sitemap):
     changefreq = "monthly"
@@ -34,7 +24,6 @@ class PostSitemap(Sitemap):
 
 sitemaps = {
     'posts': PostSitemap,
-    'pages': PageSitemap,
 }
 
 feed = {
@@ -68,5 +57,5 @@ urlpatterns += patterns('imtx.apps.blog.views',
     url(r'^archives/(?P<post_id>\d+).html$', 'single_post', name = 'single_post'),
     url(r'^archives/category/(?P<slug>[-\w]+)/$', 'category_view', name = 'post-category'),
     (r'^archives/(?P<year>\d{4})/(?P<month>\d{1,2})/$', 'archive_view'),
-    (r'^([-\w]+)/$', 'static_pages'),
+    url(r'^([-\w]+)/$', 'static_pages', name = 'static_pages'),
 )
