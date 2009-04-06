@@ -425,8 +425,8 @@ img.alignleft {
 /* Comment Start */
 
 #commentform p {
-        font-family: Helvetica,Arial,Verdana,Sans-serif;
 	margin: 3px 0;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
 	}
 	
 #commentform p#xhtml {

@@ -50,13 +50,11 @@ class Post(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User)
     category = models.ManyToManyField(Category)
-    view = models.IntegerField(default=0, editable=False)
     type = models.CharField(max_length=20, default='post', choices=TYPE_CHOICES)
     status = models.CharField(max_length=20, default='publish', choices=STATUS_CHOICES)
     comments =  generic.GenericRelation(Comment, 
                     object_id_field='object_pk',
                     content_type_field='content_type')
-    comment_count = models.IntegerField(default=0)
     objects = PostManager()
     tag = TagField()
 
