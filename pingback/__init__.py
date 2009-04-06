@@ -104,6 +104,7 @@ def create_ping_func(**kwargs):
         url_signatures = resolver.reverse_dict.getlist(func)
         logging.debug('got the url_signatures: %r', url_signatures)
         # stupid workaround because django returns tuple instead of RegexURLPattern
+        logging.debug('the kwargs is %r', kwargs)
         registered = False
         for name in kwargs:
             if resolver.reverse_dict[name] in url_signatures:
@@ -113,8 +114,9 @@ def create_ping_func(**kwargs):
             logging.debug('PingbackError.TARGET_DOES_NOT_EXIST')
             raise PingbackError(PingbackError.TARGET_IS_NOT_PINGABLE)
 
+        logging.debug('The name is %r', name)
         object_resolver = kwargs[name]
-        obj = object_resolver(**kw)
+        obj = object_resolver(*a, **kw)
 
         content_type = ContentType.objects.get_for_model(obj)
         try:

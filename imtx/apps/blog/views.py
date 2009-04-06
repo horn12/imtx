@@ -30,7 +30,6 @@ def index(request):
 
 def single_post(request, post_id):
     post = get_object_or_404(Post, id = post_id)
-
     post.hit_views()
 
     return render_to_response('post/post_detail.html', {
@@ -41,17 +40,12 @@ def single_post(request, post_id):
             )
 
 def static_pages(request, page):
-    for post in Post.objects.get_page():
-        try:
-            if post.slug == page:
-                return render_to_response('post/page.html', 
-                        {'post': post, 'current': post.slug},
-                            context_instance = RequestContext(request),
-                        )
-        except TypeError:
-            raise Http404
-
-    raise Http404
+    post = get_object_or_404(Post, slug=page)
+    post.hit_views()
+    return render_to_response('post/page.html', 
+            {'post': post, 'current': post.slug},
+                context_instance = RequestContext(request),
+            )
 
 def category_view(request, slug):
     cat = get_object_or_404(Category, slug = slug)
@@ -139,6 +133,7 @@ def pingback_post_handler(post_id, **kwargs):
     return Post.objects.get(id=post_id)
 
 def pingback_page_handler(page, **kwargs):
+    print page
     return Post.objects.get(slug=page)
 
 # define association between view name and our handler
