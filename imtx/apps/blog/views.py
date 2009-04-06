@@ -32,8 +32,6 @@ def single_post(request, post_id):
     post = get_object_or_404(Post, id = post_id)
 
     post.hit_views()
-#    post.view = post.view + 1
-#    post.save()
 
     return render_to_response('post/post_detail.html', {
                 'post': post,
@@ -137,11 +135,17 @@ from django_xmlrpc import xmlrpcdispatcher
 
 # create simple function which returns Post object and accepts
 # exactly same arguments as 'details' view.
-def pingback_blog_handler(post_id, **kwargs):
-    return Post.objects.get(id = post_id)
+def pingback_post_handler(post_id, **kwargs):
+    return Post.objects.get(id=post_id)
+
+def pingback_page_handler(page, **kwargs):
+    return Page.objects.get(slug=page)
 
 # define association between view name and our handler
-ping_details = {'single_post': pingback_blog_handler}
+ping_details = {
+    'single_post': pingback_post_handler,
+    'static_pages': pingback_page_handler,
+}
 
 # create xml rpc method, which will process all
 # ping requests
