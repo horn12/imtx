@@ -45,7 +45,7 @@ class Post(models.Model):
         ('draft', _('Unpublished')),
     )
     title = models.CharField(max_length=64)
-    slug = models.SlugField(null=True, unique=True)
+    slug = models.SlugField(blank=True, null=True, unique=True)
     content = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User)
