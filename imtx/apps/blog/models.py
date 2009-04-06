@@ -266,9 +266,9 @@ signals.post_save.connect(
         ping_external_links(content_attr = 'content', url_attr = 'get_absolute_url'),
         sender = Post, weak = False)
 
-signals.post_save.connect(
-        ping_directories(content_attr = 'content', url_attr = 'get_absolute_url'),
-        sender = Post, weak = False)
+#signals.post_save.connect(
+#        ping_directories(content_attr = 'content', url_attr = 'get_absolute_url'),
+#        sender = Post, weak = False)
 
 def on_comment_save(sender, comment, *args, **kwargs):
     post = comment.object

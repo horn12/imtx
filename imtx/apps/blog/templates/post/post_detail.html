@@ -29,9 +29,8 @@
         </p>
 	</div>
 </div>
-{% endblock %}
-
-{% block comment %}
 	{% var object = post %}
+	{% include "pingback/pingback.html" %}
 	{% include "comment/comment.html" %}
 {% endblock %}
+
