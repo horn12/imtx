@@ -103,4 +103,3 @@ DIRECTORY_URLS = (
     'http://ping.blogs.yandex.ru/RPC2',
     'http://rpc.technorati.com/rpc/ping',
 )
-

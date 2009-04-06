@@ -25,18 +25,18 @@ def index(request):
     return render_to_response('post/post_list.html', {
                 'posts': posts,
                 'page': page,
-                }, context_instance = RequestContext(request)
+                }, context_instance=RequestContext(request)
             )
 
 def single_post(request, post_id):
-    post = get_object_or_404(Post, id = post_id)
+    post = get_object_or_404(Post, id=post_id)
     post.hit_views()
 
     return render_to_response('post/post_detail.html', {
                 'post': post,
                 'comment_meta': get_comment_cookie_meta(request),
                 },
-                context_instance = RequestContext(request),
+                context_instance=RequestContext(request),
             )
 
 def static_pages(request, page):
@@ -44,11 +44,11 @@ def static_pages(request, page):
     post.hit_views()
     return render_to_response('post/page.html', 
             {'post': post, 'current': post.slug},
-                context_instance = RequestContext(request),
+                context_instance=RequestContext(request),
             )
 
 def category_view(request, slug):
-    cat = get_object_or_404(Category, slug = slug)
+    cat = get_object_or_404(Category, slug=slug)
     posts = Post.objects.get_post_by_category(cat)
     page = get_page(request)
 
@@ -57,7 +57,7 @@ def category_view(request, slug):
                 'posts': posts,
                 'path': request.path,
                 'page': page,
-                }, context_instance = RequestContext(request)
+                }, context_instance=RequestContext(request)
             )
 
 def archive_view(request, year, month):
@@ -70,7 +70,7 @@ def archive_view(request, year, month):
                 'posts': posts,
                 'path': request.path,
                 'page': page,
-                }, context_instance = RequestContext(request)
+                }, context_instance=RequestContext(request)
             )
 
 def search(request):
@@ -90,11 +90,11 @@ def search(request):
                     {'message': message}
                     )
         qset = (
-            Q(title__icontains = query) |
-            Q(content__icontains = query)
+            Q(title__icontains=query) |
+            Q(content__icontains=query)
         )
 
-        posts = Post.objects.filter(qset, status = 'publish').distinct().order_by('-date')
+        posts = Post.objects.filter(qset, status='publish').distinct().order_by('-date')
 
     response = render_to_response('search.html', {
                               'query': query,
@@ -102,7 +102,7 @@ def search(request):
                               'page': page,
                               'pagi_path': qd.urlencode(),
                               })
-    response.set_cookie('search',request.META['REMOTE_ADDR'], max_age = 5)
+    response.set_cookie('search',request.META['REMOTE_ADDR'], max_age=5)
 
     return response
 
@@ -114,7 +114,7 @@ def upload(request):
     if request.method == 'POST':
         form = MediaForm(request.POST, request.FILES)
         if form.is_valid():
-            new_object = form.save(commit = False)
+            new_object = form.save(commit=False)
             new_object.save()
             form.clean()
     else:
@@ -133,7 +133,6 @@ def pingback_post_handler(post_id, **kwargs):
     return Post.objects.get(id=post_id)
 
 def pingback_page_handler(page, **kwargs):
-    print page
     return Post.objects.get(slug=page)
 
 # define association between view name and our handler

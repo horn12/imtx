@@ -14,9 +14,9 @@ from imtx.apps.comments.signals import  comment_save
 from managers import PostManager
 
 class Category(models.Model):
-    title = models.CharField(max_length = 250, help_text = _('Maximum 250 '
+    title = models.CharField(max_length=250, help_text=_('Maximum 250 '
             'characters.'))
-    slug = models.SlugField(unique = True, help_text = _('Suggested value '
+    slug = models.SlugField(unique=True, help_text=_('Suggested value '
             'automatically generated from title. Must be unique.'))
     description = models.TextField()
 
@@ -44,19 +44,19 @@ class Post(models.Model):
         ('publish', _('Published')),
         ('draft', _('Unpublished')),
     )
-    title = models.CharField(max_length = 64)
-    slug = models.SlugField(blank = True, unique = True)
+    title = models.CharField(max_length=64)
+    slug = models.SlugField(null=True, unique=True)
     content = models.TextField()
-    date = models.DateTimeField(auto_now_add = True)
+    date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User)
     category = models.ManyToManyField(Category)
-    view = models.IntegerField(default = 0, editable = False)
-    type = models.CharField(max_length = 20, default = 'post', choices = TYPE_CHOICES)
-    status = models.CharField(max_length = 20, default = 'publish', choices = STATUS_CHOICES)
+    view = models.IntegerField(default=0, editable=False)
+    type = models.CharField(max_length=20, default='post', choices=TYPE_CHOICES)
+    status = models.CharField(max_length=20, default='publish', choices=STATUS_CHOICES)
     comments =  generic.GenericRelation(Comment, 
-                    object_id_field = 'object_pk',
-                    content_type_field = 'content_type')
-    comment_count = models.IntegerField(default = 0)
+                    object_id_field='object_pk',
+                    content_type_field='content_type')
+    comment_count = models.IntegerField(default=0)
     objects = PostManager()
     tag = TagField()
 
@@ -154,10 +154,10 @@ class PostMeta(models.Model):
         return '<%s: %s>' % (self.meta_key, self.meta_value)
 
 class Profile(models.Model):
-	user = models.ForeignKey(User, unique = True)
+	user = models.ForeignKey(User, unique=True)
 
-	nickname = models.CharField(max_length = 30)
-	website = models.URLField(blank = True)
+	nickname = models.CharField(max_length=30)
+	website = models.URLField(blank=True)
 
 	def save(self):
 		if not self.nickname:
@@ -169,9 +169,9 @@ class Profile(models.Model):
 
 class Link(models.Model):
     url = models.URLField()
-    name = models.CharField(max_length = 255)
+    name = models.CharField(max_length=255)
     description = models.TextField()
-    is_public   = models.BooleanField(_('is public'), default = True)
+    is_public   = models.BooleanField(_('is public'), default=True)
 
     def __unicode__(self):
         return '%s: %s' % (self.name, self.url)
@@ -181,9 +181,9 @@ class Media(models.Model):
     THUMB_SIZE = '640'
     LOGO_SIZE = '48'
 
-    title = models.CharField(max_length = 120)
-    image = models.ImageField(upload_to = UPLOAD_ROOT)
-    date = models.DateTimeField(auto_now_add = True)
+    title = models.CharField(max_length=120)
+    image = models.ImageField(upload_to=UPLOAD_ROOT)
+    date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name_plural = _('Media')
@@ -201,12 +201,12 @@ class Media(models.Model):
 from pingback.client import ping_external_links, ping_directories
 
 signals.post_save.connect(
-        ping_external_links(content_attr = 'content', url_attr = 'get_absolute_url'),
-        sender = Post, weak = False)
+        ping_external_links(content_attr='content', url_attr='get_absolute_url'),
+        sender=Post, weak=False)
 
 #signals.post_save.connect(
-#        ping_directories(content_attr = 'content', url_attr = 'get_absolute_url'),
-#        sender = Post, weak = False)
+#        ping_directories(content_attr='content', url_attr='get_absolute_url'),
+#        sender=Post, weak=False)
 
 def on_comment_save(sender, comment, *args, **kwargs):
     post = comment.object
