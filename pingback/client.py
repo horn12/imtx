@@ -16,20 +16,15 @@ from django.core.urlresolvers import reverse
 from pingback.models import PingbackClient, DirectoryPing
 from pingback.exceptions import PingbackNotConfigured, PingbackError
 
-LOG_FILENAME = '/tmp/pingback.log'
-logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG,)
-
 class PingBackThread(threading.Thread):
     def __init__(self, instance, url, links):
         threading.Thread.__init__(self)
         self.instance = instance
         self.url = url
         self.links = links
-        logging.debug('threading init instance %r, url %r, links %r', instance, url, links)
 
     def run(self):
         ctype = ContentType.objects.get_for_model(self.instance)
-        logging.debug('ctype is %r', ctype)
         socket.setdefaulttimeout(10)
         for link in self.links:
             try:
@@ -37,19 +32,15 @@ class PingBackThread(threading.Thread):
                                            object_id=self.instance.id)
             except PingbackClient.DoesNotExist:
                 pingback = PingbackClient(object=self.instance, url=link)
-                logging.debug('create pingback client %r', pingback)
                 try:
                     f = urlopen(link)
                     server_url = f.info().get('X-Pingback', '') or \
                                  search_link(f.read(512 * 1024))
-                    logging.debug('get server url %r', server_url)
                     if server_url:
                         server = ServerProxy(server_url)
                         try:
                             result = server.pingback.ping(self.url, link)
-                            logging.debug('pingback succeed %r', result)
                         except Exception, e:
-                            logging.debug('pingback failed %r', e)
                             pingback.success = False
                         else:
                             pingback.success = not PingbackError.is_error(result)
