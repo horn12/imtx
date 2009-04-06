@@ -1,3 +1,4 @@
+from django import template
 from django.template import Library, Node
 from django.contrib.sites.models import Site
 
