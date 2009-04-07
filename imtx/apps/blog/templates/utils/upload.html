@@ -25,7 +25,7 @@
         <a href="{{image.get_thumb_url}}"><img src="{{ image.get_thumb_url }}" title="{{ image.title }}" /></a><br />
     </div>
     <div>
-	    <input type="button" id="insert" name="insert" value="{#insert}" onclick="UploadDialog.insert('{{image.get_thumb_url}}', '{{ image.title}}', '{{ image.image.url }}');" />
+	    <input type="button" id="insert" name="insert" value="{#insert}" onclick="UploadDialog.insert('{{image.get_thumb_url}}', '{{ image.title}}', '{{ image.get_thumb_url }}');" />
     </div>
 </div>
 {% endfor %}
