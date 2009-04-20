@@ -9,7 +9,7 @@ class MediaAdmin(admin.StackedInline):
     model = Media
 
 class PostAdmin(admin.ModelAdmin):
-    prepopulated_fields = {'slug': 'title'}
+    prepopulated_fields = {'slug': ('title',)}
     list_display = ('title', 'date', 'author', 'status')
     list_filter = ('date', 'author', 'category', 'type', 'status')
     radio_fields = {
