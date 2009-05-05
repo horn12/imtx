@@ -13,12 +13,12 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASE_ENGINE = 'mysql'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = 'imtxcn'             # Or path to database file if using sqlite3.
-DATABASE_USER = 'root'             # Not used with sqlite3.
-DATABASE_PASSWORD = '123456'         # Not used with sqlite3.
-DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
-DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
+DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+DATABASE_NAME = './db/database.sqlite3'             # Or path to database file if using sqlite3.
+# DATABASE_USER = 'root'             # Not used with sqlite3.
+# DATABASE_PASSWORD = '123456'         # Not used with sqlite3.
+# DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
+# DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -55,6 +55,15 @@ ADMIN_MEDIA_PREFIX = '/media/'
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '7#8jrszoj#%a1)x9xmmk05a+@36hejrk#tmms^8ihm_8mrhj9h'
 
+#
+# Cache configures
+#
+CACHE_BACKEND = 'memcached://127.0.0.1:11211/'
+# CACHE_BACKEND = 'file:///temp/django_cache'
+CACHE_PREFIX = 'imtx_cache'
+
+
+
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.load_template_source',
@@ -85,6 +94,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.sitemaps',
+	'imtx.utils',
     'imtx.apps.blog',
     'imtx.apps.tagging',
     'imtx.apps.comments',

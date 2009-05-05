@@ -11,6 +11,7 @@ from imtx.apps.tagging.models import Tag
 from imtx.apps.tagging.fields import TagField
 from imtx.apps.comments.models import Comment
 from imtx.apps.comments.signals import  comment_save
+from imtx.apps.blog.sweeper import *
 from managers import PostManager
 
 class Category(models.Model):
@@ -64,6 +65,9 @@ class Post(models.Model):
         except:
             pass
         super(Post, self).save()
+
+		# call cache sweeper to clear releate caches
+        PostSweeper.after_save(self)
 
         # Initial the views and comments count to 0 if the PostMeta isn't available
         pm, created = PostMeta.objects.get_or_create(post=self, meta_key='views')
@@ -152,18 +156,18 @@ class PostMeta(models.Model):
         return '<%s: %s>' % (self.meta_key, self.meta_value)
 
 class Profile(models.Model):
-	user = models.ForeignKey(User, unique=True)
+    user = models.ForeignKey(User, unique=True)
 
-	nickname = models.CharField(max_length=30)
-	website = models.URLField(blank=True)
+    nickname = models.CharField(max_length=30)
+    website = models.URLField(blank=True)
 
-	def save(self):
-		if not self.nickname:
-			self.nickname = self.user.username
-		super(Profile, self).save()
+    def save(self):
+        if not self.nickname:
+            self.nickname = self.user.username
+        super(Profile, self).save()
 
-	def __unicode__(self):
-		return self.nickname
+    def __unicode__(self):
+        return self.nickname
 
 class Link(models.Model):
     url = models.URLField()

@@ -13,6 +13,7 @@ from models import Post, Category
 from imtx.apps.tagging.models import Tag
 from imtx.apps.comments.views import get_comment_cookie_meta
 from imtx.apps.pagination.utils import get_page
+from imtx.utils import caches
 
 def get_query(request):
     query = html.escape(request.GET.get('s', ''))
@@ -20,16 +21,27 @@ def get_query(request):
 
 def index(request):
     page = get_page(request)
-
+    
     posts = Post.objects.get_post()
-    return render_to_response('post/post_list.html', {
-                'posts': posts,
-                'page': page,
-                }, context_instance=RequestContext(request)
-            )
+
+    cache_key = 'blog/views/index/p/%s' % page
+    result = caches.get(cache_key)
+    if not result:
+        result = render_to_response('post/post_list.html', {
+                    'posts': posts,
+                    'page': page,
+                    }, context_instance=RequestContext(request)
+                )
+        caches.set(cache_key,result)
+    return result
 
 def single_post(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
+    cache_key = "blog/views/single_post/" + post_id
+    post = caches.get(cache_key)
+    if not post:
+        post = get_object_or_404(Post, id=post_id)
+        caches.set(cache_key,post)
+    
     post.hit_views()
 
     return render_to_response('post/post_detail.html', {
@@ -40,7 +52,12 @@ def single_post(request, post_id):
             )
 
 def static_pages(request, page):
-    post = get_object_or_404(Post, slug=page)
+    cache_key = "blog/views/static_pages/" + page
+    post = caches.get(cache_key)
+    if not post:
+        post = get_object_or_404(Post, slug=page)
+        caches.set(cache_key,post)
+		
     post.hit_views()
     return render_to_response('post/page.html', 
             {'post': post, 'current': post.slug},
