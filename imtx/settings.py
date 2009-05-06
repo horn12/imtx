@@ -1,11 +1,19 @@
 # Django settings for imtx project.
 
-import os.path
+import os.path,logging
 from os.path import join
 settings_path = os.path.abspath(os.path.dirname(__file__))
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+
+# logging config
+logging.basicConfig(
+    level = logging.DEBUG,
+    format = '[%(levelname)s] %(asctime)s:\n%(message)s\n',
+    filename = '/tmp/imtx.log',
+    filemode = 'w'
+)
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
@@ -59,10 +67,13 @@ SECRET_KEY = '7#8jrszoj#%a1)x9xmmk05a+@36hejrk#tmms^8ihm_8mrhj9h'
 # Cache configures
 #
 CACHE_BACKEND = 'memcached://127.0.0.1:11211/'
-# CACHE_BACKEND = 'file:///temp/django_cache'
+# CACHE_BACKEND = 'file:///tmp/django_cache'
 CACHE_PREFIX = 'imtx_cache'
 
-
+# delay view_count to save into db,sometimes save in the cache,until it equl this value
+VIEW_COUNT_DELAY = 10
+# like VIEW_COUNT_DELAY but it delay by time
+VIEW_COUNT_DELAY_SECONDS = 900
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
