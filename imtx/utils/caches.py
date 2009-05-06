@@ -20,6 +20,7 @@ def get(key):
     obj = cache.get(_format_key(key))
     if obj:
         logs.debug('cache hit %s' % key)
+	return obj
     
 def delete(key):
     logs.debug('cache delete %s' % key)

@@ -13,7 +13,7 @@ from models import Post, Category
 from imtx.apps.tagging.models import Tag
 from imtx.apps.comments.views import get_comment_cookie_meta
 from imtx.apps.pagination.utils import get_page
-from imtx.utils import caches
+from imtx.utils import caches,logs
 
 def get_query(request):
     query = html.escape(request.GET.get('s', ''))
@@ -32,7 +32,7 @@ def index(request):
                     'page': page,
                     }, context_instance=RequestContext(request)
                 )
-        caches.set(cache_key,result)
+        caches.set(cache_key,result,['blog/views/index'])
     return result
 
 def single_post(request, post_id):

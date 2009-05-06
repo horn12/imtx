@@ -13,6 +13,9 @@ from imtx.apps.comments.models import Comment
 from imtx.apps.comments.signals import  comment_save
 from imtx.apps.blog.sweeper import *
 from managers import PostManager
+from imtx.utils import caches,logs
+from imtx.settings import *
+import time
 
 class Category(models.Model):
     title = models.CharField(max_length=250, help_text=_('Maximum 250 '
@@ -66,7 +69,7 @@ class Post(models.Model):
             pass
         super(Post, self).save()
 
-		# call cache sweeper to clear releate caches
+        # call cache sweeper to clear releate caches
         PostSweeper.after_save(self)
 
         # Initial the views and comments count to 0 if the PostMeta isn't available
@@ -103,14 +106,42 @@ class Post(models.Model):
 
         return name
 
-    def get_views_count(self):
+    def _get_views_count(self):
         return PostMeta.objects.get(post=self, meta_key='views').meta_value
-
+    
+    def get_views_count(self):
+        cache_key = 'models/post/view_count/%s' % self.id
+        view_count = caches.get(cache_key)
+        if not view_count:
+            logs.debug('get_views_count %s not view_count' % self.id)
+            view_count = {
+                'count' : int(self._get_views_count()), 
+                'last_updated_at' : int(time.time()) 
+                }
+            caches.set(cache_key,view_count)
+        return view_count['count']
+            
+    def _hit_views(self,count):
+           pm = PostMeta.objects.get(post=self, meta_key='views')
+           pm.meta_value = str(count)
+           pm.save()
+    
     def hit_views(self):
-        pm = PostMeta.objects.get(post=self, meta_key='views')
-        pm.meta_value = str(int(pm.meta_value) + 1)
-        pm.save()
+        cache_key = 'models/post/view_count/%s' % self.id
+        view_count = caches.get(cache_key)
+        if (not view_count) or (int(view_count['count']) % VIEW_COUNT_DELAY == 0) or (int(time.time()) - int(view_count['last_updated_at']) >= VIEW_COUNT_DELAY_SECONDS):
+            if not view_count:
+                view_count = {'count' : int(self._get_views_count()), 'last_updated_at' : None }
+            view_count['count'] += 1
+            view_count['last_updated_at'] = int(time.time())
 
+            self._hit_views(view_count['count'])         
+            caches.set(cache_key,view_count)
+        else:
+            view_count['count'] += 1
+            caches.set(cache_key,view_count)
+        
+   
     def get_comments_count(self):
         return PostMeta.objects.get(post=self.id, meta_key='comments_count').meta_value
 

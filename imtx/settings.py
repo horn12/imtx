@@ -87,6 +87,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'pingback.middleware.PingbackMiddleware',
+	'middleware.SQLLogMiddleware',
 #    'imtx.middleware.maintain.MaintainMiddleware',
 )
 
