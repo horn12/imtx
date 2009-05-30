@@ -30,6 +30,9 @@ def index(request):
 
 def single_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
+    if not post.is_public():
+        raise Http404
+
     post.hit_views()
 
     return render_to_response('post/post_detail.html', {

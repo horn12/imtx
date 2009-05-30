@@ -143,6 +143,12 @@ class Post(models.Model):
     def get_categories(self):
         return self.category.all()
 
+    def is_public(self):
+        if self.status == 'publish':
+            return True
+        else:
+            return False
+
 class PostMeta(models.Model):
     post = models.ForeignKey(Post)
     meta_key = models.CharField(max_length=128)
