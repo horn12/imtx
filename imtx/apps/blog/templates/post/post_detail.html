@@ -25,12 +25,17 @@
 		{% endif %}
 		</p>
         <p class="meta"> 
+        {% if post.allow_comment %}
         <small> &raquo; <a href="#comments">{% trans "You can leave a comment." %}</a></small>
+        {% endif %}
         </p>
 	</div>
 </div>
 	{% var object = post %}
 	{% include "pingback/pingback.html" %}
+    {% if post.allow_comment %}
 	{% include "comment/comment.html" %}
+    {% else %}
+    <p class="nocomments">Comments are closed.</p>
+    {% endif %}
 {% endblock %}
-

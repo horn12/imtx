@@ -7,31 +7,6 @@
 
 <script type="text/javascript" src="/static/js/comment-reply.js"></script>
 
-{% if comment_list %}
-<h3 id="comments">{{ commentlist }}</h3>
-{% endif %}
-
-{% comment %}
-<ol class="commentlist">
-    {% for comment in comment_list %}
-
-    <li class="{{ forloop.counter|alt }}" id="comment-{{ comment.id }}">
-    <div id="div-comment-{{ comment.id }}">
-	    <cite>{% if comment.url %}<a href="{{ comment.url }}">{{ comment.name }}</a>{% else %}{{ comment.name }}{% endif %}</cite>{% trans " Says:" %}
-		<br />
-		<small class="commentmetadata"><a href="#comment-{{ comment.id }}" title="">{{ comment.date|date:"D d M Y" }}</a></small>
-		<p> {% autoescape off %}
-		{{ comment.content|urlize|linebreaks }}
-		{% endautoescape %}</p>
-		<div class="reply">
-			<a rel='nofollow' href="{{ comment.get_absolute_url }}#respond" onclick='return addComment.moveForm("div-comment-{{ comment.id }}", "{{ comment.id }}", "respond")'>Reply</a>
-		</div>
-    </div>
-    </li>
-    {% endfor %}
-</ol>
-{% endcomment %}
-
 <div id="respond">
 <h3>{% trans "Leave a Comment" %}</h3>
 <div class="cancel-comment-reply">

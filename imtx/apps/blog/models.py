@@ -44,6 +44,10 @@ class Post(models.Model):
         ('publish', _('Published')),
         ('draft', _('Unpublished')),
     )
+    COMMENT_CHOICES = (
+        ('open', _('Open')),
+        ('closed', _('Closed')),
+    )
     title = models.CharField(max_length=64)
     slug = models.SlugField(blank=True, null=True, unique=True)
     content = models.TextField()
@@ -55,6 +59,7 @@ class Post(models.Model):
     comments =  generic.GenericRelation(Comment, 
                     object_id_field='object_pk',
                     content_type_field='content_type')
+    comment_status = models.CharField(max_length=20, default='open', choices=COMMENT_CHOICES)
     objects = PostManager()
     tag = TagField()
 
@@ -148,6 +153,13 @@ class Post(models.Model):
             return True
         else:
             return False
+
+    @property
+    def allow_comment(self):
+        if self.comment_status == 'closed':
+            return False
+        else:
+            return True
 
 class PostMeta(models.Model):
     post = models.ForeignKey(Post)
