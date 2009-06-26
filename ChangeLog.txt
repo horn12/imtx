@@ -1,3 +1,7 @@
+2009-06-26 TualatriX <tualatrix@gmail.com>
+
+	* imtx/apps/blog/templates/footer.html: Add Theme Copyright.
+
 2009-03-14 TualatriX <tualatrix@gmail.com>
 
 	* pulog/__init__.py: Set coding to ascii to utf-8.
