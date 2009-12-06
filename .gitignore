@@ -1,1 +1,4 @@
 *.py[oc]
+*.db
+uploads
+settings.py
