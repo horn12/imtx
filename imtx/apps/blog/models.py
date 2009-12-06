@@ -52,7 +52,7 @@ class Post(models.Model):
     slug = models.SlugField(blank=True, null=True, unique=True)
     content = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(User)
+    author = models.ForeignKey(User, default=0)
     category = models.ManyToManyField(Category)
     type = models.CharField(max_length=20, default='post', choices=TYPE_CHOICES)
     status = models.CharField(max_length=20, default='publish', choices=STATUS_CHOICES)
