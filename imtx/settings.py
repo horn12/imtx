@@ -1,8 +1,11 @@
 # Django settings for imtx project.
 
+import sys
 import os.path
 from os.path import join
 settings_path = os.path.abspath(os.path.dirname(__file__))
+
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -92,6 +95,9 @@ INSTALLED_APPS = (
     'django_xmlrpc',
     'pingback',
 )
+
+#Login
+LOGIN_URL = '/admin'
 
 #Akisment
 AKISMET_API_KEY = ''

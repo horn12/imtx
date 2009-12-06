@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from django.forms.util import ErrorList
 from django.utils import html
 from django.core import urlresolvers
@@ -112,8 +113,8 @@ def search(request):
 def redirect_feed(request):
     return HttpResponseRedirect(urlresolvers.reverse('feed', args=('latest',)))
 
+@login_required(redirect_field_name='next')
 def upload(request):
-    #FIXME Use auth
     if request.method == 'POST':
         form = MediaForm(request.POST, request.FILES)
         if form.is_valid():
