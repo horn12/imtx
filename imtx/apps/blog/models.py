@@ -117,7 +117,7 @@ class Post(models.Model):
 
     def hit_comments(self):
         pm = PostMeta.objects.get(post=self, meta_key='comments_count')
-        pm.meta_value = str(self.comments.count())
+        pm.meta_value = str(self.get_comments().count())
         pm.save()
 
     def get_comments(self):

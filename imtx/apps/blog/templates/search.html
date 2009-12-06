@@ -11,7 +11,7 @@
         <div class="post">
             <h3 id="post-{{ post.id }}"><a href="{{ post.get_absolute_url }}" rel="bookmark" title="Permanent Link to {{ post.title }}">{{ post.title }}</a></h3>
             <small>{{ post.date }}</small>
-            <p class="postmetadata">Posted in {% for category in post.get_categories %}{% if forloop.last %}<a href="{{ category.get_absolute_url }}">{{ category.name }}</a>{% else %}<a href="{{ category.get_absolute_url }}">{{ category.name }}</a>, {% endif %}{% endfor %} | {% if user.is_staff %} <a href="/admin/blog/post/{{ post.id }}/">Edit</a>{% endif %} | <a href="{{ post.get_absolute_url}}#comments">{{ post.get_comments|num }} Comments</a> </p>
+            <p class="postmetadata">Posted in {% for category in post.get_categories %}{% if forloop.last %}<a href="{{ category.get_absolute_url }}">{{ category.name }}</a>{% else %}<a href="{{ category.get_absolute_url }}">{{ category.name }}</a>, {% endif %}{% endfor %} | {% if user.is_staff %} <a href="/admin/blog/post/{{ post.id }}/">Edit</a>{% endif %} | <a href="{{ post.get_absolute_url}}#comments">{{ post.get_comments_count }} Comments</a> </p>
         </div>
 		{% endfor %}
 	{% do_pagination_search %}
