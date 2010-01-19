@@ -1,7 +1,29 @@
+import time
 import datetime
 from django.contrib.syndication.feeds import Feed  
 from models import Post
 from imtx.apps.comments.models import Comment
+
+URL = 'feed-notify'
+
+def return_url():
+    return 'http://imtx.cn/' + URL + '?=' + time.strftime('%m%d')
+
+class NotifyMigrate(Feed):
+    title = "I'm TualatriX"
+    link = 'http://imtx.cn/'
+    description = "Hello! This is TualatriX's blog"
+    author = 'TualatriX'
+    title_template = 'feed/latest_title.html'
+    description_template = 'feed/latest_description.html'
+
+    def items(self):
+        post = Post.objects.get(slug=URL)
+        post.get_absolute_url = return_url
+        return [post]
+
+    def item_pubdate(self, item):
+        return item.date
 
 class LatestPosts(Feed):
     title = "I'm TualatriX"
