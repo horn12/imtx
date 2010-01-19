@@ -95,10 +95,13 @@ def handle_xmlrpc(request):
                 'args': ", ".join(sig_[1:]),
             }
 
-            # this just reads your docblock, so fill it in!
-            method_help = xmlrpcdispatcher.system_methodHelp(method)
+            try:
+                # this just reads your docblock, so fill it in!
+                method_help = xmlrpcdispatcher.system_methodHelp(method)
 
-            method_list.append((method, sig, method_help))
+                method_list.append((method, sig, method_help))
+            except:
+                pass
 
         if hasattr(settings, 'XMLRPC_GET_TEMPLATE'):
             # This behaviour is deprecated
