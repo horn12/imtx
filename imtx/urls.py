@@ -8,7 +8,7 @@ from django.contrib.sitemaps import views as sitemap_views
 from django.views.decorators.cache import cache_page
 
 from imtx.apps.blog.models import Post, Category
-from imtx.apps.blog.feeds import LatestPosts, NotifyMigrate
+from imtx.apps.blog.feeds import LatestPosts, NotifyMigrate, LdcnNotifyMigrate
 
 admin.autodiscover()
 
@@ -29,6 +29,7 @@ sitemaps = {
 feed = {
     'latest': LatestPosts,
     'migrate': NotifyMigrate,
+    'ldcn_migrate': LdcnNotifyMigrate,
 }
 
 urlpatterns = patterns('',
