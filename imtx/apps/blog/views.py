@@ -31,7 +31,7 @@ def index(request):
 
 def single_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    if not post.is_public():
+    if not request.user.is_staff and not post.is_public():
         raise Http404
 
     post.hit_views()
