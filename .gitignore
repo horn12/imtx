@@ -2,3 +2,4 @@
 *.db
 uploads
 settings.py
+cscope*
