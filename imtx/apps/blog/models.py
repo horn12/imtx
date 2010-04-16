@@ -1,3 +1,6 @@
+import os
+import Image
+
 from django.db import models
 from django.conf import settings
 from django.db.models import signals
@@ -192,23 +195,54 @@ class Link(models.Model):
     def __unicode__(self):
         return '%s: %s' % (self.name, self.url)
 
+WATER_BIG = os.path.join(settings.MEDIA_ROOT, 'img/logo.png')
+WATER_SMALL = os.path.join(settings.MEDIA_ROOT, 'img/logo_small.png')
+
 class Media(models.Model):
     UPLOAD_ROOT = 'uploads/%Y/%m'
+    WATER_ROOT = 'pictures/%Y/%m'
     THUMB_SIZE = '640'
     LOGO_SIZE = '48'
 
     title = models.CharField(max_length=120)
     image = models.ImageField(upload_to=UPLOAD_ROOT)
+    watermarked = models.ImageField(blank=True, upload_to=WATER_ROOT)
     date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name_plural = _('Media')
 
+    def save(self, force_insert=False, force_update=False):
+        super(Media, self).save(force_insert, force_update)
+        base = Image.open(self.image.path)
+        width, height = base.size
+
+        if width > 400:
+            logo = Image.open(WATER_BIG)
+        else:
+            logo = Image.open(WATER_SMALL)
+
+        base.paste(logo, (base.size[0] - logo.size[0], base.size[1] - logo.size[1]), logo)
+
+        water_folder = os.path.join(settings.MEDIA_ROOT, self.date.strftime(self.WATER_ROOT))
+        if not os.path.exists(water_folder):
+            os.makedirs(water_folder)
+
+        relate_path = os.path.join(self.date.strftime(self.WATER_ROOT),
+                                   os.path.basename(self.image.name))
+
+        base.save(os.path.join(settings.MEDIA_ROOT, relate_path))
+        self.watermarked = ImageFieldFile(self, self.watermarked, relate_path)
+        super(Media, self).save(force_insert, force_update)
+
     def __unicode__(self):
         return _('<Media: %s, uploaded at %s>') % (self.title, self.date.strftime('%I:%M%p, %Y/%m/%d'))
 
     def get_thumb_url(self):
-        return self.image.url
+        try:
+            return self.watermarked.url
+        except:
+            return self.image.url
 
     def get_logo_url(self):
         return self.image.url + '?width=' + self.LOGO_SIZE + '&height=' + self.LOGO_SIZE
