@@ -95,6 +95,7 @@ INSTALLED_APPS = (
     'imtx.apps.pagination',
     'django_xmlrpc',
     'pingback',
+    'south',
 )
 
 #Login
