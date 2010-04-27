@@ -134,6 +134,7 @@ def post_comment(request, next = None):
                 "comment_will_be_posted receiver %r killed the comment" % receiver.__name__)
 
     # Save the comment and signal that it was saved
+    comment.content = escape(comment.content)
     comment.save()
     signals.comment_was_posted.send(
         sender  = comment.__class__,
