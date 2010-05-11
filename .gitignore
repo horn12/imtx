@@ -1,5 +1,6 @@
 *.py[oc]
 *.db
 uploads
+pictures
 settings.py
 cscope*
