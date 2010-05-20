@@ -688,3 +688,19 @@ blockquote cite {
 	}
 
 /* Footer End */
+
+.twitter{
+	margin-top: 10px;
+	background: url('/static/img/twitter-logo.png') no-repeat top left;
+	padding: 8px 0px 0px 36px;
+	height: 32px;
+	display: block;
+}
+
+.rss {
+	margin-top: 10px;
+	background: url('/static/img/rss-logo.png') no-repeat top left;
+	padding: 8px 0px 0px 36px;
+	height: 32px;
+	display: block;
+}
