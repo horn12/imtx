@@ -217,7 +217,7 @@ class Media(models.Model):
         base = Image.open(self.image.path)
         width, height = base.size
 
-        if width > 400:
+        if width > 480:
             logo = Image.open(WATER_BIG)
         else:
             logo = Image.open(WATER_SMALL)
