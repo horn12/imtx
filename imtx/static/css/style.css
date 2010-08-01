@@ -534,13 +534,13 @@ img.alignleft {
 	padding: 2px 4px 2px 4px; 
 	margin: 2px;
 	text-decoration: none;
-	border: 1px solid #666666;
-	color: #666666;
+	border: 1px solid #0066cc;
+	color: #0066cc;
 	background-color: #FFFFFF;	
 }
 .pagenavi a:hover {	
-	border: 1px solid #666666;
-	color: #666666;
+	border: 1px solid #114477;
+	color: #114477;
 	background-color: #FFFFFF;
 }
 .pagenavi span.pages {
