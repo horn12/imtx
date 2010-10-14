@@ -223,6 +223,7 @@ class ThreadedCommentNode(BaseCommentNode):
                     'date': comment.date.strftime('%Y %B %d, %H:%M'),
                     'depth': comment.get_depth(),
                     'edit': comment.get_admin_url(),
+                    'spam': comment.get_spam_url(),
                     'content': linebreaks(comment.content),
 #                    'parity': comment.get_parity(),
                     'parity': get_even_or_odd(comment),
@@ -239,7 +240,7 @@ class ThreadedCommentNode(BaseCommentNode):
                 html.append('<div id="div-comment-%(id)d"><div class="comment-author vcard">%(name)s</div>\n' % commentmeta)
 
             if context['user'].is_staff:
-                html.append('<div class="comment-meta commentmetadata"><a href="%(url)s">%(date)s</a>&nbsp;&nbsp;<a href="%(edit)s" title="Edit comment">Edit</a></div>\n'
+                html.append('<div class="comment-meta commentmetadata"><a href="%(url)s">%(date)s</a>&nbsp;&nbsp;<a href="%(edit)s" title="Edit comment">Edit</a>. <a href="%(spam)s" title="Spam comment">Spam</a></div>\n'
                    '<p>%(content)s</p>\n' % commentmeta)
             else:
                 html.append('<div class="comment-meta commentmetadata"><a href="%(url)s">%(date)s</a></div>\n'
@@ -320,6 +321,7 @@ class ThreadedCommentNode(BaseCommentNode):
                     'date': comment.date.strftime('%Y %B %d, %H:%M'),
                     'depth': comment.get_depth(),
                     'edit': comment.get_admin_url(),
+                    'spam': comment.get_spam_url(),
                     'content': linebreaks(comment.content),
 #                    'parity': comment.get_parity(),
                     'parity': get_even_or_odd(comment),
@@ -336,7 +338,7 @@ class ThreadedCommentNode(BaseCommentNode):
                 html.append('<div id="div-comment-%(id)d"><div class="comment-author vcard">%(name)s</div>\n' % commentmeta)
 
             if context['user'].is_staff:
-                html.append('<div class="comment-meta commentmetadata"><a href="%(url)s">%(date)s</a>&nbsp;&nbsp;<a href="%(edit)s" title="Edit comment">Edit</a></div>\n'
+                html.append('<div class="comment-meta commentmetadata"><a href="%(url)s">%(date)s</a>&nbsp;&nbsp;<a href="%(edit)s" title="Edit comment">Edit</a>. <a href="%(spam)s" title="Spam comment">Spam</a></div>\n'
                    '<p>%(content)s</p>\n' % commentmeta)
             else:
                 html.append('<div class="comment-meta commentmetadata"><a href="%(url)s">%(date)s</a></div>\n'

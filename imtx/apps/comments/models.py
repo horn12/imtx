@@ -220,6 +220,9 @@ class Comment(models.Model):
     def get_admin_url(self):
         return '/admin/comments/comment/%d/' % self.id
 
+    def get_spam_url(self):
+        return '/comment/spam/%d/?next=%s' % (self.id, self.get_content_object_url())
+
     def get_as_text(self):
         """
         Return this comment as plain text.  Useful for emails.

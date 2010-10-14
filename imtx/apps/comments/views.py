@@ -1,6 +1,7 @@
 from django import http
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
@@ -49,6 +50,15 @@ def comment_list(request):
                 'page': page,
                 'current': 'comments',
                 }, context_instance = RequestContext(request))
+
+def spam_comment(request, comment_id):
+    comment = Comment.objects.get(pk=comment_id)
+    comment.is_public = False
+    comment.is_removed = True
+    comment.save()
+    url = request.GET.get('next', '')
+
+    return HttpResponseRedirect(url)
 
 @require_POST
 def post_comment(request, next = None):
