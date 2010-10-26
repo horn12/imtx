@@ -8,14 +8,14 @@ URL = 'feed-notify'
 LDCN_URL = 'ldcn-feed'
 
 def return_url():
-    return 'http://imtx.cn/' + URL + '?=' + time.strftime('%m%d')
+    return 'http://imtx.me/' + URL + '?=' + time.strftime('%m%d')
 
 def return_ldcn_url():
-    return 'http://imtx.cn/' + LDCN_URL + '?=' + time.strftime('%m%d')
+    return 'http://imtx.me/' + LDCN_URL + '?=' + time.strftime('%m%d')
 
 class LdcnNotifyMigrate(Feed):
     title = "I'm TualatriX"
-    link = 'http://imtx.cn/'
+    link = 'http://imtx.me/'
     description = "Hello! This is TualatriX's blog"
     author = 'TualatriX'
     title_template = 'feed/latest_title.html'
@@ -31,7 +31,7 @@ class LdcnNotifyMigrate(Feed):
 
 class NotifyMigrate(Feed):
     title = "I'm TualatriX"
-    link = 'http://imtx.cn/'
+    link = 'http://imtx.me/'
     description = "Hello! This is TualatriX's blog"
     author = 'TualatriX'
     title_template = 'feed/latest_title.html'
@@ -47,7 +47,7 @@ class NotifyMigrate(Feed):
 
 class LatestPosts(Feed):
     title = "I'm TualatriX"
-    link = 'http://imtx.cn/'
+    link = 'http://imtx.me/'
     description = "Hello! This is TualatriX's blog"
     author = 'TualatriX'
     title_template = 'feed/latest_title.html'
