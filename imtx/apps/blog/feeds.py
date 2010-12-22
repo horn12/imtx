@@ -71,7 +71,7 @@ class LatestCommentFeed(Feed):
     description_template = 'feed/latest_comment_description.html'
 
     def items(self):
-        return Comment.objects.in_public()
+        return Comment.objects.in_public()[:50]
         
     def item_pubdate(self, item):
         return item.date
