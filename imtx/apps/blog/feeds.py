@@ -1,6 +1,8 @@
 import time
 import datetime
+
 from django.contrib.syndication.feeds import Feed  
+
 from models import Post
 from imtx.apps.comments.models import Comment
 
@@ -62,33 +64,14 @@ class LatestPosts(Feed):
 
 class LatestCommentFeed(Feed):
     """Feed of latest comments on the current site."""
-
-    def title(self):
-        if not hasattr(self, '_site'):
-            self._site = Site.objects.get_current()
-        return u"%s comments" % self._site.name
-
-    def link(self):
-        if not hasattr(self, '_site'):
-            self._site = Site.objects.get_current()
-        return "http://%s/" % (self._site.domain)
-
-    def description(self):
-        if not hasattr(self, '_site'):
-            self._site = Site.objects.get_current()
-        return u"Latest comments on %s" % self._site.name
+    title = "I'm TualatriX"
+    link = 'http://imtx.me/'
+    description = "Hello! This is TualatriX's blog's comments"
+    title_template = 'feed/latest_comment_title.html'
+    description_template = 'feed/latest_comment_description.html'
 
     def items(self):
-        qs = Comment.objects.filter(
-            site__pk = settings.SITE_ID,
-            is_public = True,
-            is_removed = False,
-        )
-        if getattr(settings, 'COMMENTS_BANNED_USERS_GROUP', None):
-            where = ['user_id NOT IN (SELECT user_id FROM auth_user_groups WHERE group_id = %s)']
-            params = [settings.COMMENTS_BANNED_USERS_GROUP]
-            qs = qs.extra(where=where, params=params)
-        return qs.order_by('-date')[:40]
+        return Comment.objects.in_public()
         
     def item_pubdate(self, item):
         return item.date
