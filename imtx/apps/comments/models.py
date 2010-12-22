@@ -237,7 +237,7 @@ class Comment(models.Model):
         return _('Posted by %(user)s at %(date)s\n\n%(comment)s\n\nhttp://%(domain)s%(url)s') % d
 
     def get_title(self):
-        return '%s said: %s' % (self.user, self.content)
+        return '%s said: %s' % (self.name, self.content)
 
 def on_comment_was_posted(sender, comment, request, *args, **kwargs):
     try:
