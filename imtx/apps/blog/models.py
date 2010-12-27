@@ -213,7 +213,7 @@ class Media(models.Model):
         verbose_name_plural = _('Media')
 
     def save(self, force_insert=False, force_update=False, using=None):
-        super(Media, self).save(force_insert, force_update)
+        super(Media, self).save(force_insert, force_update, using)
         base = Image.open(self.image.path)
         width, height = base.size
 
