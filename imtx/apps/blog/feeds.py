@@ -72,7 +72,7 @@ class LatestCommentFeed(Feed):
     description_template = 'feed/latest_comment_description.html'
 
     def items(self):
-        return Comment.objects.in_public().filter(~Q(user_email="tualatrix@gmail.com"))[:50]
+        return Comment.objects.in_public().filter(~Q(user_email="tualatrix@gmail.com"))[:10]
         
     def item_pubdate(self, item):
         return item.date
