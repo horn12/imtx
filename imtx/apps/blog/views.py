@@ -106,7 +106,7 @@ def search(request):
                               'page': page,
                               'pagi_path': qd.urlencode(),
                               })
-    response.set_cookie('search',request.META['REMOTE_ADDR'], max_age=5)
+    response.set_cookie('search',request.META['REMOTE_ADDR'], max_age=1)
 
     return response
 
