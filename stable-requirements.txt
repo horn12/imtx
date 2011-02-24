@@ -6,4 +6,4 @@ MySQL-python
 beautifulsoup
 
 -e git+git@github.com:tualatrix/django-xmlrpc.git@master#egg=django_xmlrpc
--e git+git@github.com:tualatrix/django-pingback.git@0.1.1#egg=pingback
+-e git+git@github.com:tualatrix/django-pingback.git@0.1.2#egg=pingback
