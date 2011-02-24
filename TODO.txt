@@ -1,4 +1,0 @@
-* 补上Archive count的统计
-* Use flatpage instead of Post.page
-* Create more common filters for blog templates.
-* Cleanup the code.
