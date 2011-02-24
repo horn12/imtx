@@ -34,13 +34,8 @@ feed = {
 }
 
 urlpatterns = patterns('',
-#        (r'linebreak/', 'imtx.blog.views.break_lines'),
     (r'^sitemap.xml$', cache_page(sitemap_views.sitemap, 60 * 60 * 6), {'sitemaps': sitemaps}),
-    (r'^admin/(.*)', admin.site.root),
-    (r'^static/(?P<path>.*)$', 'django.views.static.serve', 
-        {'document_root': settings.MEDIA_ROOT}),
-    (r'^media/(?P<path>.*)$', 'django.views.static.serve', 
-        {'document_root': settings.ADMIN_MEDIA_ROOT}),
+    (r'^admin/', include(admin.site.urls)),
     url(r'^feed/(?P<url>.*)/$', 'django.contrib.syndication.views.feed', 
         {'feed_dict': feed}, name='feed'),
     (r'^comment/', include('imtx.apps.comments.urls')),
@@ -62,3 +57,9 @@ urlpatterns += patterns('imtx.apps.blog.views',
     (r'^archives/(?P<year>\d{4})/(?P<month>\d{1,2})/$', 'archive_view'),
     url(r'^([-\w]+)/$', 'static_pages', name='static_pages'),
 )
+
+if settings.DEBUG:
+    urlpatterns += patterns('',
+        (r'^static/(?P<path>.*)$', 'django.views.static.serve',
+            {'document_root': settings.MEDIA_ROOT}),
+    )
