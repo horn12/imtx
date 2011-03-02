@@ -1,7 +1,7 @@
 {% if pingbacks %}
 <ul>
 	{% for pingback in pingbacks %}
-	<li><a href="{{ pingback.object.get_absolute_url }}">{{ pingback.title }}</a></li>
+	<li><a href="{{ pingback.get_absolute_url }}">{{ pingback.title }}</a></li>
 	{% endfor %}
 </ul>
 {% endif %}
