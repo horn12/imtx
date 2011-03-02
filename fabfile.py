@@ -7,6 +7,6 @@ env.user = os.getenv('IMTX_USER')
 env.hosts = [os.getenv('IMTX_HOST')]
 
 def deploy():
-    with cd('www/imtx.cn/imtx.cn/'):
+    with cd('~/public_html/imtx.me/imtx'):
         run('git pull origin master')
-        run('touch ~/www/imtx.cn/cgi-bin/imtxcn.fcgi')
+        run('touch django.wsgi')
