@@ -1,11 +1,10 @@
 {% extends "base.html" %}
 {% load i18n pagination %}
 
-
-{% block title %} {{ tag.name }} | I'm TualatriX!{% endblock %}
+{% block title %}{{ title }} | I'm TualatriX{% if page != 1 %} - Page {{ page }}{% endif %}{% endblock %}
 
 {% block content %}
-	<h2 class="pagetitle">Items for {{ tag.name }}</h2>
+    <h2 class="pagetitle">{{ title }}</h2>
 
 	{% if posts %}
 		{% pre_pagination posts page %}

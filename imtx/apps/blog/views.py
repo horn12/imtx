@@ -11,7 +11,6 @@ from django.core import urlresolvers
 
 from forms import MediaForm
 from models import Post, Category
-from imtx.apps.tagging.models import Tag
 from imtx.apps.comments.views import get_comment_cookie_meta
 from imtx.apps.pagination.utils import get_page
 
