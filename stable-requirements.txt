@@ -7,4 +7,4 @@ beautifulsoup
 pygments
 
 -e git+git@github.com:tualatrix/django-xmlrpc.git@master#egg=django_xmlrpc
--e git+git@github.com:tualatrix/django-pingback.git@v0.1.2#egg=pingback
+-e git+git@github.com:tualatrix/django-pingback.git@v0.1.3#egg=pingback
