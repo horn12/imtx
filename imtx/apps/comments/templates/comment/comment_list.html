@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n pagination %}
 
-{% block title %} I'm TualatriX {% endblock %}
+{% block title %} Comments | I'm TualatriX{% if page != 1 %} - Page {{ page }}{% endif %}{% endblock %}
 
 {% block content %}
 	{% if comments %}

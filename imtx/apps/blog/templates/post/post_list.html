@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load i18n pagination %}
 
-{% block title %} I'm TualatriX {% endblock %}
+{% block title %}I'm TualatriX{% if page != 1 %} - Page {{ page }}{% endif %}{% endblock %}
 
 {% block content %}
 	{% if posts %}
@@ -21,6 +21,6 @@
 		{% endfor %}
 		{% do_pagination %}
 	{% else %}
-		No artile yet!
+		No article yet!
 	{% endif %}
 {% endblock %}

@@ -1,18 +1,10 @@
 {% extends "base.html" %}
 {% load i18n pagination %}
 
-{% block title %} I'm TualatriX{% endblock %}
+{% block title %}{{ title }} | I'm TualatriX{% if page != 1 %} - Page {{ page }}{% endif %}{% endblock %}
 
 {% block content %}
-	{% if category %}
-	<h2 class="pagetitle">Archive for {{ category.title }}</h2>
-	{% endif %}
-	{% if year %}
-	<h2 class="pagetitle">Archive for {{ year }} {{ month }}</h2>
-	{% endif %}
-	{% if results %}
-	<h2 class="pagetitle">Archive for {{ query }}</h2>
-	{% endif %}
+    <h2 class="pagetitle">{{ title }}</h2>
 
 	{% pre_pagination posts page %}
 	{% if posts %}

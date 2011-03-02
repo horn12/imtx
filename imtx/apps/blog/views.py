@@ -55,18 +55,21 @@ def category_view(request, slug):
     cat = get_object_or_404(Category, slug=slug)
     posts = Post.objects.get_post_by_category(cat)
     page = get_page(request)
+    title = 'Category Archives: %s' % cat.title
 
     return render_to_response('post/archive.html', {
                 'category': cat, 
                 'posts': posts,
                 'path': request.path,
                 'page': page,
+                'title': title,
                 }, context_instance=RequestContext(request)
             )
 
 def archive_view(request, year, month):
     posts = Post.objects.get_post_by_date(year, month)
     page = get_page(request)
+    title = 'Monthly Archives: %s-%s' % (year, month)
     
     return render_to_response('post/archive.html', {
                 'year': year,
@@ -74,6 +77,7 @@ def archive_view(request, year, month):
                 'posts': posts,
                 'path': request.path,
                 'page': page,
+                'title': title,
                 }, context_instance=RequestContext(request)
             )
 
@@ -100,11 +104,14 @@ def search(request):
 
         posts = Post.objects.filter(qset, status='publish').distinct().order_by('-date')
 
+    title = 'Search results for: %s' % query
+
     response = render_to_response('search.html', {
                               'query': query,
                               'posts': posts,
                               'page': page,
                               'pagi_path': qd.urlencode(),
+                              'title': title,
                               })
     response.set_cookie('search',request.META['REMOTE_ADDR'], max_age=1)
 

@@ -5,6 +5,7 @@
   - Update to Django 1.2
   - Convert to virtualenv app and split the xmlrpc and pingback as apps
   - Make pingback link to the anchor url
+  - Fix the pagination titles
 
 0.1.0
 =====
