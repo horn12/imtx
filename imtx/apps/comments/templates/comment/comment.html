@@ -12,7 +12,7 @@
 <div class="cancel-comment-reply">
 <small><a rel="nofollow" id="cancel-comment-reply-link" href="{{ comment.get_absolute_url }}#respond" style="display:none;">Click here to cancel reply.</a></small>
 </div>
-<form style="display: block;" action="/comment/post/" method="POST" id="commentform">
+<form style="display: block;" action="/comment/post/" method="POST" id="commentform">{% csrf_token %}
     {% if not user.is_authenticated %}
         <p>{{ commentform.name }}
         <label for="author"><small>{% trans "Name (required)" %}</small></label></p>
