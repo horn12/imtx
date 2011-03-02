@@ -12,7 +12,7 @@
 
 <h1 id="title">Upload your files</h1>
 <hr>
-<form enctype="multipart/form-data" method="POST" action="/upload/">
+<form enctype="multipart/form-data" method="POST" action="/upload/">{% csrf_token %}
 	{{ form.as_p }}
 	<input type="submit" value="upload"/>
 	<!--<input type="button" id="insert" name="insert" value="{#insert}" onclick="UploadDialog({{ image.image.url }}).insert();" />-->
