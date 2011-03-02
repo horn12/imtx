@@ -123,7 +123,8 @@ def upload(request):
             form.clean()
     else:
         form = MediaForm()
-    return render_to_response('utils/upload.html', {'form': form})
+    return render_to_response('utils/upload.html', {'form': form},
+            context_instance=RequestContext(request))
 
 from datetime import time, date, datetime
 from time import strptime
