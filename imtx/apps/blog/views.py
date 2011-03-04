@@ -50,7 +50,7 @@ def static_pages(request, page):
     post.hit_views()
 
     return render_to_response('post/page.html', 
-            {'post': post, 'current': post.slug},
+            {'post': post, 'current': page},
                 context_instance=RequestContext(request),
             )
 
@@ -148,7 +148,7 @@ def pingback_post_handler(post_id, **kwargs):
     return Post.objects.get(id=post_id)
 
 def pingback_page_handler(page, **kwargs):
-    return Post.objects.get(slug=page)
+    return Menu.objects.get(slug=page).page
 
 # define association between view name and our handler
 ping_details = {
