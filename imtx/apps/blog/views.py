@@ -11,6 +11,7 @@ from django.core import urlresolvers
 
 from forms import MediaForm
 from models import Post, Category
+from models import Menu
 from imtx.apps.comments.views import get_comment_cookie_meta
 from imtx.apps.pagination.utils import get_page
 
@@ -43,8 +44,11 @@ def single_post(request, post_id):
             )
 
 def static_pages(request, page):
-    post = get_object_or_404(Post, slug=page)
+    menu = get_object_or_404(Menu, slug=page)
+    #TODO deal with the multi-level
+    post = menu.page
     post.hit_views()
+
     return render_to_response('post/page.html', 
             {'post': post, 'current': post.slug},
                 context_instance=RequestContext(request),

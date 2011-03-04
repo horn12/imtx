@@ -19,3 +19,7 @@ class PostManager(models.Manager):
 
     def get_page(self):
         return self.get_query_set().filter(type='page', status='publish')
+
+class MenuManager(models.Manager):
+    def get_root_menu(self):
+        return self.get_query_set().filter(parent=None, visible=True).order_by('-weight')

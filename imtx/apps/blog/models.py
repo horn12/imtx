@@ -14,7 +14,7 @@ from imtx.apps.tagging.models import Tag
 from imtx.apps.tagging.fields import TagField
 from imtx.apps.comments.models import Comment
 from imtx.apps.comments.signals import  comment_save
-from managers import PostManager
+from managers import PostManager, MenuManager
 
 class Category(models.Model):
     title = models.CharField(max_length=250, help_text=_('Maximum 250 '
@@ -197,6 +197,30 @@ class Link(models.Model):
 
 WATER_BIG = os.path.join(settings.MEDIA_ROOT, 'img/logo.png')
 WATER_SMALL = os.path.join(settings.MEDIA_ROOT, 'img/logo_small.png')
+
+class Menu(models.Model):
+    slug = models.SlugField(unique=True)
+    name = models.CharField(max_length=120, blank=True)
+    page = models.ForeignKey(Post, blank=True, null=True)
+    weight = models.PositiveSmallIntegerField(default=0)
+    url = models.URLField(blank=True)
+    parent = models.ForeignKey('self', blank=True, null=True)
+    visible = models.BooleanField(default=True)
+    objects = MenuManager()
+
+    def __unicode__(self):
+        return self.title
+
+    @property
+    def title(self):
+        if self.page:
+            return self.page.title
+        return self.name
+
+    def get_absolute_url(self):
+        if self.page:
+            return self.get_absolute_url()
+        return self.url
 
 class Media(models.Model):
     UPLOAD_ROOT = 'uploads/%Y/%m'

@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
-from models import Category, Post, Link, Profile, Media
+from models import Category, Post, Link, Profile, Media, Menu
 
 #TODO In tiny_mce, implement the StackedInline
 class MediaAdmin(admin.StackedInline):
@@ -38,3 +38,4 @@ admin.site.register(Category)
 admin.site.register(Profile)
 admin.site.register(Link)
 admin.site.register(Media)
+admin.site.register(Menu)
