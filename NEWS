@@ -7,6 +7,7 @@
   - Make pingback link to the anchor url
   - Fix the pagination titles
   - Add real menu support, it will support a powerful menu system like WordPress
+  - Use the original django-tagging apps
 
 0.1.0
 =====

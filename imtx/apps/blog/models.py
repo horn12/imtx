@@ -10,11 +10,17 @@ from django.contrib.contenttypes import generic
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.fields.files import ImageFieldFile
 
-from imtx.apps.tagging.models import Tag
-from imtx.apps.tagging.fields import TagField
+from tagging.models import Tag
+from tagging.fields import TagField
+
 from imtx.apps.comments.models import Comment
 from imtx.apps.comments.signals import  comment_save
 from managers import PostManager, MenuManager
+
+@models.permalink
+def tag_get_absolute_url(self):
+    return ('tag-view', [str(self.name)])
+setattr(Tag, 'get_absolute_url', tag_get_absolute_url)
 
 class Category(models.Model):
     title = models.CharField(max_length=250, help_text=_('Maximum 250 '

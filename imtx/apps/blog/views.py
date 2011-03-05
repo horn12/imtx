@@ -9,6 +9,8 @@ from django.forms.util import ErrorList
 from django.utils import html
 from django.core import urlresolvers
 
+from tagging.models import Tag, TaggedItem
+
 from forms import MediaForm
 from models import Post, Category
 from models import Menu
@@ -83,6 +85,20 @@ def archive_view(request, year, month):
                 'title': title,
                 }, context_instance=RequestContext(request)
             )
+
+def tag_view(request, name):
+    tag = get_object_or_404(Tag, name=name)
+    posts = TaggedItem.objects.get_by_model(Post, tag).order_by('-date')
+    page = get_page(request)
+    title = 'Tag archives for: %s' % tag
+
+    return render_to_response('tag/tag.html', {
+                                            'tag': tag,
+                                            'posts': posts,
+                                            'page': page,
+                                            'pagi_path': request.path,
+                                            'title': title,
+                                            }, context_instance = RequestContext(request))
 
 def search(request):
     query = get_query(request)

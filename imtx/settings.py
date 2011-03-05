@@ -101,11 +101,11 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.sitemaps',
     'imtx.apps.blog',
-    'imtx.apps.tagging',
     'imtx.apps.comments',
     'imtx.apps.pagination',
     'django_xmlrpc',
     'pingback',
+    'tagging',
     'south',
 )
 
