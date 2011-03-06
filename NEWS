@@ -9,6 +9,7 @@
   - Add real menu support, it will support a powerful menu system like WordPress
   - Use the original django-tagging apps
   - Post doesn't have the slug field now
+  - Add basic keyword based SEO support
 
 0.1.0
 =====

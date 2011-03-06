@@ -3,9 +3,7 @@
 
 {% block title %} {{ post.title }} | I'm TualatriX {% endblock %}
 {% block extrahead %}
-{% if post.get_tags %}    <meta name="keywords" content="{% for tag in post.get_tags %}{% if forloop.last %}{{ tag.name }}{% else %}{{ tag.name }},{% endif %}{% endfor %}">{% endif %}
-    <meta name="description" content="{{ post.excerpt }}">
-{% endblock %}
+{% if post.get_tags %}    <meta name="keywords" content="{% for tag in post.get_tags %}{% if forloop.last %}{{ tag.name }}{% else %}{{ tag.name }},{% endif %}{% endfor %}">{% endif %}{% endblock %}
 
 {% block content %}
     <div class="post" id="post-{{ post.id }}">
