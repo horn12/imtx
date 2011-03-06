@@ -58,7 +58,6 @@ class Post(models.Model):
         ('closed', _('Closed')),
     )
     title = models.CharField(max_length=64)
-    slug = models.SlugField(blank=True, null=True, unique=True)
     content = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, default=0)
@@ -95,10 +94,7 @@ class Post(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        if self.type == 'post':
-            return ('single_post', [str(self.id)])
-        else:
-            return ('static_pages', [str(self.slug)])
+        return ('single_post', [str(self.id)])
 
     def get_admin_url(self):
         return '/admin/blog/post/%d/' % self.id
