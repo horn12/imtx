@@ -19,7 +19,7 @@ from managers import PostManager, MenuManager
 
 @models.permalink
 def tag_get_absolute_url(self):
-    return ('tag-view', [str(self.name)])
+    return ('tag-view', [self.name])
 setattr(Tag, 'get_absolute_url', tag_get_absolute_url)
 
 class Category(models.Model):
