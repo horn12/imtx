@@ -81,6 +81,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'pingback.middleware.PingbackMiddleware',
     'imtx.middleware.SetRemoteAddrFromForwardedFor',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 #    'imtx.middleware.maintain.MaintainMiddleware',
 )
 
@@ -107,6 +108,7 @@ INSTALLED_APPS = (
     'pingback',
     'tagging',
     'south',
+    'debug_toolbar',
 )
 
 #Login

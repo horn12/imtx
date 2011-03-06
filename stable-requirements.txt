@@ -5,6 +5,7 @@ south==0.7.3
 MySQL-python
 beautifulsoup
 pygments
+django-debug-toolbar
 
 -e svn+http://django-tagging.googlecode.com/svn/trunk/#egg=tagging
 -e git+git@github.com:tualatrix/django-xmlrpc.git@master#egg=django_xmlrpc
