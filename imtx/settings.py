@@ -80,7 +80,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'pingback.middleware.PingbackMiddleware',
-    'imtx.middleware.SetRemoteAddrFromForwardedFor',
 #    'imtx.middleware.maintain.MaintainMiddleware',
 )
 
