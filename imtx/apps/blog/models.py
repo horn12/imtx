@@ -63,7 +63,7 @@ class Post(models.Model):
     author = models.ForeignKey(User, default=0)
     category = models.ManyToManyField(Category)
     type = models.CharField(max_length=20, default='post', choices=TYPE_CHOICES)
-    status = models.CharField(max_length=20, default='publish', choices=STATUS_CHOICES)
+    status = models.CharField(max_length=20, default='draft', choices=STATUS_CHOICES)
     comments =  generic.GenericRelation(Comment, 
                     object_id_field='object_pk',
                     content_type_field='content_type')
