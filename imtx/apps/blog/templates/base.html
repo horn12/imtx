@@ -1,14 +1,13 @@
-{% load menu utils %}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+{% load menu utils %}<!DOCTYPE html>
 <html>
 <head>
-	<title>{% block title %}{% endblock %}</title>
-	<link rel="stylesheet" href="/static/css/style.css" type="text/css" media="screen" />
-	<link rel="stylesheet" href="/static/css/highlight.css" type="text/css" media="screen" />
-	<link rel="alternate" type="application/rss+xml" title="订阅 TualatriX Feed" href="http://feeds.feedburner.com/tualatrix" />
-	<link rel="pingback" href="{% fullurl xmlrpc %}" />
-	<link rel="shortcut icon" type="image/ico" href="/static/img/favicon.ico" />
-	<meta name="google-site-verification" content="dQrNwIxyr9oBaxexqgzQKlenOC-d-7VmT_asQEizeJU" />
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/style.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/static/css/highlight.css" type="text/css" media="screen" />
+    <link rel="alternate" type="application/rss+xml" title="订阅 TualatriX Feed" href="http://feeds.feedburner.com/tualatrix" />
+    <link rel="pingback" href="{% fullurl xmlrpc %}" />
+    <link rel="shortcut icon" type="image/ico" href="/static/img/favicon.ico" />
+    <meta name="google-site-verification" content="dQrNwIxyr9oBaxexqgzQKlenOC-d-7VmT_asQEizeJU" />{% block extrahead %}{% endblock %}
 </head>
         
 <body>
@@ -16,15 +15,15 @@
         <div id="header">
             <h1><a href="/">I'm TualatriX!</a></h1>
             <form action="/search/" method="GET">
-		    <div>
-			    <input type="text" value="Search..." onfocus="if (value =='Search...'){value =''}" onblur="if (value ==''){value='Search...'}" name="s" id="s" />
-			    <input type="image" id="searchsubmit" value="Search" src="/static/css/images/search.gif" />
-		    </div>
+            <div>
+                <input type="text" value="Search..." onfocus="if (value =='Search...'){value =''}" onblur="if (value ==''){value='Search...'}" name="s" id="s" />
+                <input type="image" id="searchsubmit" value="Search" src="/static/css/images/search.gif" />
+            </div>
             </form>
         </div> 
 
         <div id="menu">
-		{% get_menu %}
+        {% get_menu %}
         </div>
         <div class="contain">
             <div id="content" class="narrowcolumn">
@@ -32,6 +31,6 @@
             </div>
 
 {% include "sidebar.html" %}
-	</div>
+    </div>
         <hr />
 {% include "footer.html" %}

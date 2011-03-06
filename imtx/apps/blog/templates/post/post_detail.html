@@ -2,39 +2,42 @@
 {% load i18n utils highlight %}
 
 {% block title %} {{ post.title }} | I'm TualatriX {% endblock %}
+{% block extrahead %}
+{% if post.get_tags %}    <meta name="keywords" content="{% for tag in post.get_tags %}{% if forloop.last %}{{ tag.name }}{% else %}{{ tag.name }},{% endif %}{% endfor %}">{% endif %}
+    <meta name="description" content="{{ post.excerpt }}">
+{% endblock %}
 
 {% block content %}
-	<div class="post" id="post-{{ post.id }}">
-	{% include "post/title.html" %}
-	
-	<div class="clear"></div>
-	<div class="entry">
-		{% autoescape off %}
-		{% if post.pagebreak %}
-			{{ post.excerpt }}
+    <div class="post" id="post-{{ post.id }}">
+    {% include "post/title.html" %}
+    <div class="clear"></div>
+    <div class="entry">
+        {% autoescape off %}
+        {% if post.pagebreak %}
+            {{ post.excerpt }}
             <p><span id="more-{{ post.id }}"></span></p>
-			{{ post.remain|do_highlight }} 
-		{% else %}
-			{{ post.content|do_highlight }} 
-		{% endif %}
-		{% endautoescape %}
+            {{ post.remain|do_highlight }}
+        {% else %}
+            {{ post.content|do_highlight }}
+        {% endif %}
+        {% endautoescape %}
 
-		<p>
-		{% if post.get_tags %}
-		<div id="tags">Tags: {% for tag in post.get_tags %}{% if forloop.last %}<a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>. {% else %}<a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>, {% endif %}{% endfor %}</div>
-		{% endif %}
-		</p>
+        <p>
+        {% if post.get_tags %}
+        <div id="tags">Tags: {% for tag in post.get_tags %}{% if forloop.last %}<a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>. {% else %}<a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>, {% endif %}{% endfor %}</div>
+        {% endif %}
+        </p>
         <p class="meta"> 
         {% if post.allow_comment %}
         <small> &raquo; <a href="#comments">{% trans "You can leave a comment." %}</a></small>
         {% endif %}
         </p>
-	</div>
+    </div>
 </div>
-	{% var object = post %}
-	{% include "pingback/pingback.html" %}
+    {% var object = post %}
+    {% include "pingback/pingback.html" %}
     {% if post.allow_comment %}
-	{% include "comment/comment.html" %}
+    {% include "comment/comment.html" %}
     {% else %}
     <p class="nocomments">Comments are closed.</p>
     {% endif %}
