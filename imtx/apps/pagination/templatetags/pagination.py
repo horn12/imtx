@@ -33,7 +33,11 @@ class PaginationNode(template.Node):
 
     def render(self, context):
         objects = self.objects_to_be_paginated.resolve(context)
-        current = int(self.current_page.resolve(context))
+        try:
+            current = int(self.current_page.resolve(context))
+        except:
+            current = 1
+
         pagi = Paginator(objects, self.per_page)
         try:
             page = pagi.page(current)
