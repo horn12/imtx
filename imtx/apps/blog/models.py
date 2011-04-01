@@ -59,7 +59,7 @@ class Post(models.Model):
     )
     title = models.CharField(max_length=64)
     content = models.TextField()
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField()
     author = models.ForeignKey(User, default=0)
     category = models.ManyToManyField(Category)
     type = models.CharField(max_length=20, default='post', choices=TYPE_CHOICES)
